@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/jack/AndroidStudioProjects/jebora/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/Users/jack/AndroidStudioProjects/jebora/app/build/intermediates/pre-dexed/debug/classes-893957c86e6bffed5a809fd82e033622ea9c03e2.jar" />
+    </item>
+    <item
+        jar="/Users/jack/AndroidStudioProjects/jebora/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/Users/jack/AndroidStudioProjects/jebora/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-76272157fb9413cda1f850717a972c300c86293f.jar" />
+    </item>
+    <item
+        jar="/Users/jack/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="/Users/jack/AndroidStudioProjects/jebora/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-fd8f509a752b720e83be58e64081ea246d81aa64.jar" />
+    </item>
+    <item
+        jar="/Users/jack/AndroidStudioProjects/jebora/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
+        <dex dex="/Users/jack/AndroidStudioProjects/jebora/app/build/intermediates/pre-dexed/debug/classes-1f621aba22efb1362af001a5e2f86479621b6292.jar" />
+    </item>
+
+</items>

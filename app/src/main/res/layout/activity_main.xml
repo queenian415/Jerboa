@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/first_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:scaleType="fitXY"/>
+
+
+        <LinearLayout
+            android:id="@+id/guide_bottom_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginBottom="24.0dip"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/third_party_login"
+                android:layout_width="250.0dip"
+                android:layout_height="48.0dip"
+                android:gravity="center"
+                android:layout_marginBottom="8.0dip"
+                android:text="腾讯微信账号登陆"
+                android:textColor="#FFFFFF"
+                android:textSize="18.0sp" />
+
+            <Button
+                android:id="@+id/email_reg"
+                android:layout_width="250.0dip"
+                android:layout_height="48.0dip"
+                android:layout_marginBottom="8.0dip"
+                android:gravity="center"
+                android:text="Email注册新账号"
+                android:textColor="#FFFFFF"
+                android:textSize="18.0sp" />
+            <Button
+                android:id="@+id/login"
+                android:layout_width="250.0dip"
+                android:layout_height="48.0dip"
+                android:gravity="center"
+                android:text="已注册用户登陆"
+                android:textColor="#FFFFFF"
+                android:textSize="18.0sp" />
+        </LinearLayout>
+
+</RelativeLayout>
