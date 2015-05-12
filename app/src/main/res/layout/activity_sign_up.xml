@@ -5,34 +5,6 @@
     android:orientation="vertical"
     tools:context="com.jebora.jebora.SignUp">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/black">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/go_back"
-            android:text="返回"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="注册"
-            android:textColor="@android:color/white"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Continue"
-            android:layout_alignParentRight="true"
-            android:text="继续"/>
-
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,42 +17,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="16.0dp"
             android:textSize="20sp"
-            android:hint="我叫..."
-            android:inputType="textEmailAddress" />
-       <RadioGroup
-           android:layout_width="300dp"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal"
-           android:layout_marginBottom="16.0dp"
-           android:layout_gravity="center">
-
-           <RadioButton
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_weight="1"
-               android:text="爸爸"/>
-
-           <RadioButton
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_weight="1"
-               android:text="妈妈"/>
-
-           <RadioButton
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_weight="1"
-               android:text="其他"/>
-
-       </RadioGroup>
-
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16.0dp"
-            android:textSize="20sp"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress" />
 
 
@@ -91,15 +28,24 @@
             android:layout_gravity="center"
             android:layout_marginBottom="16.0dp"
             android:textSize="20sp"
-            android:hint="密码"
+            android:hint="@string/password"
             android:inputType="textPassword" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginBottom="16.0dp"
+            android:textSize="20sp"
+            android:text="@string/read_agreement"/>
 
         <CheckBox
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="20sp"
-            android:text="同意使用条款"/>
+            android:text="@string/agree_agreement"/>
 
     </LinearLayout>
 

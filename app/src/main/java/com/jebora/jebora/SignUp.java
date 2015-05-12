@@ -5,37 +5,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
-
 public class SignUp extends ActionBarActivity {
-
-    private Button goback;
-    private Button Continue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        goback = (Button) findViewById(R.id.go_back);
-        goback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignUp.this, MainActivity.class));
-                finish ();
-            }
-        });
+        /*ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);*/
 
-        Continue = (Button) findViewById(R.id.Continue);
-        Continue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignUp.this, AddKids.class));
-                finish ();
-            }
-        });
     }
 
     @Override
@@ -53,8 +34,24 @@ public class SignUp extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.Continue) {
+            startActivity(new Intent(SignUp.this, SignUp_2.class));
+            finish ();
+        }
+
+        if (id == R.id.home){
+
             return true;
+           /* Intent upIntent = NavUtils.getParentActivityIntent(this);
+            if (NavUtils.shouldUpRecreateTask(this, upIntent)){
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+            else{
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                NavUtils.navigateUpTo(this, upIntent);
+            }*/
         }
 
         return super.onOptionsItemSelected(item);

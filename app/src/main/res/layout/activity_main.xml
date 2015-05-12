@@ -20,13 +20,20 @@
             android:layout_marginBottom="24.0dip"
             android:orientation="vertical" >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="欢迎"
+                android:textSize="40sp"
+                android:layout_marginBottom="200dip"/>
+
             <Button
-                android:id="@+id/third_party_login"
+                android:id="@+id/login"
                 android:layout_width="250.0dip"
                 android:layout_height="48.0dip"
                 android:gravity="center"
                 android:layout_marginBottom="8.0dip"
-                android:text="腾讯微信账号登陆"
+                android:text="@string/main_login"
                 android:textColor="#FFFFFF"
                 android:textSize="18.0sp" />
 
@@ -36,17 +43,30 @@
                 android:layout_height="48.0dip"
                 android:layout_marginBottom="8.0dip"
                 android:gravity="center"
-                android:text="Email注册新账号"
+                android:text="@string/main_email_reg"
                 android:textColor="#FFFFFF"
                 android:textSize="18.0sp" />
-            <Button
-                android:id="@+id/login"
-                android:layout_width="250.0dip"
-                android:layout_height="48.0dip"
-                android:gravity="center"
-                android:text="已注册用户登陆"
-                android:textColor="#FFFFFF"
-                android:textSize="18.0sp" />
+
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+
+               <Button
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/qq_login"
+                   android:layout_weight="1"
+                   android:text="QQ"/>
+               <Button
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/weibo_login"
+                   android:layout_weight="1"
+                   android:text="微博"/>
+           </LinearLayout>
+
+
+
         </LinearLayout>
 
 </RelativeLayout>

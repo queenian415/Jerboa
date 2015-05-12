@@ -6,4 +6,24 @@
     <string name="title_activity_sign_up">SignUp</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_add_kids">AddKids</string>
+    <string name="main_login">已注册用户登陆</string>
+    <string name="main_email_reg">Email注册新账号</string>
+    <string name="title_activity_sign_up_2">SignUp_2</string>
+    <string name="skip">跳过</string>
+    <string name="Continue">继续</string>
+    <string name="Return">返回</string>
+    <string name="Register">注册</string>
+    <string name="boy">男孩</string>
+    <string name="girl">女孩</string>
+    <string name="child_name">孩子名字</string>
+    <string name="my_name">我是...</string>
+    <string name="child_birthday">孩子生日</string>
+    <string name="dad">爸爸</string>
+    <string name="mom">妈妈</string>
+    <string name="other">其他</string>
+    <string name="read_agreement">查看使用条款</string>
+    <string name="agree_agreement">同意使用条款</string>
+    <string name="email">Email</string>
+    <string name="password">密码</string>
+    <string name="finish">完成</string>
 </resources>

@@ -17,13 +17,10 @@ import android.widget.ImageView;
 public class MainActivity extends Activity {
 
     private Button email_Reg;
-    private Button Third_party_Login;
+    private Button QQ_login;
+    private Button Weibo_login;
     private Button login;
     private ImageView mBackGround;
-
-    //private Animation mFadeIn;
-    //private Animation mFadeInScale;
-    //private Animation mFadeOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +28,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         email_Reg = (Button) findViewById(R.id.email_reg);
-        Third_party_Login = (Button) findViewById(R.id.third_party_login);
+        QQ_login = (Button) findViewById(R.id.qq_login);
+        Weibo_login = (Button) findViewById(R.id.weibo_login);
         login = (Button) findViewById(R.id.login);
         mBackGround = (ImageView) findViewById(R.id.first_bg);
 
         setListener();
-        //initAnim();
 
     }
 
@@ -66,18 +63,6 @@ public class MainActivity extends Activity {
         });
     }
 
-    /* still having some problems with the animation implementation, comment out for now
-    private void initAnim() {
-        mFadeIn = AnimationUtils.loadAnimation(MainActivity.this,
-                R.anim.fade_in);
-        mFadeIn.setDuration(1000);
-        mFadeInScale = AnimationUtils.loadAnimation(MainActivity.this,
-                R.anim.fade_in_scale);
-        mFadeInScale.setDuration(6000);
-        mFadeOut = AnimationUtils.loadAnimation(MainActivity.this,
-                R.anim.fade_out);
-        mFadeOut.setDuration(1000);
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
