@@ -1,9 +1,13 @@
 package com.jebora.jebora;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 public class Login extends ActionBarActivity {
@@ -12,6 +16,19 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ((Button)findViewById(R.id.login)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(accountAuthentication()) {
+                    startActivity(new Intent(Login.this, UserMain.class));
+                    finish();
+                } else {
+                    TextView textView = (TextView)findViewById(R.id.signin_fail);
+                    textView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -35,4 +52,13 @@ public class Login extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private boolean accountAuthentication () {
+        String username = ((TextView)findViewById(R.id.username)).getText().toString().trim();
+        String password = ((TextView)findViewById(R.id.password)).getText().toString().trim();
+
+        ServerAuthentication auth = new ServerAuthentication();
+        return auth.logIn(username, password, Login.this);
+    }
+
 }

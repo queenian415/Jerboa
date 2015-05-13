@@ -19,7 +19,7 @@
         <activity
             android:name=".SignUp"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jebora.jebora.MainActivity" />
@@ -27,7 +27,7 @@
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jebora.jebora.MainActivity" />
@@ -39,6 +39,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jebora.jebora.SignUp" />
+        </activity>
+        <activity
+            android:name=".UserMain"
+            android:label="@string/title_activity_user_main" >
         </activity>
     </application>
 
