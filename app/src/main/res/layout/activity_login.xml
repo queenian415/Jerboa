@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context="com.jebora.jebora.SignUp">
+    tools:context=".Login">
 
     <TextView
         android:id="@+id/signin_fail"
@@ -35,6 +35,7 @@
 
     <Button
         android:id="@+id/login"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="登录"/>

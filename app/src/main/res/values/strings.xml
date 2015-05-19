@@ -27,4 +27,8 @@
     <string name="password">密码</string>
     <string name="finish">完成</string>
     <string name="title_activity_user_main">UserMain</string>
+    <string name="title_activity_photo_grid_view">全部照片</string>
+    <string name="title_activity_choose_product">选择产品</string>
+    <string name="title_activity_preview_product">预览</string>
+    <string name="title_activity_payvement_info">支付信息</string>
 </resources>

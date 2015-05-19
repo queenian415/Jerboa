@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,13 +18,13 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ((Button)findViewById(R.id.login)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(accountAuthentication()) {
+                if (accountAuthentication()) {
                     startActivity(new Intent(Login.this, UserMain.class));
                     finish();
                 } else {
-                    TextView textView = (TextView)findViewById(R.id.signin_fail);
+                    TextView textView = (TextView) findViewById(R.id.signin_fail);
                     textView.setVisibility(View.VISIBLE);
                 }
             }
@@ -49,6 +50,8 @@ public class Login extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+
 
         return super.onOptionsItemSelected(item);
     }

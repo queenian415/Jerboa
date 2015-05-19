@@ -9,6 +9,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,6 +44,38 @@
         <activity
             android:name=".UserMain"
             android:label="@string/title_activity_user_main" >
+        </activity>
+        <activity
+            android:name=".PhotoGridView"
+            android:label="@string/title_activity_photo_grid_view"
+            android:parentActivityName=".UserMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.UserMain" />
+        </activity>
+        <activity
+            android:name=".ChooseProduct"
+            android:label="@string/title_activity_choose_product"
+            android:parentActivityName=".UserMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.UserMain" />
+        </activity>
+        <activity
+            android:name=".PreviewProduct"
+            android:label="@string/title_activity_preview_product"
+            android:parentActivityName=".ChooseProduct" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.ChooseProduct" />
+        </activity>
+        <activity
+            android:name=".PayvementInfo"
+            android:label="@string/title_activity_payvement_info"
+            android:parentActivityName=".PreviewProduct" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.PreviewProduct" />
         </activity>
     </application>
 
