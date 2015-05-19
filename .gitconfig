@@ -1,0 +1,27 @@
+[user]
+	name = Tiffany Huang 
+	email = queenian415@gmail.com 
+[core]
+    editor = vim
+    whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	autocrlf = false
+[alias]
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff
+    dc = diff --cached
+    lg = log -p
+    ru = remote update
+    llog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    who = shortlog -s --
+    conv8z = git@consus.canlab.ibm.com:/opt/git/v8z.git
+    coj = checkout joran
+    com = checkout master
+    rbmj = rebase master joran
+
+[push]
+	default = tracking
+[color]
+	ui = auto
