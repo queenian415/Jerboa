@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jebora.jebora" >
 
+    <uses-sdk android:minSdkVersion="7" android:maxSdkVersion="18" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,7 +25,7 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jebora.jebora.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".Login"
@@ -31,15 +33,15 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jebora.jebora.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".SignUp_2"
             android:label="@string/title_activity_sign_up_2"
-            android:parentActivityName=".SignUp" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jebora.jebora.SignUp" />
+                android:value=".SignUp" />
         </activity>
         <activity
             android:name=".PhotoGridView"
@@ -47,7 +49,7 @@
             android:parentActivityName=".UserMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jebora.jebora.UserMain" />
+                android:value=".UserMain" />
         </activity>
         <activity
             android:name=".ChooseProduct"
@@ -55,7 +57,7 @@
             android:parentActivityName=".UserMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jebora.jebora.UserMain" />
+                android:value=".UserMain" />
         </activity>
         <activity
             android:name=".PreviewProduct"
@@ -63,7 +65,7 @@
             android:parentActivityName=".ChooseProduct" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jebora.jebora.ChooseProduct" />
+                android:value=".ChooseProduct" />
         </activity>
         <activity
             android:name=".PayvementInfo"
@@ -71,7 +73,7 @@
             android:parentActivityName=".PreviewProduct" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jebora.jebora.PreviewProduct" />
+                android:value=".PreviewProduct" />
         </activity>
         <activity
             android:name=".UserMain"
