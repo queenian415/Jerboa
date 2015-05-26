@@ -11,7 +11,16 @@
         android:layout_marginTop="48.0dip"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/signup2_fail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:text=""/>
+
         <EditText
+            android:id="@+id/child_name"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -32,6 +41,7 @@
             android:onClick="showBirthdayPickerDialog" />
 
         <RadioGroup
+            android:id="@+id/child_gender"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -52,15 +62,15 @@
 
         </RadioGroup>
 
-        <EditText
+        <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="16.0dp"
             android:textSize="20sp"
-            android:hint="@string/my_name"
-            android:inputType="textEmailAddress" />
+            android:hint="@string/my_name" />
         <RadioGroup
+            android:id="@+id/relationship"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -71,27 +81,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/dad"/>
+                android:text="@string/dad"
+                android:onClick="hideOther"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/mom"/>
+                android:text="@string/mom"
+                android:onClick="hideOther"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/other"/>
+                android:text="@string/other"
+                android:onClick="showOther"/>
 
         </RadioGroup>
 
+        <EditText
+            android:id="@+id/signup_2_other_relationship"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="其他"
+            android:visibility="invisible"/>
+
         <Button
+            android:id="@+id/complete"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="20sp"
-            android:text="完成"/>
+            android:text="完成"
+            android:onClick="onClickComplete" />
     </LinearLayout>
 </LinearLayout>

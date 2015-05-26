@@ -7,9 +7,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 
 public class SignUp_2 extends ActionBarActivity {
+
+    public static final String SIGNUP2_EMPTY = "请输入全部信息";
+    public static final String SIGNUP2_NORELATION = "请输入与孩子的关系";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +47,73 @@ public class SignUp_2 extends ActionBarActivity {
             return true;
         }
 
+        if (id == R.id.skip) {
+            startActivity(new Intent(SignUp_2.this, UserMain.class));
+            finish();
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onClickComplete(View v) {
+        String status = addKid();
+        TextView textView = (TextView)findViewById(R.id.signup2_fail);
+
+        if (status.equals(SIGNUP2_EMPTY)) {
+            textView.setText(SIGNUP2_EMPTY);
+            textView.setVisibility(v.VISIBLE);
+        } else if (status.equals(SIGNUP2_NORELATION)) {
+            textView.setText(SIGNUP2_NORELATION);
+            textView.setVisibility(v.VISIBLE);
+        } else {
+            startActivity(new Intent(SignUp_2.this, UserMain.class));
+            finish();
+        }
     }
 
     public void showBirthdayPickerDialog(View v) {
         DatePickerFragment birthdayPicker = new DatePickerFragment();
         birthdayPicker.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void showOther(View v) {
+        ((EditText)findViewById(R.id.signup_2_other_relationship)).setVisibility(v.VISIBLE);
+    }
+
+    public void hideOther(View v) {
+        ((EditText)findViewById(R.id.signup_2_other_relationship)).setVisibility(v.INVISIBLE);
+    }
+
+    private String addKid() {
+        String kidName = ((EditText) findViewById(R.id.child_name)).getText().toString();
+        String kidBirthday = ((Button) findViewById(R.id.child_birthday)).getText().toString();
+
+        RadioGroup radioGroup1 = ((RadioGroup) findViewById(R.id.child_gender));
+        int radioGroup1_id = radioGroup1.getCheckedRadioButtonId();
+        if (radioGroup1_id == -1) {
+            return SIGNUP2_EMPTY;
+        }
+        String kidGender = ((RadioButton) findViewById(radioGroup1_id)).getText().toString();
+
+        RadioGroup radioGroup2 = ((RadioGroup) findViewById(R.id.relationship));
+        int radioGroup2_id = radioGroup2.getCheckedRadioButtonId();
+        if (radioGroup2_id == -1) {
+            return SIGNUP2_NORELATION;
+        }
+        String kidRelation = ((RadioButton) findViewById(radioGroup2_id)).getText().toString();
+        if (kidRelation.equals("其他")) {
+            kidRelation = ((EditText) findViewById(R.id.signup_2_other_relationship)).getText().toString();
+            if (kidRelation.equals("")) {
+                return SIGNUP2_NORELATION;
+            }
+        }
+
+        if (kidName.equals("") || kidBirthday.equals(getString(R.string.child_birthday))) {
+            return SIGNUP2_EMPTY;
+        }
+
+        ServerCommunication s = new ServerCommunication();
+        return s.addKid(kidName, kidBirthday, kidGender, kidRelation);
     }
 
 }

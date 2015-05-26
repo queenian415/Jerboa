@@ -48,7 +48,6 @@ public class SignUp extends ActionBarActivity {
 
         //Create user account
         if (id == R.id.Continue) {
-
             String status = createAccount();
             TextView textView = (TextView)findViewById(R.id.signup_fail);
             if(status.equals(SIGNUP_SUCCEEDS)) {
