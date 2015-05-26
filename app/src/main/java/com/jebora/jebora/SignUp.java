@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class SignUp extends ActionBarActivity {
     public static final String SIGNUP_EXISTS = "用户名已注册";
     public static final String SIGNUP_EMPTY = "请输入用户名和密码";
     public static final String SIGNUP_SUCCEEDS = "注册成功";
+    public static final String SIGNUP_NOTAGREE = "请同意使用条款";
 
 
     @Override
@@ -54,6 +56,9 @@ public class SignUp extends ActionBarActivity {
                 finish();
             } else if (status.equals(SIGNUP_EXISTS)){
                 textView.setVisibility(View.VISIBLE);
+            } else if (status.equals(SIGNUP_NOTAGREE)) {
+                textView.setText(SIGNUP_NOTAGREE);
+                textView.setVisibility(View.VISIBLE);
             } else {
                 textView.setText(SIGNUP_EMPTY);
                 textView.setVisibility(View.VISIBLE);
@@ -81,9 +86,14 @@ public class SignUp extends ActionBarActivity {
     private String createAccount() {
         String username = ((EditText)findViewById(R.id.username)).getText().toString().trim();
         String password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
+        CheckBox agreement = ((CheckBox)findViewById(R.id.agreement));
 
         if (username.equals("") || password.equals("")) {
             return SIGNUP_EMPTY;
+        }
+
+        if (!agreement.isChecked()) {
+            return SIGNUP_NOTAGREE;
         }
 
         ServerAuthentication auth = new ServerAuthentication();

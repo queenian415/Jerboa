@@ -20,14 +20,16 @@
             android:hint="@string/child_name"
             android:inputType="textPersonName" />
 
-        <EditText
+
+        <Button
+            android:id="@+id/child_birthday"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="16.0dp"
             android:textSize="20sp"
-            android:hint="@string/child_birthday"
-            android:inputType="textPersonName" />
+            android:text="@string/child_birthday"
+            android:onClick="showBirthdayPickerDialog" />
 
         <RadioGroup
             android:layout_width="300dp"

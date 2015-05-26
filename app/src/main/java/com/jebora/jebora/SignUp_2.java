@@ -1,10 +1,12 @@
 package com.jebora.jebora;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class SignUp_2 extends ActionBarActivity {
@@ -39,5 +41,9 @@ public class SignUp_2 extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void showBirthdayPickerDialog(View v) {
+        DatePickerFragment birthdayPicker = new DatePickerFragment();
+        birthdayPicker.show(getSupportFragmentManager(), "datePicker");
+    }
 
 }
