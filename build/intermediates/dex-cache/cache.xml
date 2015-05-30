@@ -9,6 +9,13 @@
         <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-03e544f24c652b6e34df8bf9fae91eecb66793db.jar" />
     </item>
     <item
+        jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-cbbcd1e842846236a40133dcbd50bb75c2d4aa69.jar" />
+    </item>
+    <item
         jar="/Users/jack/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -21,13 +28,6 @@
         revision="22.0.1"
         sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
         <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-4f52db5d95270772a027f673a0e5c67d9e10ed96.jar" />
-    </item>
-    <item
-        jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-cbbcd1e842846236a40133dcbd50bb75c2d4aa69.jar" />
     </item>
 
 </items>
