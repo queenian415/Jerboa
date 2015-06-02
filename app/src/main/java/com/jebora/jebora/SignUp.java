@@ -52,14 +52,14 @@ public class SignUp extends ActionBarActivity {
             TextView textView = (TextView)findViewById(R.id.signup_fail);
             if(status.equals(SIGNUP_SUCCEEDS)) {
                 startActivity(new Intent(SignUp.this, SignUp_2.class));
-                finish();
+                //finish();
             } else if (status.equals(SIGNUP_EXISTS)){
                 textView.setVisibility(View.VISIBLE);
             } else if (status.equals(SIGNUP_NOTAGREE)) {
                 textView.setText(SIGNUP_NOTAGREE);
                 textView.setVisibility(View.VISIBLE);
             } else {
-                textView.setText(SIGNUP_EMPTY);
+                textView.setText(status);
                 textView.setVisibility(View.VISIBLE);
             }
         }
@@ -96,6 +96,7 @@ public class SignUp extends ActionBarActivity {
         }
 
         ServerAuthentication auth = new ServerAuthentication();
-        return auth.signUp(username, password, SignUp.this);
+        return auth.signUp(username, password);
     }
+
 }

@@ -63,7 +63,7 @@ public class Login extends ActionBarActivity {
         String password = ((TextView)findViewById(R.id.password)).getText().toString().trim();
 
         ServerAuthentication auth = new ServerAuthentication();
-        return auth.logIn(username, password, Login.this);
+        return auth.logIn(username, password);
     }
 
 }
