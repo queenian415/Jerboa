@@ -10,6 +10,8 @@ import com.parse.ParseObject;
  */
 public class App extends Application {
 
+    public static final String PREFIX = "com.jebora.jebora";
+
     @Override
     public void onCreate() {
         super.onCreate();

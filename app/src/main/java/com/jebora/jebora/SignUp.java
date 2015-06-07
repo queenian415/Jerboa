@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,14 +14,12 @@ import android.widget.TextView;
 
 public class SignUp extends ActionBarActivity {
 
-    public static final String PREFIX = "com.jebora.jebora";
-
     /***
      * Sign up verification strings
      */
     public static final String SIGNUP_EXISTS = "用户名已注册";
     public static final String SIGNUP_EMPTY = "请输入用户名和密码";
-    public static final String SIGNUP_SUCCEEDS = "注册成功";
+    public static final String SIGNUP_ERROR = "系统出错";
     public static final String SIGNUP_NOTAGREE = "请同意使用条款";
 
 
@@ -49,18 +48,20 @@ public class SignUp extends ActionBarActivity {
         //Create user account
         if (id == R.id.Continue) {
             String status = createAccount();
+
             TextView textView = (TextView)findViewById(R.id.signup_fail);
-            if(status.equals(SIGNUP_SUCCEEDS)) {
-                startActivity(new Intent(SignUp.this, SignUp_2.class));
-                //finish();
-            } else if (status.equals(SIGNUP_EXISTS)){
+
+            if (status.equals(SIGNUP_EXISTS)){
                 textView.setVisibility(View.VISIBLE);
             } else if (status.equals(SIGNUP_NOTAGREE)) {
-                textView.setText(SIGNUP_NOTAGREE);
-                textView.setVisibility(View.VISIBLE);
-            } else {
                 textView.setText(status);
                 textView.setVisibility(View.VISIBLE);
+            } else if (status.equals(SIGNUP_ERROR)) {
+                textView.setText(status);
+                textView.setVisibility(View.VISIBLE);
+            } else {
+                startActivity(new Intent(SignUp.this, SignUp_2.class));
+                //finish();
             }
         }
 
@@ -95,8 +96,8 @@ public class SignUp extends ActionBarActivity {
             return SIGNUP_NOTAGREE;
         }
 
-        ServerAuthentication auth = new ServerAuthentication();
-        return auth.signUp(username, password);
+        ServerCommunication sc = new ServerCommunication();
+        return sc.signUp(username, password);
     }
 
 }

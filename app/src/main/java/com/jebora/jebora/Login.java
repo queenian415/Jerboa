@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -61,8 +62,7 @@ public class Login extends ActionBarActivity {
     private boolean accountAuthentication () {
         String username = ((TextView)findViewById(R.id.username)).getText().toString().trim();
         String password = ((TextView)findViewById(R.id.password)).getText().toString().trim();
-
-        ServerAuthentication auth = new ServerAuthentication();
+        ServerCommunication auth = new ServerCommunication();
         return auth.logIn(username, password);
     }
 
