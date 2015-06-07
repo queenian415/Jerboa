@@ -1,9 +1,11 @@
 package com.jebora.jebora;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +15,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 
 public class SignUp_2 extends ActionBarActivity {
 
     public static final String SIGNUP2_EMPTY = "请输入全部信息";
     public static final String SIGNUP2_NORELATION = "请输入与孩子的关系";
-
+    public static final String SIGNUP2_ERROR = "系统错误";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +68,21 @@ public class SignUp_2 extends ActionBarActivity {
         TextView textView = (TextView)findViewById(R.id.signup2_fail);
 
         if (status.equals(SIGNUP2_EMPTY)) {
-            textView.setText(SIGNUP2_EMPTY);
+            textView.setText(status);
             textView.setVisibility(v.VISIBLE);
         } else if (status.equals(SIGNUP2_NORELATION)) {
-            textView.setText(SIGNUP2_NORELATION);
+            textView.setText(status);
+            textView.setVisibility(v.VISIBLE);
+        } else if (status.equals(SIGNUP2_ERROR)) {
+            textView.setText(status);
             textView.setVisibility(v.VISIBLE);
         } else {
+            // Save the preferred kid
+            SharedPreferences user = getSharedPreferences(App.PREFIX + "KIDID", 0);
+            SharedPreferences.Editor editor = user.edit();
+            editor.putString("kidid", status);
+            editor.commit();
+
             startActivity(new Intent(SignUp_2.this, UserMain.class));
             finish();
         }
@@ -77,11 +94,11 @@ public class SignUp_2 extends ActionBarActivity {
     }
 
     public void showOther(View v) {
-        ((EditText)findViewById(R.id.signup_2_other_relationship)).setVisibility(v.VISIBLE);
+        (findViewById(R.id.signup_2_other_relationship)).setVisibility(v.VISIBLE);
     }
 
     public void hideOther(View v) {
-        ((EditText)findViewById(R.id.signup_2_other_relationship)).setVisibility(v.INVISIBLE);
+        (findViewById(R.id.signup_2_other_relationship)).setVisibility(v.INVISIBLE);
     }
 
     private String addKid() {
@@ -112,8 +129,8 @@ public class SignUp_2 extends ActionBarActivity {
             return SIGNUP2_EMPTY;
         }
 
-        ServerCommunication s = new ServerCommunication();
-        return s.addKid(kidName, kidBirthday, kidGender, kidRelation);
+        ServerCommunication sc = new ServerCommunication();
+        return sc.addKid(kidName, kidBirthday, kidGender, kidRelation);
     }
 
 }

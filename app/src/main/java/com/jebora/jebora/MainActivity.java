@@ -13,6 +13,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
 
 public class MainActivity extends Activity {
 
@@ -25,16 +28,22 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        email_Reg = (Button) findViewById(R.id.email_reg);
-        QQ_login = (Button) findViewById(R.id.qq_login);
-        Weibo_login = (Button) findViewById(R.id.weibo_login);
-        login = (Button) findViewById(R.id.login);
-        mBackGround = (ImageView) findViewById(R.id.first_bg);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            startActivity(new Intent(this, UserMain.class));
+            finish();
+        } else {
+            setContentView(R.layout.activity_main);
 
-        setListener();
+            email_Reg = (Button) findViewById(R.id.email_reg);
+            QQ_login = (Button) findViewById(R.id.qq_login);
+            Weibo_login = (Button) findViewById(R.id.weibo_login);
+            login = (Button) findViewById(R.id.login);
+            mBackGround = (ImageView) findViewById(R.id.first_bg);
 
+            setListener();
+        }
     }
 
     @Override
