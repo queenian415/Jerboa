@@ -2,40 +2,46 @@
 <items version="2" >
 
     <item
-        jar="/Users/Tiffanie/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
-        <dex dex="/Users/Tiffanie/AndroidProjects/Jerboa/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-058c4b32b9aa729aeb5a89eeb9fb774dc64acc97.jar" />
-    </item>
-    <item
-<<<<<<< Updated upstream
-        jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-cbbcd1e842846236a40133dcbd50bb75c2d4aa69.jar" />
-    </item>
-    <item
-        jar="/Users/jack/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-fd8f509a752b720e83be58e64081ea246d81aa64.jar" />
-    </item>
-    <item
-        jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars/classes.jar"
+        jar="/Users/danchen/GitHub/Jerboa/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
-        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-4f52db5d95270772a027f673a0e5c67d9e10ed96.jar" />
-=======
-        jar="/Users/Tiffanie/AndroidProjects/Jerboa/app/libs/Parse-1.9.2.jar"
+        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/classes-d901566599d51eb037666bc5fac900c05aec821c.jar" />
+    </item>
+    <item
+        jar="/Users/danchen/GitHub/Jerboa/app/libs/Parse-1.9.2.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="fe739334780fe321141e62720822c2d456061899">
-        <dex dex="/Users/Tiffanie/AndroidProjects/Jerboa/app/build/intermediates/pre-dexed/debug/Parse-1.9.2-36d5455baa99c7d7912b20921afd69ac847afa53.jar" />
->>>>>>> Stashed changes
+        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/Parse-1.9.2-df9b0e97988ca7e3102a758ce40bf217dc119a78.jar" />
+    </item>
+    <item
+        jar="/Users/danchen/GitHub/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/classes-99c13fc2da9c4232635fb0dd96a11aeeb1dbd63f.jar" />
+    </item>
+    <item
+        jar="/Users/danchen/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-2f96cbe47104d198eb627b5764f74e2f03ec91de.jar" />
+    </item>
+    <item
+        jar="/Users/danchen/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-2b103c642570143fbb20ccf61c7c36435e9389d6.jar" />
+    </item>
+    <item
+        jar="/Users/danchen/GitHub/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-5434504021a61abab9c19b2968afca53cb1f0458.jar" />
     </item>
 
 </items>
