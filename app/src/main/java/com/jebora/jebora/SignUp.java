@@ -4,13 +4,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Iterator;
 
 public class SignUp extends ActionBarActivity {
 
@@ -21,12 +29,47 @@ public class SignUp extends ActionBarActivity {
     public static final String SIGNUP_EMPTY = "请输入用户名和密码";
     public static final String SIGNUP_ERROR = "系统出错";
     public static final String SIGNUP_NOTAGREE = "请同意使用条款";
+    public static final String SIGNUP_NOTEMAIL = "请输入邮箱为用户名";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        //set email drop down list
+        final AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.username);
+        textView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s != null && s.length() > 0 && s.charAt(s.length() - 1) == '@') {
+                    String[] emailDropdown = getResources().getStringArray(R.array.email_dropdown);
+                    // Edit drop down list to match user email
+                    // For example, if user enters "hello@", drop down list shows "hello@gmail.com" etc.
+                    int i = 0;
+                    for (String email : emailDropdown) {
+                        emailDropdown[i] = s + email;
+                        i++;
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, emailDropdown);
+                    AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.username);
+                    textView.setThreshold(1);
+                    textView.setAdapter(adapter);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -59,6 +102,12 @@ public class SignUp extends ActionBarActivity {
             } else if (status.equals(SIGNUP_ERROR)) {
                 textView.setText(status);
                 textView.setVisibility(View.VISIBLE);
+            } else if (status.equals(SIGNUP_NOTEMAIL)) {
+                textView.setText(status);
+                textView.setVisibility(View.VISIBLE);
+            } else if (status.equals(SIGNUP_EMPTY)) {
+                textView.setText(status);
+                textView.setVisibility(View.VISIBLE);
             } else {
                 startActivity(new Intent(SignUp.this, SignUp_2.class));
                 //finish();
@@ -84,7 +133,7 @@ public class SignUp extends ActionBarActivity {
     }
 
     private String createAccount() {
-        String username = ((EditText)findViewById(R.id.username)).getText().toString().trim();
+        String username = ((AutoCompleteTextView)findViewById(R.id.username)).getText().toString().trim();
         String password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
         CheckBox agreement = ((CheckBox)findViewById(R.id.agreement));
 
@@ -94,6 +143,10 @@ public class SignUp extends ActionBarActivity {
 
         if (!agreement.isChecked()) {
             return SIGNUP_NOTAGREE;
+        }
+
+        if (!username.contains("@")) {
+            return SIGNUP_NOTEMAIL;
         }
 
         ServerCommunication sc = new ServerCommunication();

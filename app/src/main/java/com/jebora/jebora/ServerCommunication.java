@@ -11,7 +11,10 @@ import com.parse.ParseUser;
  */
 public class ServerCommunication {
 
+    private final String TAG = "ServerCommunication";
     public String signUp(String username, String password) {
+        Log.d(TAG, "signUp");
+
         ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setPassword(password);
@@ -23,23 +26,27 @@ public class ServerCommunication {
             if (e.getCode() == ParseException.USERNAME_TAKEN) {
                 return SignUp.SIGNUP_EXISTS;
             } else {
-                Log.d("signUp", e.getMessage());
+                e.printStackTrace();
                 return SignUp.SIGNUP_ERROR;
             }
         }
     }
 
     public Boolean logIn(String username, String password) {
+        Log.d(TAG, "logIn");
+
         try {
             ParseUser.logIn(username, password);
             return true;
         } catch (ParseException e) {
-            Log.d("logIn", e.getMessage());
+            Log.d(TAG, "logIn failed: " + e.getMessage());
             return false;
         }
     }
 
     public String addKid(String kidName, String kidBirthday, String kidGender, String kidRelation) {
+        Log.d(TAG, "addKid");
+
         // Store kid's info in Parse
         ParseObject kid = new ParseObject("Kid");
         kid.put("kidName", kidName);

@@ -46,4 +46,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
+    
+    <string-array name="email_dropdown">
+        <item>gmail.com</item>
+        <item>sina.com</item>
+        <item>163.com</item>
+        <item>qq.com</item>
+        <item>126.com</item>
+        <item>hotmail.com</item>
+        <item>sohu.com</item>
+    </string-array>
 </resources>
