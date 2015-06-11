@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
@@ -35,6 +36,18 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+
+import com.jebora.jebora.adapters.CircularAdapter;
+import com.jebora.jebora.provider.ImagesUrls;
+import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
+import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 
 public class UserMain extends ActionBarActivity
@@ -129,6 +142,19 @@ public class UserMain extends ActionBarActivity
         /**
          * 返回根据title参数创建的fragment
          */
+        //parameters for listbuddies
+        private static final String TAG = UserMainList.class.getSimpleName();
+        int mMarginDefault;
+        int[] mScrollConfig;
+        private boolean isOpenActivities;
+        private CircularAdapter mAdapterLeft;
+        private CircularAdapter mAdapterRight;
+        @InjectView(R.id.listbuddies)
+        ListBuddiesLayout mListBuddies;
+        private List<String> mImagesLeft = new ArrayList<String>();
+        private List<String> mImagesRight = new ArrayList<String>();
+        //end
+
         public static ContentFragment newInstance(String title) {
             ContentFragment fragment = new ContentFragment();
             Bundle args = new Bundle();
@@ -171,6 +197,20 @@ public class UserMain extends ActionBarActivity
                 });
                 return rootView;
             }
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("关于我们")){
+                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+                ButterKnife.inject(this, rootView);
+
+                //If we do this we need to uncomment the container on the xml layout
+                //createListBuddiesLayoutDinamically(rootView);
+                mImagesLeft.addAll(Arrays.asList(ImagesUrls.imageUrls_left));
+                mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
+                mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
+                mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
+                mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
+                //mListBuddies.setOnItemClickListener(this);
+                return rootView;
+            }
             else{
                 View rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -199,6 +239,51 @@ public class UserMain extends ActionBarActivity
                 }
                 showImage.setImageBitmap(bitmap);
             }
+        }
+        private String getImage(int buddy, int position) {
+            return buddy == 0 ? ImagesUrls.imageUrls_left[position] : ImagesUrls.imageUrls_right[position];
+        }
+
+        public void setGap(int value) {
+            mListBuddies.setGap(value);
+        }
+
+        public void setSpeed(int value) {
+            mListBuddies.setSpeed(value);
+        }
+
+        public void setDividerHeight(int value) {
+            mListBuddies.setDividerHeight(value);
+        }
+
+        public void setGapColor(int color) {
+            mListBuddies.setGapColor(color);
+        }
+
+        public void setAutoScrollFaster(int option) {
+            mListBuddies.setAutoScrollFaster(option);
+        }
+
+        public void setScrollFaster(int option) {
+            mListBuddies.setManualScrollFaster(option);
+        }
+
+        public void setDivider(Drawable drawable) {
+            mListBuddies.setDivider(drawable);
+        }
+
+        public void setOpenActivities(Boolean openActivities) {
+            this.isOpenActivities = openActivities;
+        }
+
+        public void resetLayout() {
+            mListBuddies.setGap(mMarginDefault)
+                    .setSpeed(ListBuddiesLayout.DEFAULT_SPEED)
+                    .setDividerHeight(mMarginDefault)
+                    .setGapColor(getResources().getColor(R.color.frame))
+                    .setAutoScrollFaster(mScrollConfig[ScrollConfigOptions.RIGHT.getConfigValue()])
+                    .setManualScrollFaster(mScrollConfig[ScrollConfigOptions.LEFT.getConfigValue()])
+                    .setDivider(getResources().getDrawable(R.drawable.divider));
         }
     }
 }

@@ -2,46 +2,46 @@
 <items version="2" >
 
     <item
-        jar="/Users/danchen/GitHub/Jerboa/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars/classes.jar"
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-urlconnection/2.0.0/afe8399d352713b66e597e9670c741d1e60ae923/okhttp-urlconnection-2.0.0.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
-        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/classes-d901566599d51eb037666bc5fac900c05aec821c.jar" />
+        sha1="afe8399d352713b66e597e9670c741d1e60ae923">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.0.0-f26edbed3c2ce955caafd18839d55ee9382c4f82.jar" />
     </item>
     <item
-        jar="/Users/danchen/GitHub/Jerboa/app/libs/Parse-1.9.2.jar"
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.0.0/2534c458682c73f5b9871131ab3098d3f987ca3/okio-1.0.0.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="fe739334780fe321141e62720822c2d456061899">
-        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/Parse-1.9.2-df9b0e97988ca7e3102a758ce40bf217dc119a78.jar" />
+        sha1="02534c458682c73f5b9871131ab3098d3f987ca3">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okio-1.0.0-6acc3946e7eb412c1570c54c88dce75f419d8796.jar" />
     </item>
     <item
-        jar="/Users/danchen/GitHub/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/5.1.2/daf5472b0df6dabaceb6ad755b3812535863965a/butterknife-5.1.2.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/classes-99c13fc2da9c4232635fb0dd96a11aeeb1dbd63f.jar" />
+        sha1="daf5472b0df6dabaceb6ad755b3812535863965a">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/butterknife-5.1.2-5ece5fc3c90959115d27422e7252a002dc30f087.jar" />
     </item>
     <item
-        jar="/Users/danchen/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.3.3/1262995965440e28ba5c4d480c9c9ab4ccce84cc/picasso-2.3.3.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
-        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-2f96cbe47104d198eb627b5764f74e2f03ec91de.jar" />
+        sha1="1262995965440e28ba5c4d480c9c9ab4ccce84cc">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/picasso-2.3.3-fd94280fd89e31a4c109fe204e02ef455d8ea523.jar" />
     </item>
     <item
-        jar="/Users/danchen/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/Jerboa/library/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-2b103c642570143fbb20ccf61c7c36435e9389d6.jar" />
+        sha1="eacfe8567e5bec0dc82d806a599a0a89d1888138">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-755d6ed0b0bfd26b0e6911e1992abc8094d1f4cc.jar" />
     </item>
     <item
-        jar="/Users/danchen/GitHub/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.0.0/4c8d1536dba3812cc1592090dc20c47a4ed3c35e/okhttp-2.0.0.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/Users/danchen/GitHub/Jerboa/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-5434504021a61abab9c19b2968afca53cb1f0458.jar" />
+        sha1="4c8d1536dba3812cc1592090dc20c47a4ed3c35e">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-2.0.0-d83c90d27a7446ec8317ad9b7bf4627a4d5470b7.jar" />
     </item>
 
 </items>
