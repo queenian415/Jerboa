@@ -433,9 +433,9 @@ public class ListBuddiesLayout extends LinearLayout implements View.OnTouchListe
         int speed;
 
         if (isManualScrollLeftListFaster && isCalculationForLeft || !isManualScrollLeftListFaster && !isCalculationForLeft) {
-            speed = (int) -deltaY * 2;
+            speed = (int) -deltaY;
         } else {
-            speed = (int) -deltaY / 2;
+            speed = (int) -deltaY;
         }
         return speed;
     }

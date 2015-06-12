@@ -9,13 +9,6 @@
         <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.0.0-f26edbed3c2ce955caafd18839d55ee9382c4f82.jar" />
     </item>
     <item
-        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.0.0/2534c458682c73f5b9871131ab3098d3f987ca3/okio-1.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="02534c458682c73f5b9871131ab3098d3f987ca3">
-        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okio-1.0.0-6acc3946e7eb412c1570c54c88dce75f419d8796.jar" />
-    </item>
-    <item
         jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/5.1.2/daf5472b0df6dabaceb6ad755b3812535863965a/butterknife-5.1.2.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -23,18 +16,18 @@
         <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/butterknife-5.1.2-5ece5fc3c90959115d27422e7252a002dc30f087.jar" />
     </item>
     <item
-        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.3.3/1262995965440e28ba5c4d480c9c9ab4ccce84cc/picasso-2.3.3.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="1262995965440e28ba5c4d480c9c9ab4ccce84cc">
-        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/picasso-2.3.3-fd94280fd89e31a4c109fe204e02ef455d8ea523.jar" />
-    </item>
-    <item
         jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/Jerboa/library/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="eacfe8567e5bec0dc82d806a599a0a89d1888138">
+        sha1="4fdc553cf595ad338694f7c4064c7f1eaa0b9ff7">
         <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-755d6ed0b0bfd26b0e6911e1992abc8094d1f4cc.jar" />
+    </item>
+    <item
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.0.0/2534c458682c73f5b9871131ab3098d3f987ca3/okio-1.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="02534c458682c73f5b9871131ab3098d3f987ca3">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okio-1.0.0-6acc3946e7eb412c1570c54c88dce75f419d8796.jar" />
     </item>
     <item
         jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.0.0/4c8d1536dba3812cc1592090dc20c47a4ed3c35e/okhttp-2.0.0.jar"
@@ -42,6 +35,13 @@
         revision="22.0.1"
         sha1="4c8d1536dba3812cc1592090dc20c47a4ed3c35e">
         <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-2.0.0-d83c90d27a7446ec8317ad9b7bf4627a4d5470b7.jar" />
+    </item>
+    <item
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.3.3/1262995965440e28ba5c4d480c9c9ab4ccce84cc/picasso-2.3.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1262995965440e28ba5c4d480c9c9ab4ccce84cc">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/picasso-2.3.3-fd94280fd89e31a4c109fe204e02ef455d8ea523.jar" />
     </item>
 
 </items>
