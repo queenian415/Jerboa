@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +73,7 @@ public class UserMain extends ActionBarActivity
 
     private Fragment currentFragment;
     private Fragment lastFragment;
+    private SpinnerAdapter mSpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,7 @@ public class UserMain extends ActionBarActivity
 
         // 设置抽屉
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
     }
 
     @Override
@@ -117,7 +122,17 @@ public class UserMain extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()&&mTitle.equals("我的照片")) {
+
+            mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.kids, android.R.layout.simple_spinner_dropdown_item);
+            getMenuInflater().inflate(R.menu.menu_usermain_view, menu);
+            MenuItem item = menu.findItem(R.id.menu_spinner);
+            Spinner spinner = (Spinner) item.getActionView();
+            spinner.setAdapter(mSpinnerAdapter);
+            restoreActionBar();
+            return true;
+        }
+        else if(!mNavigationDrawerFragment.isDrawerOpen()){
             getMenuInflater().inflate(R.menu.user_main, menu);
             restoreActionBar();
             return true;
@@ -165,8 +180,13 @@ public class UserMain extends ActionBarActivity
             Bundle args = new Bundle();
             args.putString(ARG_SECTION_TITLE, title);
             fragment.setArguments(args);
+
+            if(title.equals("我的照片"))
+                fragment.setHasOptionsMenu(true);
+
             return fragment;
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -202,10 +222,10 @@ public class UserMain extends ActionBarActivity
                 });
                 return rootView;
             }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("关于我们")){
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("我的照片")){
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
                 ButterKnife.inject(this, rootView);
-
+                setHasOptionsMenu(true);
                 //If we do this we need to uncomment the container on the xml layout
                 //createListBuddiesLayoutDinamically(rootView);
                 mImagesLeft.addAll(Arrays.asList(ImagesUrls.imageUrls_left));
@@ -213,6 +233,7 @@ public class UserMain extends ActionBarActivity
                 mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
                 mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
                 mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
+                mListBuddies.setSpeed(0);
                 //mListBuddies.setOnItemClickListener(this);
                 return rootView;
             }

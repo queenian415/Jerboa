@@ -99,6 +99,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
         String[] itemTitle = getResources().getStringArray(R.array.item_title);
         int[] itemIconRes = {
+            R.drawable.ic_drawer_setting,
     		R.drawable.ic_drawer_home,
     		R.drawable.ic_drawer_explore,
     		R.drawable.ic_drawer_follow,

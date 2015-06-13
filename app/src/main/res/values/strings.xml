@@ -30,6 +30,7 @@
     <string name="title_activity_choose_product">选择产品</string>
     <string name="title_activity_preview_product">预览</string>
     <string name="title_activity_payvement_info">支付信息</string>
+    <string name="myphotos">我的照片</string>
     <string name="mykids">我的孩子</string>
     <string name="myorders">我的订单</string>
     <string name="mycart">我的购物车</string>
@@ -41,6 +42,9 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+
+    <string name="firstkid">孩子1</string>
+    <string name="secondkid">孩子2</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
