@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,8 +43,11 @@ import com.jebora.jebora.provider.ImagesUrls;
 import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -129,6 +133,7 @@ public class UserMain extends ActionBarActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * 内容fragment
@@ -227,6 +232,9 @@ public class UserMain extends ActionBarActivity
                 Bundle extras = data.getExtras();
                 Bitmap photo = (Bitmap) extras.get("data");
                 showImage.setImageBitmap(photo);
+                File appExtDir = getAppDir();
+                Date photoTakenTime = new Date();
+                saveBitmapToPath(photo, appExtDir.toString(), photoTakenTime.toString());
             }
             else if(requestCode == GALLERY_REQUEST){
                 Uri origUri = data.getData();
@@ -238,6 +246,9 @@ public class UserMain extends ActionBarActivity
                     e.printStackTrace();
                 }
                 showImage.setImageBitmap(bitmap);
+                File appExtDir = getAppDir();
+                Date photoAddedTime = new Date();
+                saveBitmapToPath(bitmap, appExtDir.toString(), photoAddedTime.toString());
             }
         }
         private String getImage(int buddy, int position) {
@@ -284,6 +295,39 @@ public class UserMain extends ActionBarActivity
                     .setAutoScrollFaster(mScrollConfig[ScrollConfigOptions.RIGHT.getConfigValue()])
                     .setManualScrollFaster(mScrollConfig[ScrollConfigOptions.LEFT.getConfigValue()])
                     .setDivider(getResources().getDrawable(R.drawable.divider));
+        }
+
+        public File getAppDir(){
+            File extFile = getActivity().getApplicationContext().getExternalFilesDir(null);
+            if(!extFile.exists()){
+                if(!extFile.mkdir()){
+                    Log.e("IO Error", "Error cannot make jerboa dir");
+                }
+            }
+            return extFile;
+        }
+
+        public boolean saveBitmapToPath(Bitmap bm, String path, String filename){
+            boolean result = false;
+            FileOutputStream fOut = null;
+            File f = new File(path + File.separator + filename + ".png");
+            boolean fExists = f.exists();
+            try{
+                if(!fExists){
+                    f.createNewFile();
+                }
+                else{
+                    f.delete();
+                    f.createNewFile();
+                }
+                fOut = new FileOutputStream(f);
+                bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                result = true;
+            }catch (Exception e){
+                result = false;
+                e.printStackTrace();
+            }
+            return result;
         }
     }
 }
