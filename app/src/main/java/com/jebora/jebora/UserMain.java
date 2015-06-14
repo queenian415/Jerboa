@@ -348,7 +348,15 @@ public class UserMain extends ActionBarActivity
                 result = false;
                 e.printStackTrace();
             }
+
+            // save to server
+            saveBitmapToServer(bm, filename);
             return result;
+        }
+
+        public void saveBitmapToServer(Bitmap src, String filename) {
+            ServerCommunication sc = new ServerCommunication();
+            sc.saveImage(getActivity().getApplicationContext(), src, filename);
         }
     }
 }

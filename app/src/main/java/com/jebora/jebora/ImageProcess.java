@@ -14,6 +14,7 @@ public class ImageProcess {
         return createSepiaToningEffect(src, 0, 0, 0, 0);
     }
 
+    // a better sepia-toning effect has values depth = 150, r = 1.5, g = 0.3, b = 0.12
     public static Bitmap createSepiaToningEffect(Bitmap src, int depth, double red, double green, double blue) {
         // image size
         int width = src.getWidth();

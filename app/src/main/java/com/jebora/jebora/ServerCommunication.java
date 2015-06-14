@@ -1,10 +1,17 @@
 package com.jebora.jebora;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Tiffanie on 15-05-25.
@@ -70,4 +77,41 @@ public class ServerCommunication {
         }
         return kid.getObjectId();
     }
+
+    public void saveImage(Context context, Bitmap src, String filename) {
+        Log.d(TAG, "saveImage");
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        src.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] data = stream.toByteArray();
+        final ParseFile image = new ParseFile("image" + ".png", data);
+        final Context mContext = context;
+        image.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Image saved successfully, now link image to user and kid
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+
+                    // Get current kid
+                    SharedPreferences sharedPreferences = mContext.getSharedPreferences(App.PREFIX + "KIDID", 0);
+                    String kidId = sharedPreferences.getString("kidid", null);
+                    boolean isKid = true;
+                    if (kidId == null) {
+                        isKid = false;
+                    }
+
+                    ParseObject parseObject = new ParseObject("Image");
+                    parseObject.put("image", image);
+                    parseObject.put("user", currentUser);
+                    if (isKid)
+                        parseObject.put("kid", ParseObject.createWithoutData("Kid", kidId));
+                    parseObject.put("isKid", isKid);
+                    parseObject.saveInBackground();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 }
