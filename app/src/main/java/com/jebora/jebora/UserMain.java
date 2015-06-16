@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +32,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +46,11 @@ import com.jebora.jebora.provider.ImagesUrls;
 import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -66,6 +73,7 @@ public class UserMain extends ActionBarActivity
 
     private Fragment currentFragment;
     private Fragment lastFragment;
+    private SpinnerAdapter mSpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +85,7 @@ public class UserMain extends ActionBarActivity
 
         // 设置抽屉
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
     }
 
     @Override
@@ -113,7 +122,17 @@ public class UserMain extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()&&mTitle.equals("我的照片")) {
+
+            mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.kids, android.R.layout.simple_spinner_dropdown_item);
+            getMenuInflater().inflate(R.menu.menu_usermain_view, menu);
+            MenuItem item = menu.findItem(R.id.menu_spinner);
+            Spinner spinner = (Spinner) item.getActionView();
+            spinner.setAdapter(mSpinnerAdapter);
+            restoreActionBar();
+            return true;
+        }
+        else if(!mNavigationDrawerFragment.isDrawerOpen()){
             getMenuInflater().inflate(R.menu.user_main, menu);
             restoreActionBar();
             return true;
@@ -129,6 +148,7 @@ public class UserMain extends ActionBarActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * 内容fragment
@@ -160,8 +180,13 @@ public class UserMain extends ActionBarActivity
             Bundle args = new Bundle();
             args.putString(ARG_SECTION_TITLE, title);
             fragment.setArguments(args);
+
+            if(title.equals("我的照片"))
+                fragment.setHasOptionsMenu(true);
+
             return fragment;
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -197,10 +222,10 @@ public class UserMain extends ActionBarActivity
                 });
                 return rootView;
             }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("关于我们")){
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("我的照片")){
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
                 ButterKnife.inject(this, rootView);
-
+                setHasOptionsMenu(true);
                 //If we do this we need to uncomment the container on the xml layout
                 //createListBuddiesLayoutDinamically(rootView);
                 mImagesLeft.addAll(Arrays.asList(ImagesUrls.imageUrls_left));
@@ -208,6 +233,7 @@ public class UserMain extends ActionBarActivity
                 mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
                 mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
                 mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
+                mListBuddies.setSpeed(0);
                 //mListBuddies.setOnItemClickListener(this);
                 return rootView;
             }
@@ -227,6 +253,9 @@ public class UserMain extends ActionBarActivity
                 Bundle extras = data.getExtras();
                 Bitmap photo = (Bitmap) extras.get("data");
                 showImage.setImageBitmap(photo);
+                File appExtDir = getAppDir();
+                Date photoTakenTime = new Date();
+                saveBitmapToPath(photo, appExtDir.toString(), photoTakenTime.toString());
             }
             else if(requestCode == GALLERY_REQUEST){
                 Uri origUri = data.getData();
@@ -238,6 +267,9 @@ public class UserMain extends ActionBarActivity
                     e.printStackTrace();
                 }
                 showImage.setImageBitmap(bitmap);
+                File appExtDir = getAppDir();
+                Date photoAddedTime = new Date();
+                saveBitmapToPath(bitmap, appExtDir.toString(), photoAddedTime.toString());
             }
         }
         private String getImage(int buddy, int position) {
@@ -284,6 +316,47 @@ public class UserMain extends ActionBarActivity
                     .setAutoScrollFaster(mScrollConfig[ScrollConfigOptions.RIGHT.getConfigValue()])
                     .setManualScrollFaster(mScrollConfig[ScrollConfigOptions.LEFT.getConfigValue()])
                     .setDivider(getResources().getDrawable(R.drawable.divider));
+        }
+
+        public File getAppDir(){
+            File extFile = getActivity().getApplicationContext().getExternalFilesDir(null);
+            if(!extFile.exists()){
+                if(!extFile.mkdir()){
+                    Log.e("IO Error", "Error cannot make jerboa dir");
+                }
+            }
+            return extFile;
+        }
+
+        public boolean saveBitmapToPath(Bitmap bm, String path, String filename){
+            boolean result = false;
+            FileOutputStream fOut = null;
+            File f = new File(path + File.separator + filename + ".png");
+            boolean fExists = f.exists();
+            try{
+                if(!fExists){
+                    f.createNewFile();
+                }
+                else{
+                    f.delete();
+                    f.createNewFile();
+                }
+                fOut = new FileOutputStream(f);
+                bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                result = true;
+            }catch (Exception e){
+                result = false;
+                e.printStackTrace();
+            }
+
+            // save to server
+            saveBitmapToServer(bm, filename);
+            return result;
+        }
+
+        public void saveBitmapToServer(Bitmap src, String filename) {
+            ServerCommunication sc = new ServerCommunication();
+            sc.saveImage(getActivity().getApplicationContext(), src, filename);
         }
     }
 }

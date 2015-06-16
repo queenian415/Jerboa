@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="kids">
+        <item>@string/firstkid</item>
+        <item>@string/secondkid</item>
+    </string-array>
+</resources>

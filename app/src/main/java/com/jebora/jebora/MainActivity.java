@@ -30,11 +30,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-        /*
+
         if (currentUser != null) {
             startActivity(new Intent(this, UserMain.class));
             finish();
-        } else {*/
+        } else {
             setContentView(R.layout.activity_main);
 
             email_Reg = (Button) findViewById(R.id.email_reg);
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
             mBackGround = (ImageView) findViewById(R.id.first_bg);
 
             setListener();
-        //}
+        }
     }
 
     @Override
