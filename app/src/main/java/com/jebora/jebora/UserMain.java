@@ -32,6 +32,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -226,9 +227,11 @@ public class UserMain extends ActionBarActivity
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
+
+                ServerCommunication sc = new ServerCommunication();
+                mImagesLeft = sc.loadImages(getActivity().getApplicationContext());
                 //If we do this we need to uncomment the container on the xml layout
                 //createListBuddiesLayoutDinamically(rootView);
-                mImagesLeft.addAll(Arrays.asList(ImagesUrls.imageUrls_left));
                 mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
                 mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
                 mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
@@ -350,13 +353,15 @@ public class UserMain extends ActionBarActivity
             }
 
             // save to server
-            saveBitmapToServer(bm, filename);
+            saveBitmapToServer(bm);
             return result;
         }
 
-        public void saveBitmapToServer(Bitmap src, String filename) {
+        public void saveBitmapToServer(Bitmap src) {
             ServerCommunication sc = new ServerCommunication();
-            sc.saveImage(getActivity().getApplicationContext(), src, filename);
+            sc.saveImageInBackground(getActivity().getApplicationContext(), src);
         }
+
+
     }
 }

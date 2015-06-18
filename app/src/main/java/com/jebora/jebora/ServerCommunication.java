@@ -1,17 +1,28 @@
 package com.jebora.jebora;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Tiffanie on 15-05-25.
@@ -78,7 +89,7 @@ public class ServerCommunication {
         return kid.getObjectId();
     }
 
-    public void saveImage(Context context, Bitmap src, String filename) {
+    public void saveImageInBackground(Context context, Bitmap src) {
         Log.d(TAG, "saveImage");
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         src.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -103,15 +114,52 @@ public class ServerCommunication {
                     ParseObject parseObject = new ParseObject("Image");
                     parseObject.put("image", image);
                     parseObject.put("user", currentUser);
-                    if (isKid)
+                    if (isKid) {
                         parseObject.put("kid", ParseObject.createWithoutData("Kid", kidId));
+                    }
                     parseObject.put("isKid", isKid);
                     parseObject.saveInBackground();
                 } else {
-                    e.printStackTrace();
+                    Log.d(TAG, "saveImage: " + e.getMessage());
                 }
             }
         });
     }
 
+    public List<String> loadImages(Context context) {
+        Log.d(TAG, "loadImages");
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        // Get current kid, null if user's images
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.PREFIX + "KIDID", 0);
+        String kidId = sharedPreferences.getString("kidid", null);
+        ParseObject currentKid = null;
+        if (kidId != null) {
+            // Get kid object
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Kid");
+            try {
+                currentKid = query.get(kidId);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<String> imageUrl = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Image");
+        query.whereEqualTo("user", currentUser);
+        if (currentKid != null) {
+            query.whereEqualTo("kid", currentKid);
+        }
+
+        try {
+            List<ParseObject> list = query.find();
+            for (ParseObject object : list) {
+                ParseFile image = (ParseFile) object.get("image");
+                imageUrl.add(image.getUrl());
+            }
+
+        } catch (ParseException e) {
+            Log.d(TAG, "loadImagesInBackground: " + e.getMessage());
+        }
+        return imageUrl;
+    }
 }
