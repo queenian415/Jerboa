@@ -3,6 +3,7 @@ package com.jebora.jebora;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -46,6 +47,7 @@ import com.jebora.jebora.adapters.CircularAdapter;
 import com.jebora.jebora.provider.ImagesUrls;
 import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
+import com.parse.ParseUser;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -322,18 +324,46 @@ public class UserMain extends ActionBarActivity
         }
 
         public File getAppDir(){
+            // get user & kid id. store image in the corresponding directory
+            String userId = ParseUser.getCurrentUser().getObjectId();
+            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(App.PREFIX + "KIDID", 0);
+            String kidId = sharedPreferences.getString("kidid", null);
+
             File extFile = getActivity().getApplicationContext().getExternalFilesDir(null);
             if(!extFile.exists()){
                 if(!extFile.mkdir()){
                     Log.e("IO Error", "Error cannot make jerboa dir");
                 }
             }
-            return extFile;
+
+            // user directory
+            String userPath = extFile.getAbsolutePath() + File.separator + userId;
+            File userFile = new File(userPath);
+            if(!userFile.exists()){
+                if(!userFile.mkdir()){
+                    Log.e("IO Error", "Error cannot make jerboa dir");
+                }
+            }
+
+            if (kidId == null) {
+                return userFile;
+            } else {
+            // user's kid directory
+                String kidPath = userPath + File.separator + kidId;
+                File kidFile = new File(kidPath);
+                if (!kidFile.exists()) {
+                    if (!kidFile.mkdir()) {
+                        Log.e("IO Error", "Error cannot make jerboa dir");
+                    }
+                }
+                return kidFile;
+            }
         }
 
         public boolean saveBitmapToPath(Bitmap bm, String path, String filename){
             boolean result = false;
             FileOutputStream fOut = null;
+
             File f = new File(path + File.separator + filename + ".png");
             boolean fExists = f.exists();
             try{
