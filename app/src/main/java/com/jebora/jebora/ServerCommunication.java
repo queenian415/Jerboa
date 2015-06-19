@@ -89,12 +89,12 @@ public class ServerCommunication {
         return kid.getObjectId();
     }
 
-    public void saveImageInBackground(Context context, Bitmap src) {
+    public void saveImageInBackground(Context context, Bitmap src, final String filename) {
         Log.d(TAG, "saveImage");
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         src.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] data = stream.toByteArray();
-        final ParseFile image = new ParseFile("image" + ".png", data);
+        final ParseFile image = new ParseFile(filename + ".png", data);
         final Context mContext = context;
         image.saveInBackground(new SaveCallback() {
             @Override
@@ -120,7 +120,7 @@ public class ServerCommunication {
                     parseObject.put("isKid", isKid);
                     parseObject.saveInBackground();
                 } else {
-                    Log.d(TAG, "saveImage: " + e.getMessage());
+                    Log.d(TAG, "saveImage: " + e.getMessage() + "filename: " + filename);
                 }
             }
         });

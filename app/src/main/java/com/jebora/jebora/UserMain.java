@@ -258,7 +258,7 @@ public class UserMain extends ActionBarActivity
                 showImage.setImageBitmap(photo);
                 File appExtDir = getAppDir();
                 Date photoTakenTime = new Date();
-                saveBitmapToPath(photo, appExtDir.toString(), photoTakenTime.toString());
+                saveBitmapToPath(photo, appExtDir.toString(), Integer.toString(photoTakenTime.hashCode()));
             }
             else if(requestCode == GALLERY_REQUEST){
                 Uri origUri = data.getData();
@@ -272,7 +272,7 @@ public class UserMain extends ActionBarActivity
                 showImage.setImageBitmap(bitmap);
                 File appExtDir = getAppDir();
                 Date photoAddedTime = new Date();
-                saveBitmapToPath(bitmap, appExtDir.toString(), photoAddedTime.toString());
+                saveBitmapToPath(bitmap, appExtDir.toString(), Integer.toString(photoAddedTime.hashCode()));
             }
         }
         private String getImage(int buddy, int position) {
@@ -353,13 +353,13 @@ public class UserMain extends ActionBarActivity
             }
 
             // save to server
-            saveBitmapToServer(bm);
+            saveBitmapToServer(bm, filename);
             return result;
         }
 
-        public void saveBitmapToServer(Bitmap src) {
+        public void saveBitmapToServer(Bitmap src, String filename) {
             ServerCommunication sc = new ServerCommunication();
-            sc.saveImageInBackground(getActivity().getApplicationContext(), src);
+            sc.saveImageInBackground(getActivity().getApplicationContext(), src, filename);
         }
 
 
