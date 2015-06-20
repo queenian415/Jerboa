@@ -3,6 +3,7 @@ package com.jebora.jebora;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -32,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -45,6 +47,7 @@ import com.jebora.jebora.adapters.CircularAdapter;
 import com.jebora.jebora.provider.ImagesUrls;
 import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
+import com.parse.ParseUser;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -226,9 +229,11 @@ public class UserMain extends ActionBarActivity
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
+
+                ServerCommunication sc = new ServerCommunication();
+                mImagesLeft = sc.loadImages(getActivity().getApplicationContext());
                 //If we do this we need to uncomment the container on the xml layout
                 //createListBuddiesLayoutDinamically(rootView);
-                mImagesLeft.addAll(Arrays.asList(ImagesUrls.imageUrls_left));
                 mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
                 mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
                 mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
@@ -255,7 +260,7 @@ public class UserMain extends ActionBarActivity
                 showImage.setImageBitmap(photo);
                 File appExtDir = getAppDir();
                 Date photoTakenTime = new Date();
-                saveBitmapToPath(photo, appExtDir.toString(), photoTakenTime.toString());
+                saveBitmapToPath(photo, appExtDir.toString(), Integer.toString(photoTakenTime.hashCode()));
             }
             else if(requestCode == GALLERY_REQUEST){
                 Uri origUri = data.getData();
@@ -269,7 +274,7 @@ public class UserMain extends ActionBarActivity
                 showImage.setImageBitmap(bitmap);
                 File appExtDir = getAppDir();
                 Date photoAddedTime = new Date();
-                saveBitmapToPath(bitmap, appExtDir.toString(), photoAddedTime.toString());
+                saveBitmapToPath(bitmap, appExtDir.toString(), Integer.toString(photoAddedTime.hashCode()));
             }
         }
         private String getImage(int buddy, int position) {
@@ -319,18 +324,46 @@ public class UserMain extends ActionBarActivity
         }
 
         public File getAppDir(){
+            // get user & kid id. store image in the corresponding directory
+            String userId = ParseUser.getCurrentUser().getObjectId();
+            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(App.PREFIX + "KIDID", 0);
+            String kidId = sharedPreferences.getString("kidid", null);
+
             File extFile = getActivity().getApplicationContext().getExternalFilesDir(null);
             if(!extFile.exists()){
                 if(!extFile.mkdir()){
                     Log.e("IO Error", "Error cannot make jerboa dir");
                 }
             }
-            return extFile;
+
+            // user directory
+            String userPath = extFile.getAbsolutePath() + File.separator + userId;
+            File userFile = new File(userPath);
+            if(!userFile.exists()){
+                if(!userFile.mkdir()){
+                    Log.e("IO Error", "Error cannot make jerboa dir");
+                }
+            }
+
+            if (kidId == null) {
+                return userFile;
+            } else {
+            // user's kid directory
+                String kidPath = userPath + File.separator + kidId;
+                File kidFile = new File(kidPath);
+                if (!kidFile.exists()) {
+                    if (!kidFile.mkdir()) {
+                        Log.e("IO Error", "Error cannot make jerboa dir");
+                    }
+                }
+                return kidFile;
+            }
         }
 
         public boolean saveBitmapToPath(Bitmap bm, String path, String filename){
             boolean result = false;
             FileOutputStream fOut = null;
+
             File f = new File(path + File.separator + filename + ".png");
             boolean fExists = f.exists();
             try{
@@ -356,7 +389,9 @@ public class UserMain extends ActionBarActivity
 
         public void saveBitmapToServer(Bitmap src, String filename) {
             ServerCommunication sc = new ServerCommunication();
-            sc.saveImage(getActivity().getApplicationContext(), src, filename);
+            sc.saveImageInBackground(getActivity().getApplicationContext(), src, filename);
         }
+
+
     }
 }
