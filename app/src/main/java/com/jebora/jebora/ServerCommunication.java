@@ -1,16 +1,10 @@
 package com.jebora.jebora;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -18,10 +12,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -143,7 +135,7 @@ public class ServerCommunication {
             }
         }
 
-        List<String> imageUrl = new ArrayList<>();
+        List<String> imageUrl = new ArrayList();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Image");
         query.whereEqualTo("user", currentUser);
         if (currentKid != null) {
