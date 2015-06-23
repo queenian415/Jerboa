@@ -242,6 +242,17 @@ public class UserMain extends ActionBarActivity
                 //mListBuddies.setOnItemClickListener(this);
                 return rootView;
             }
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("注销")){
+                View rootView = inflater.inflate(R.layout.preview_temp_layout, container, false);
+                Button preview = (Button) rootView.findViewById(R.id.preview);
+                preview.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        ;/********刘佟把你code放这儿*********/
+                    }
+                });
+                return rootView;
+            }
             else{
                 View rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 TextView textView = (TextView) rootView.findViewById(R.id.section_label);
