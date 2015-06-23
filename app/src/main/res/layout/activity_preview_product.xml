@@ -25,12 +25,37 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="132dp"
-            android:layout_height="180dp"
+            android:layout_width="166dp"
+            android:layout_height="300dp"
             android:id="@+id/logo"
             android:src="@drawable/logo"
-            android:layout_gravity="center_horizontal|top"
-            android:paddingTop="100dp" />
+            android:scaleType="matrix"
+            android:layout_gravity="center"
+            android:layout_marginBottom="25dp" />
+
+        <Button
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="尺码"
+            android:id="@+id/sizebutton"
+            android:layout_gravity="center_horizontal|bottom" />
+
+        <Button
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="3D预览"
+            android:id="@+id/button3d"
+            android:layout_gravity="right|bottom"
+            android:onClick="threeDView" />
+
+        <Button
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="黑色"
+            android:id="@+id/colorbutton"
+            android:layout_gravity="left|bottom"
+            android:onClick="changeShirtColor" />
+
     </FrameLayout>
 
 </RelativeLayout>
