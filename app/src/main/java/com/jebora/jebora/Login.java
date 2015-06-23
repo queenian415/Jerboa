@@ -5,9 +5,13 @@ import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,6 +22,40 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //set email drop down list
+        final AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.username);
+        textView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s != null && s.length() > 0 && s.charAt(s.length() - 1) == '@') {
+                    String[] emailDropdown = getResources().getStringArray(R.array.email_dropdown);
+                    // Edit drop down list to match user email
+                    // For example, if user enters "hello@", drop down list shows "hello@gmail.com" etc.
+                    int i = 0;
+                    for (String email : emailDropdown) {
+                        emailDropdown[i] = s + email;
+                        i++;
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, emailDropdown);
+                    AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.username);
+                    textView.setThreshold(1);
+                    textView.setAdapter(adapter);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
