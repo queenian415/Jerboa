@@ -207,7 +207,7 @@ public class UserMain extends ActionBarActivity
                         startActivityForResult(intent, CAMERA_REQUEST);
                     }
                 });
-
+ 
                 galleryButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -248,7 +248,9 @@ public class UserMain extends ActionBarActivity
                 preview.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        ;/********刘佟把你code放这儿*********/
+                        /********刘佟把你code放这儿*********/
+                        Intent intent = new Intent(getActivity(), PreviewProduct.class);
+                        startActivity(intent);
                     }
                 });
                 return rootView;
