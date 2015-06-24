@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -76,18 +77,32 @@ public class UserMain extends ActionBarActivity
 
     private Fragment currentFragment;
     private Fragment lastFragment;
-    private SpinnerAdapter mSpinnerAdapter;
+
+    private static List<String> mImagesLeft = new ArrayList<String>();
+    private static List<String> mImagesRight = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
-
+        final String [] listNames = getResources().getStringArray(R.array.kids);
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getBaseContext(),
+                android.R.layout.simple_spinner_dropdown_item, listNames
+                );
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        ActionBar.OnNavigationListener navigationListener = new ActionBar.OnNavigationListener() {
+            @Override
+            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+                onNavigationDrawerItemSelected(listNames[itemPosition]);
+                return false;
+            }
+        };
         // 设置抽屉
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        getSupportActionBar().setListNavigationCallbacks(adapter, navigationListener);
 
     }
 
@@ -101,7 +116,7 @@ public class UserMain extends ActionBarActivity
             ft.add(R.id.container, currentFragment, title);
         }
         if(lastFragment != null) {
-            ft.hide(lastFragment);
+            ft.detach(lastFragment);
         }
         if(currentFragment.isDetached()){
             ft.attach(currentFragment);
@@ -125,7 +140,7 @@ public class UserMain extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()&&mTitle.equals("我的照片")) {
+        /*if (!mNavigationDrawerFragment.isDrawerOpen()&&mTitle.equals("我的照片")) {
 
             mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.kids, android.R.layout.simple_spinner_dropdown_item);
             getMenuInflater().inflate(R.menu.menu_usermain_view, menu);
@@ -134,10 +149,10 @@ public class UserMain extends ActionBarActivity
             spinner.setAdapter(mSpinnerAdapter);
             restoreActionBar();
             return true;
-        }
-        else if(!mNavigationDrawerFragment.isDrawerOpen()){
-            getMenuInflater().inflate(R.menu.user_main, menu);
-            restoreActionBar();
+        }*/
+        if(!mNavigationDrawerFragment.isDrawerOpen()){
+            //getMenuInflater().inflate(R.menu.user_main, menu);
+            //restoreActionBar();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -174,8 +189,7 @@ public class UserMain extends ActionBarActivity
         private CircularAdapter mAdapterRight;
         @InjectView(R.id.listbuddies)
         ListBuddiesLayout mListBuddies;
-        private List<String> mImagesLeft = new ArrayList<String>();
-        private List<String> mImagesRight = new ArrayList<String>();
+
         //end
 
         public static ContentFragment newInstance(String title) {
@@ -194,13 +208,13 @@ public class UserMain extends ActionBarActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
+            if(getArguments().getString(ARG_SECTION_TITLE).equals("我的照片")){
                 View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
                 showImage = (ImageView) rootView.findViewById(R.id.selected_image);
                 ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
                 ImageButton galleryButton = (ImageButton) rootView.findViewById(R.id.gallery_button);
 
-                cameraButton.setOnClickListener(new View.OnClickListener(){
+                cameraButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -225,7 +239,7 @@ public class UserMain extends ActionBarActivity
                 });
                 return rootView;
             }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("我的照片")){
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
@@ -235,6 +249,39 @@ public class UserMain extends ActionBarActivity
                 //If we do this we need to uncomment the container on the xml layout
                 //createListBuddiesLayoutDinamically(rootView);
                 mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
+                mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
+                mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
+                mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
+                mListBuddies.setSpeed(0);
+                //mListBuddies.setOnItemClickListener(this);
+                return rootView;
+            }
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("孩子1")){
+                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+                ButterKnife.inject(this, rootView);
+                setHasOptionsMenu(true);
+
+                ServerCommunication sc = new ServerCommunication();
+                mImagesLeft = sc.loadImages(getActivity().getApplicationContext());
+                //If we do this we need to uncomment the container on the xml layout
+                //createListBuddiesLayoutDinamically(rootView);
+                mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
+                mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
+                mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
+                mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
+                mListBuddies.setSpeed(0);
+                //mListBuddies.setOnItemClickListener(this);
+                return rootView;
+            }
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("孩子2")){
+                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+                ButterKnife.inject(this, rootView);
+                setHasOptionsMenu(true);
+
+                mImagesLeft.clear();
+                //If we do this we need to uncomment the container on the xml layout
+                //createListBuddiesLayoutDinamically(rootView);
+                mImagesRight.clear();
                 mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
                 mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
                 mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
@@ -253,7 +300,6 @@ public class UserMain extends ActionBarActivity
                 preview.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        /********刘佟把你code放这儿*********/
                         Intent intent = new Intent(getActivity(), PreviewProduct.class);
                         startActivity(intent);
                     }
