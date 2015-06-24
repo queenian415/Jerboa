@@ -242,6 +242,11 @@ public class UserMain extends ActionBarActivity
                 //mListBuddies.setOnItemClickListener(this);
                 return rootView;
             }
+            else if (getArguments().getString(ARG_SECTION_TITLE).equals("注销")) {
+                ParseUser.logOut();
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                return null;
+            }
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("关注我们")){
                 View rootView = inflater.inflate(R.layout.preview_temp_layout, container, false);
                 Button preview = (Button) rootView.findViewById(R.id.preview);
