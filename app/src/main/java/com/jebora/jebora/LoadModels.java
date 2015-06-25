@@ -7,7 +7,7 @@ import android.content.res.Resources;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
-
+import com.threed.jpct.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -42,7 +42,7 @@ public class LoadModels extends Activity {
 
         new LoadAssets(getResources());
 
-        glView = new GLSurfaceView(this);
+        glView = new GLSurfaceView(getApplication());
 
         mr = new MyRenderer();
 
@@ -88,27 +88,26 @@ public class LoadModels extends Activity {
 
         return super.onTouchEvent(m);
     }
+
+
     @Override
-    public void onResume() {
+    protected void onPause() {
+        Logger.log("onPause");
+        super.onPause();
+        glView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Logger.log("onResume");
         super.onResume();
+        glView.onResume();
     }
 
-    @Override
-    public void onPause() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
+    protected void onStop() {
+        Logger.log("onStop");
         super.onStop();
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-
 }
 
 

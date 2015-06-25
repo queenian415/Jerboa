@@ -72,10 +72,10 @@
         <activity
             android:name=".PreviewProduct"
             android:label="@string/title_activity_preview_product"
-            android:parentActivityName=".ChooseProduct" >
+            android:parentActivityName=".UserMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChooseProduct" />
+                android:value=".UserMain" />
         </activity>
         <activity
             android:name=".PayvementInfo"
@@ -92,10 +92,10 @@
         <activity
             android:name=".LoadModels"
             android:label="loadModel"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".PreviewProduct" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".PreviewProduct" />
         </activity>
     </application>
 

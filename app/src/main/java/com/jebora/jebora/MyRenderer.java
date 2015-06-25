@@ -27,6 +27,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by mshzhb on 15/6/23.
  */
 public class MyRenderer implements GLSurfaceView.Renderer {
+    private  static int state = 0; //0 not start 1 started
     public Resources res;
     // scale
     private int thingScale = 1;
@@ -82,6 +83,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
+
         res = LoadAssets.res;
         world = new World();
         // 设置环境光

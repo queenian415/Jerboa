@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.jebora.jebora.UserMainList">
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
+    android:layout_height="wrap_content" tools:context="com.jebora.jebora.UserMainList">
 
     <!-- TODO: Update blank fragment layout -->
     <com.jpardogo.listbuddies.lib.views.ListBuddiesLayout
@@ -11,6 +11,30 @@
         listbuddies:speed="2"
         listbuddies:autoScrollFaster="right"
         listbuddies:scrollFaster="left"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|center_horizontal">
+
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/camera_button"
+            android:background="@drawable/button_circle"
+            android:src="@drawable/ic_camera"
+            android:layout_gravity="center" />
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/gallery_button"
+            android:src="@drawable/ic_gallery"
+            android:background="@drawable/button_circle"
+            android:layout_gravity="right"/>
+
+    </LinearLayout>
+
 
 </FrameLayout>
 

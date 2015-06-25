@@ -132,27 +132,24 @@ public class UserMain extends ActionBarActivity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*if (!mNavigationDrawerFragment.isDrawerOpen()&&mTitle.equals("我的照片")) {
 
-            mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.kids, android.R.layout.simple_spinner_dropdown_item);
-            getMenuInflater().inflate(R.menu.menu_usermain_view, menu);
-            MenuItem item = menu.findItem(R.id.menu_spinner);
-            Spinner spinner = (Spinner) item.getActionView();
-            spinner.setAdapter(mSpinnerAdapter);
-            restoreActionBar();
-            return true;
-        }*/
         if(!mNavigationDrawerFragment.isDrawerOpen()){
             //getMenuInflater().inflate(R.menu.user_main, menu);
-            //restoreActionBar();
+
+            ActionBar actionBar = getSupportActionBar();
+            if(mTitle.equals("孩子1")||mTitle.equals("孩子2")||mTitle.equals("Jebora")||mTitle.equals("UserMain")){
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            }
+            else{
+                getMenuInflater().inflate(R.menu.user_main, menu);
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            }
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -176,7 +173,6 @@ public class UserMain extends ActionBarActivity
         private static final int CAMERA_REQUEST = 1;
         private static final int GALLERY_REQUEST = 2;
         private static final String ARG_SECTION_TITLE = "section_title";
-        private ImageView showImage;
         /**
          * 返回根据title参数创建的fragment
          */
@@ -210,7 +206,10 @@ public class UserMain extends ActionBarActivity
                                  Bundle savedInstanceState) {
             if(getArguments().getString(ARG_SECTION_TITLE).equals("我的照片")){
                 View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
-                showImage = (ImageView) rootView.findViewById(R.id.selected_image);
+                return rootView;
+            }
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
+                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
                 ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
                 ImageButton galleryButton = (ImageButton) rootView.findViewById(R.id.gallery_button);
 
@@ -221,7 +220,7 @@ public class UserMain extends ActionBarActivity
                         startActivityForResult(intent, CAMERA_REQUEST);
                     }
                 });
- 
+
                 galleryButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -237,10 +236,7 @@ public class UserMain extends ActionBarActivity
                         }
                     }
                 });
-                return rootView;
-            }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
-                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
 
@@ -321,7 +317,6 @@ public class UserMain extends ActionBarActivity
             if(requestCode == CAMERA_REQUEST){
                 Bundle extras = data.getExtras();
                 Bitmap photo = (Bitmap) extras.get("data");
-                showImage.setImageBitmap(photo);
                 File appExtDir = getAppDir();
                 Date photoTakenTime = new Date();
                 saveBitmapToPath(photo, appExtDir.toString(), Integer.toString(photoTakenTime.hashCode()));
@@ -335,7 +330,6 @@ public class UserMain extends ActionBarActivity
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-                showImage.setImageBitmap(bitmap);
                 File appExtDir = getAppDir();
                 Date photoAddedTime = new Date();
                 saveBitmapToPath(bitmap, appExtDir.toString(), Integer.toString(photoAddedTime.hashCode()));
