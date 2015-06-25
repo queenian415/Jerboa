@@ -176,7 +176,6 @@ public class UserMain extends ActionBarActivity
         private static final int CAMERA_REQUEST = 1;
         private static final int GALLERY_REQUEST = 2;
         private static final String ARG_SECTION_TITLE = "section_title";
-        private ImageView showImage;
         /**
          * 返回根据title参数创建的fragment
          */
@@ -210,7 +209,10 @@ public class UserMain extends ActionBarActivity
                                  Bundle savedInstanceState) {
             if(getArguments().getString(ARG_SECTION_TITLE).equals("我的照片")){
                 View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
-                showImage = (ImageView) rootView.findViewById(R.id.selected_image);
+                return rootView;
+            }
+            else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
+                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
                 ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
                 ImageButton galleryButton = (ImageButton) rootView.findViewById(R.id.gallery_button);
 
@@ -221,7 +223,7 @@ public class UserMain extends ActionBarActivity
                         startActivityForResult(intent, CAMERA_REQUEST);
                     }
                 });
- 
+
                 galleryButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -237,10 +239,7 @@ public class UserMain extends ActionBarActivity
                         }
                     }
                 });
-                return rootView;
-            }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
-                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
 
@@ -321,7 +320,6 @@ public class UserMain extends ActionBarActivity
             if(requestCode == CAMERA_REQUEST){
                 Bundle extras = data.getExtras();
                 Bitmap photo = (Bitmap) extras.get("data");
-                showImage.setImageBitmap(photo);
                 File appExtDir = getAppDir();
                 Date photoTakenTime = new Date();
                 saveBitmapToPath(photo, appExtDir.toString(), Integer.toString(photoTakenTime.hashCode()));
@@ -335,7 +333,6 @@ public class UserMain extends ActionBarActivity
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-                showImage.setImageBitmap(bitmap);
                 File appExtDir = getAppDir();
                 Date photoAddedTime = new Date();
                 saveBitmapToPath(bitmap, appExtDir.toString(), Integer.toString(photoAddedTime.hashCode()));

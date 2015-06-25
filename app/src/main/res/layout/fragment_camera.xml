@@ -18,15 +18,19 @@
             android:layout_height="60dp"
             android:padding="@dimen/activity_horizontal_margin"
             android:id="@+id/camera_button"
-            android:background="@drawable/camera_logo"
-            android:layout_gravity="center_horizontal" />
+            android:background="@drawable/button_circle"
+            android:src="@drawable/ic_camera"
+            android:layout_gravity="center|bottom" />
 
         <ImageButton
+            android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="@dimen/activity_horizontal_margin"
             android:id="@+id/gallery_button"
-            android:background="@drawable/gallery_logo"/>
+            android:src="@drawable/ic_gallery"
+            android:background="@drawable/button_circle"
+            android:layout_gravity="right|bottom"/>
 
     </LinearLayout>
 
