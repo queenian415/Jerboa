@@ -132,27 +132,24 @@ public class UserMain extends ActionBarActivity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*if (!mNavigationDrawerFragment.isDrawerOpen()&&mTitle.equals("我的照片")) {
 
-            mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.kids, android.R.layout.simple_spinner_dropdown_item);
-            getMenuInflater().inflate(R.menu.menu_usermain_view, menu);
-            MenuItem item = menu.findItem(R.id.menu_spinner);
-            Spinner spinner = (Spinner) item.getActionView();
-            spinner.setAdapter(mSpinnerAdapter);
-            restoreActionBar();
-            return true;
-        }*/
         if(!mNavigationDrawerFragment.isDrawerOpen()){
             //getMenuInflater().inflate(R.menu.user_main, menu);
-            //restoreActionBar();
+
+            ActionBar actionBar = getSupportActionBar();
+            if(mTitle.equals("孩子1")||mTitle.equals("孩子2")||mTitle.equals("Jebora")||mTitle.equals("UserMain")){
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            }
+            else{
+                getMenuInflater().inflate(R.menu.user_main, menu);
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            }
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
             return true;
         }
         return super.onCreateOptionsMenu(menu);
