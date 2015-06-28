@@ -25,7 +25,7 @@ public class ImageFilter {
         switch (type) {
             case 0: //T-shirt
                 //secondBitmap = RotateBitmap(secondBitmap,280);
-                canvas.drawBitmap(secondBitmap, MyRenderer.x, MyRenderer.y, null); break;
+                canvas.drawBitmap(secondBitmap, 690, 600, null); break;
             default:
         }
         return bitmap;
