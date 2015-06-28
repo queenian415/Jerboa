@@ -1,0 +1,36 @@
+1. set up NDK:
+ - download ndk; upzip; set PATH to include ndk/
+ - ndk-build in terminal now should work
+
+2. set up JNI in Android Studio for OpenCV:
+ - export OPENCV_MK_PATH=path/to/opencv_android_sdk/sdk/native/jni/OpenCV.mk
+ - creat jni/ in app/src/main (same level as java/, res/)
+    --xx.h xx.cpp files reside in this dir
+ - create Application.mk in jni/
+    --content plz refer to app/src/main/jni/Application.mk
+    --include $OPENCV_MK_PATH in this file
+ - create Android.mk in jni/
+    --content refer to app/src/main/jni/Android.mk
+ - modify build.gradle:
+    -- add: sourceSets.main.jni.srcDirs = []
+            sourceSets.main.jniLibs.srcDir 'src/main/libs'
+       under android after defaultConfig
+
+3. set up javah in Android Studio:
+ - export JAVA_HOME=/path/to/jdk; export PATH=$JAVA_HOME/bin:$PATH
+ - in Android Studio, Preference->External Tools, click + to add javah
+   --Program: /usr/bin/javah
+   --Parameters: -v -jni -d $ModuleFileDir$/src/main/jni $FileClass$
+   --Work dir: $SourcepathEntry$
+
+4. right click to xx.java where c function is defined, External Tools->javah
+ - this will generate xx.h to jni/, which should be included from xx.cpp where the function implementation is written
+
+5. run ndk-build under app/src/main, this should create .so in app/src/main/libs
+
+6. Run in Android Studio
+
+Note: 
+- everytime new changes made to .cpp files, ndk-build should be run
+- everytime new c functions in defined in .java, javah should be run
+

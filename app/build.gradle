@@ -11,6 +11,10 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    sourceSets.main.jni.srcDirs = [] // disable gradle to build files under jni
+    sourceSets.main.jniLibs.srcDir 'src/main/libs' // set jniLibs to src/main/libs
+
     buildTypes {
         release {
             minifyEnabled false

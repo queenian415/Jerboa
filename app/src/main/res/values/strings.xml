@@ -60,4 +60,5 @@
         <item>hotmail.com</item>
         <item>sohu.com</item>
     </string-array>
+    <string name="title_activity_image_editing">ImageEditing</string>
 </resources>
