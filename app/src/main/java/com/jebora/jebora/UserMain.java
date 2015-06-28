@@ -211,32 +211,8 @@ public class UserMain extends ActionBarActivity
             }
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
-                ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
-                ImageButton galleryButton = (ImageButton) rootView.findViewById(R.id.gallery_button);
 
-                cameraButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, CAMERA_REQUEST);
-                    }
-                });
-
-                galleryButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                            i.addCategory(Intent.CATEGORY_OPENABLE);
-                            i.setType("image/*");
-                            startActivityForResult(i, GALLERY_REQUEST);
-                        } else {
-                            i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(i, GALLERY_REQUEST);
-                        }
-                    }
-                });
+                setCameraAndGalleryButton(rootView);
 
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
@@ -255,6 +231,7 @@ public class UserMain extends ActionBarActivity
             }
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("孩子1")){
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+                setCameraAndGalleryButton(rootView);
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
 
@@ -272,6 +249,7 @@ public class UserMain extends ActionBarActivity
             }
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("孩子2")){
                 View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+                setCameraAndGalleryButton(rootView);
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
 
@@ -451,6 +429,34 @@ public class UserMain extends ActionBarActivity
             sc.saveImageInBackground(getActivity().getApplicationContext(), src, filename);
         }
 
+        public void setCameraAndGalleryButton(View rootView){
+            ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
+            ImageButton galleryButton = (ImageButton) rootView.findViewById(R.id.gallery_button);
+
+            cameraButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, CAMERA_REQUEST);
+                }
+            });
+
+            galleryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        i.addCategory(Intent.CATEGORY_OPENABLE);
+                        i.setType("image/*");
+                        startActivityForResult(i, GALLERY_REQUEST);
+                    } else {
+                        i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i, GALLERY_REQUEST);
+                    }
+                }
+            });
+        }
 
     }
 }
