@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#FFFEFA">
 
         <ImageView
             android:id="@+id/first_bg"
@@ -35,6 +36,7 @@
                 android:layout_marginBottom="8.0dip"
                 android:text="@string/main_login"
                 android:textColor="#FFFFFF"
+
                 android:textSize="18.0sp" />
 
             <Button

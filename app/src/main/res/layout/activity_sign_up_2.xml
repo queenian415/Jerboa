@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="16.0dp"
+            android:background="@drawable/signup_choose_birth_selector"
             android:textSize="20sp"
             android:text="@string/child_birthday"
             android:onClick="showBirthdayPickerDialog" />
