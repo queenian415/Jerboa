@@ -36,7 +36,7 @@ public class SignUp extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
+        getSupportActionBar().setElevation(0);
         //set email drop down list
         final AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.username);
         textView.addTextChangedListener(new TextWatcher() {

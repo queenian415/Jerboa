@@ -93,6 +93,7 @@ public class UserMain extends ActionBarActivity
                 android.R.layout.simple_spinner_dropdown_item, listNames
                 );
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        getSupportActionBar().setElevation(0);
         ActionBar.OnNavigationListener navigationListener = new ActionBar.OnNavigationListener() {
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {

@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
+        
 
         if (currentUser != null) {
             startActivity(new Intent(this, UserMain.class));

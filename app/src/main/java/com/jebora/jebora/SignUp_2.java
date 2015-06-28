@@ -34,6 +34,7 @@ public class SignUp_2 extends ActionBarActivity {
         setContentView(R.layout.activity_sign_up_2);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
     }
 
     @Override

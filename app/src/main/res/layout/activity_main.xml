@@ -2,7 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#FFFEFA">
+    android:background="#fffefa">
 
         <ImageView
             android:id="@+id/first_bg"
@@ -31,22 +31,25 @@
             <Button
                 android:id="@+id/login"
                 android:layout_width="250.0dip"
-                android:layout_height="48.0dip"
+                android:layout_height="40dip"
                 android:gravity="center"
                 android:layout_marginBottom="8.0dip"
                 android:text="@string/main_login"
-                android:textColor="#FFFFFF"
-
+                android:stateListAnimator="@null"
+                android:textColor="@drawable/text_color_selector"
+                android:background="@drawable/button_selector"
                 android:textSize="18.0sp" />
 
             <Button
                 android:id="@+id/email_reg"
                 android:layout_width="250.0dip"
-                android:layout_height="48.0dip"
+                android:layout_height="40dip"
                 android:layout_marginBottom="8.0dip"
                 android:gravity="center"
+                android:stateListAnimator="@null"
                 android:text="@string/main_email_reg"
-                android:textColor="#FFFFFF"
+                android:textColor="@drawable/text_color_selector"
+                android:background="@drawable/button_selector"
                 android:textSize="18.0sp" />
 
            <LinearLayout
@@ -55,14 +58,20 @@
 
                <Button
                    android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
+                   android:layout_height="40dip"
                    android:id="@+id/qq_login"
+                   android:background="@drawable/button_selector"
+                   android:textColor="@drawable/text_color_selector"
+                   android:stateListAnimator="@null"
                    android:layout_weight="1"
                    android:text="QQ"/>
                <Button
                    android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
+                   android:layout_height="40dip"
+                   android:stateListAnimator="@null"
                    android:id="@+id/weibo_login"
+                   android:background="@drawable/button_selector"
+                   android:textColor="@drawable/text_color_selector"
                    android:layout_weight="1"
                    android:text="微博"/>
            </LinearLayout>

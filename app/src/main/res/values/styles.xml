@@ -4,8 +4,8 @@
     <style name="CustomActionBarTheme"
            parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
-
         <!-- Support library compatibility -->
+        <item name="android:windowContentOverlay">@null</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
@@ -14,7 +14,6 @@
            parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/actionbar_background</item>
         <item name="android:titleTextStyle">@style/MyTitleStyle</item>
-
         <!-- Support library compatibility -->
         <item name="background">@drawable/actionbar_background</item>
         <item name="titleTextStyle">@style/MyTitleStyle</item>
