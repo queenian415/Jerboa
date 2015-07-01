@@ -44,16 +44,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import com.drew.metadata.exif.ExifInteropDirectory;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
+import com.drew.metadata.file.FileMetadataDirectory;
+import com.drew.metadata.file.FileMetadataReader;
+import com.drew.metadata.png.PngDirectory;
+import com.jebora.jebora.Utils.FileInfo;
 import com.jebora.jebora.adapters.CircularAdapter;
 import com.jebora.jebora.provider.ImagesUrls;
 import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
 import com.parse.ParseUser;
 
-import java.sql.Time;
+import com.drew.metadata.*;
+import com.drew.imaging.*;
+import com.drew.lang.*;
+import com.drew.tools.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -413,6 +422,8 @@ public class UserMain extends ActionBarActivity
                 }
                 fOut = new FileOutputStream(f);
                 bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                fOut.close();
+                Date date = FileInfo.getLastModifiedTime(f);
                 result = true;
             }catch (Exception e){
                 result = false;
