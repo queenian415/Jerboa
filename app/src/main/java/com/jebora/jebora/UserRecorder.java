@@ -86,9 +86,11 @@ public class UserRecorder {
         try {
             FileOutputStream fos = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
 
-            for (Map.Entry<String, String> entry: list.entrySet()) {
-                String newLine = entry.getKey() + ':' + entry.getValue() + "\n";
-                fos.write(newLine.getBytes());
+            if (list != null) {
+                for (Map.Entry<String, String> entry : list.entrySet()) {
+                    String newLine = entry.getKey() + ':' + entry.getValue() + "\n";
+                    fos.write(newLine.getBytes());
+                }
             }
 
             fos.close();
