@@ -27,7 +27,7 @@ public class SignUp extends ActionBarActivity {
      */
     public static final String SIGNUP_EXISTS = "用户名已注册";
     public static final String SIGNUP_EMPTY = "请输入用户名和密码";
-    public static final String SIGNUP_ERROR = "系统出错";
+    public static final String SIGNUP_ERROR = "无法连接到服务器";
     public static final String SIGNUP_NOTAGREE = "请同意使用条款";
     public static final String SIGNUP_NOTEMAIL = "请输入邮箱为用户名";
 
@@ -149,8 +149,7 @@ public class SignUp extends ActionBarActivity {
             return SIGNUP_NOTEMAIL;
         }
 
-        ServerCommunication sc = new ServerCommunication();
-        return sc.signUp(username, password);
+        return ServerCommunication.signUp(getApplicationContext(), username, password);
     }
 
 }

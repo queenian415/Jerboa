@@ -14,6 +14,7 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,16 +22,17 @@ import java.util.List;
  */
 public class ServerCommunication {
 
-    private final String TAG = "ServerCommunication";
-    public String signUp(String username, String password) {
+    private static final String TAG = "ServerCommunication";
+
+    public static String signUp(Context context, String username, String password) {
         Log.d(TAG, "signUp");
 
         ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setPassword(password);
-
         try {
             user.signUp();
+            new UserRecorder(context);
             return user.getObjectId();
         } catch (ParseException e) {
             if (e.getCode() == ParseException.USERNAME_TAKEN) {
@@ -42,11 +44,18 @@ public class ServerCommunication {
         }
     }
 
-    public Boolean logIn(String username, String password) {
+    public static Boolean logIn(Context context, String username, String password) {
         Log.d(TAG, "logIn");
 
         try {
             ParseUser.logIn(username, password);
+            new UserRecorder(context);
+            if (!UserRecorder.hasLocalKidList()) {
+                // user don't have local copy in log in
+                // maybe that user is using a new phone
+                // we want to update the kid list in this case
+                UserRecorder.updateKidList(getKids());
+            }
             return true;
         } catch (ParseException e) {
             Log.d(TAG, "logIn failed: " + e.getMessage());
@@ -54,7 +63,7 @@ public class ServerCommunication {
         }
     }
 
-    public String addKid(String kidName, String kidBirthday, String kidGender, String kidRelation) {
+    public static String addKid(String kidName, String kidBirthday, String kidGender, String kidRelation) {
         Log.d(TAG, "addKid");
 
         // Store kid's info in Parse
@@ -74,14 +83,36 @@ public class ServerCommunication {
 
         try {
             kid.save();
+            String kidId = kid.getObjectId();
+            UserRecorder.addOneKid(kidId, kidName);
+            return kidId;
         } catch (ParseException e) {
             Log.d("addKid", e.getMessage());
             return SignUp_2.SIGNUP2_ERROR;
         }
-        return kid.getObjectId();
     }
 
-    public void saveImageInBackground(Context context, Bitmap src, final String filename) {
+    public static HashMap<String, String> getKids() {
+        Log.d(TAG, "getKids");
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Kid");
+        query.whereEqualTo("kidParent", ParseUser.getCurrentUser());
+        try {
+            List<ParseObject> list = query.find();
+            HashMap<String, String> kidList = new HashMap<>();
+
+            for (ParseObject obj: list) {
+                kidList.put(obj.getObjectId(), obj.getString("kidName"));
+            }
+            return kidList;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void saveImageInBackground(Context context, Bitmap src, final String filename) {
         Log.d(TAG, "saveImage");
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         src.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -118,7 +149,7 @@ public class ServerCommunication {
         });
     }
 
-    public List<String> loadImages(Context context) {
+    public static List<String> loadImages(Context context) {
         Log.d(TAG, "loadImages");
         final ParseUser currentUser = ParseUser.getCurrentUser();
         // Get current kid, null if user's images

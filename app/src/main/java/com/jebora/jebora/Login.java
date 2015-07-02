@@ -101,8 +101,7 @@ public class Login extends ActionBarActivity {
     private boolean accountAuthentication () {
         String username = ((TextView)findViewById(R.id.username)).getText().toString().trim();
         String password = ((TextView)findViewById(R.id.password)).getText().toString().trim();
-        ServerCommunication auth = new ServerCommunication();
-        return auth.logIn(username, password);
+        return ServerCommunication.logIn(getApplicationContext(), username, password);
     }
 
 }

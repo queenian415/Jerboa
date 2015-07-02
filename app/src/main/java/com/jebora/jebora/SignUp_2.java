@@ -26,7 +26,7 @@ public class SignUp_2 extends ActionBarActivity {
 
     public static final String SIGNUP2_EMPTY = "请输入全部信息";
     public static final String SIGNUP2_NORELATION = "请输入与孩子的关系";
-    public static final String SIGNUP2_ERROR = "系统错误";
+    public static final String SIGNUP2_ERROR = "无法连接到服务器";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +79,7 @@ public class SignUp_2 extends ActionBarActivity {
             textView.setVisibility(v.VISIBLE);
         } else {
             // Save the preferred kid
-            SharedPreferences user = getSharedPreferences(App.PREFIX + "KIDID", 0);
-            SharedPreferences.Editor editor = user.edit();
-            editor.putString("kidid", status);
-            editor.commit();
-
+            UserRecorder.setPreferredKid(status);
             startActivity(new Intent(SignUp_2.this, UserMain.class));
             finish();
         }
@@ -130,8 +126,7 @@ public class SignUp_2 extends ActionBarActivity {
             return SIGNUP2_EMPTY;
         }
 
-        ServerCommunication sc = new ServerCommunication();
-        return sc.addKid(kidName, kidBirthday, kidGender, kidRelation);
+        return ServerCommunication.addKid(kidName, kidBirthday, kidGender, kidRelation);
     }
 
 }
