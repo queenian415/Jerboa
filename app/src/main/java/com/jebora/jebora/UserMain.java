@@ -38,7 +38,10 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,12 +66,27 @@ public class UserMain extends ActionBarActivity
 
     private static List<String> mImagesLeft = new ArrayList<String>();
     private static List<String> mImagesRight = new ArrayList<String>();
+    final static List<String> listNames = new ArrayList<String>();
+    final static List<String> listIds = new ArrayList<String>();
+    private static int kidsnumber = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
-        final String [] listNames = getResources().getStringArray(R.array.kids);
+        Map <String, String> kids = UserRecorder.getKidList();
+        for (String key : kids.keySet()) {
+            System.out.println(key);
+            System.out.println(kids.get(key));//will print value associated with key
+            listNames.add(kids.get(key));
+            listIds.add(key);
+            kidsnumber++;
+        }
+        listNames.add("全部照片");
+        listNames.add("+");
+        listIds.add("全部照片");
+        listIds.add("+");
+
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -80,7 +98,14 @@ public class UserMain extends ActionBarActivity
         ActionBar.OnNavigationListener navigationListener = new ActionBar.OnNavigationListener() {
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                onNavigationDrawerItemSelected(listNames[itemPosition]);
+                String[] temp = new String[listIds.size()];
+                temp = listIds.toArray(temp);
+                if(temp[itemPosition].equals("+")){
+                    kidsnumber++;
+                    startActivity(new Intent(UserMain.this, SignUp_2.class));
+                }
+                else
+                    onNavigationDrawerItemSelected(temp[itemPosition]);
                 return false;
             }
         };
@@ -123,15 +148,24 @@ public class UserMain extends ActionBarActivity
 
         if(!mNavigationDrawerFragment.isDrawerOpen()){
             //getMenuInflater().inflate(R.menu.user_main, menu);
-
+            String[] temp = new String[listNames.size()];
+            temp = listNames.toArray(temp);
+            HashMap<String, String> kidlist = UserRecorder.getKidList();
+            String CurrentKid = kidlist.get(mTitle);
             ActionBar actionBar = getSupportActionBar();
-            if(mTitle.equals("孩子1")||mTitle.equals("孩子2")||mTitle.equals("Jebora")||mTitle.equals("UserMain")){
-                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            for(int i=0; i<kidsnumber; i++){
+                if(CurrentKid != null) {
+                    if (CurrentKid.equals(temp[i]))
+                        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                }
+                else if(mTitle.equals("全部照片")||mTitle.equals("Jebora")||mTitle.equals("UserMain"))
+                    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                else{
+                    getMenuInflater().inflate(R.menu.user_main, menu);
+                    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                }
             }
-            else{
-                getMenuInflater().inflate(R.menu.user_main, menu);
-                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            }
+
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(mTitle);
             return true;
@@ -188,6 +222,10 @@ public class UserMain extends ActionBarActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
+            String[] temp = new String[listIds.size()];
+            temp = listIds.toArray(temp);
+
             if(getArguments().getString(ARG_SECTION_TITLE).equals("我的照片")){
                 View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
                 return rootView;
@@ -205,41 +243,6 @@ public class UserMain extends ActionBarActivity
                 //If we do this we need to uncomment the container on the xml layout
                 //createListBuddiesLayoutDinamically(rootView);
                 mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
-                mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
-                mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
-                mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
-                mListBuddies.setSpeed(0);
-                //mListBuddies.setOnItemClickListener(this);
-                return rootView;
-            }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("孩子1")){
-                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
-                setCameraAndGalleryButton(rootView);
-                ButterKnife.inject(this, rootView);
-                setHasOptionsMenu(true);
-
-                ServerCommunication sc = new ServerCommunication();
-                mImagesLeft = sc.loadImages(getActivity().getApplicationContext());
-                //If we do this we need to uncomment the container on the xml layout
-                //createListBuddiesLayoutDinamically(rootView);
-                mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
-                mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
-                mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
-                mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
-                mListBuddies.setSpeed(0);
-                //mListBuddies.setOnItemClickListener(this);
-                return rootView;
-            }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("孩子2")){
-                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
-                setCameraAndGalleryButton(rootView);
-                ButterKnife.inject(this, rootView);
-                setHasOptionsMenu(true);
-
-                mImagesLeft.clear();
-                //If we do this we need to uncomment the container on the xml layout
-                //createListBuddiesLayoutDinamically(rootView);
-                mImagesRight.clear();
                 mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
                 mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
                 mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
@@ -265,6 +268,23 @@ public class UserMain extends ActionBarActivity
                 return rootView;
             }
             else{
+                for (int i=0; i<=kidsnumber; i++) {
+                    if(getArguments().getString(ARG_SECTION_TITLE).equals(temp[i])){
+                        View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+                        setCameraAndGalleryButton(rootView);
+                        ButterKnife.inject(this, rootView);
+                        setHasOptionsMenu(true);
+                        ServerCommunication sc = new ServerCommunication();
+                        mImagesLeft = sc.loadImages(getActivity().getApplicationContext());
+                        mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
+                        mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
+                        mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
+                        mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
+                        mListBuddies.setSpeed(0);
+                        //mListBuddies.setOnItemClickListener(this);
+                        return rootView;
+                    }
+                }
                 View rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 TextView textView = (TextView) rootView.findViewById(R.id.section_label);
                 textView.setText(getArguments().getString(ARG_SECTION_TITLE));

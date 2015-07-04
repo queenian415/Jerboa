@@ -85,6 +85,27 @@ public class SignUp_2 extends ActionBarActivity {
         }
     }
 
+    public void onClickAddNext(View v) {
+        String status = addKid();
+        TextView textView = (TextView)findViewById(R.id.signup2_fail);
+
+        if (status.equals(SIGNUP2_EMPTY)) {
+            textView.setText(status);
+            textView.setVisibility(v.VISIBLE);
+        } else if (status.equals(SIGNUP2_NORELATION)) {
+            textView.setText(status);
+            textView.setVisibility(v.VISIBLE);
+        } else if (status.equals(SIGNUP2_ERROR)) {
+            textView.setText(status);
+            textView.setVisibility(v.VISIBLE);
+        } else {
+            // Save the preferred kid
+            UserRecorder.setPreferredKid(status);
+            startActivity(new Intent(SignUp_2.this, SignUp_2.class));
+            finish();
+        }
+    }
+
     public void showBirthdayPickerDialog(View v) {
         DatePickerFragment birthdayPicker = new DatePickerFragment();
         birthdayPicker.show(getSupportFragmentManager(), "datePicker");

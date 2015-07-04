@@ -33,7 +33,7 @@
     <string name="myphotos">我的照片</string>
     <string name="mykids">我的孩子</string>
     <string name="myorders">我的订单</string>
-    <string name="mycart">我的购物车</string>
+    <string name="browseproduct">浏览产品</string>
     <string name="changepw">更改密码</string>
     <string name="aboutus">关于我们</string>
     <string name="follwus">关注我们</string>
@@ -51,16 +51,6 @@
 
     <string name="action_example">Example action</string>
 
-    
-    <string-array name="email_dropdown">
-        <item>gmail.com</item>
-        <item>sina.com</item>
-        <item>163.com</item>
-        <item>qq.com</item>
-        <item>126.com</item>
-        <item>hotmail.com</item>
-        <item>sohu.com</item>
-    </string-array>
     <string name="title_activity_image_editing">ImageEditing</string>
     <string name="title_activity_product_select">ProductSelect</string>
 </resources>
