@@ -9,4 +9,5 @@
     <color name="apptheme_color">#92D5E9</color>
     <color name="inset">#9000</color>
     <color name="pressed">#BFE6F1</color>
+    <color name="photo_tint">#88101010</color>
 </resources>

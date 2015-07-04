@@ -1,54 +1,31 @@
 package com.jebora.jebora;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-
-import com.drew.metadata.exif.ExifInteropDirectory;
-import com.drew.metadata.exif.ExifSubIFDDirectory;
-import com.drew.metadata.file.FileMetadataDirectory;
-import com.drew.metadata.file.FileMetadataReader;
-import com.drew.metadata.png.PngDirectory;
 import com.jebora.jebora.Utils.FileInfo;
 import com.jebora.jebora.adapters.CircularAdapter;
 import com.jebora.jebora.provider.ImagesUrls;
@@ -56,11 +33,8 @@ import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
 import com.parse.ParseUser;
 
-import com.drew.metadata.*;
-import com.drew.imaging.*;
-import com.drew.lang.*;
-import com.drew.tools.*;
-
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -284,7 +258,7 @@ public class UserMain extends ActionBarActivity
                 preview.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), PreviewProduct.class);
+                        Intent intent = new Intent(getActivity(), ProductSelect.class);
                         startActivity(intent);
                     }
                 });

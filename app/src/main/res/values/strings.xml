@@ -62,4 +62,5 @@
         <item>sohu.com</item>
     </string-array>
     <string name="title_activity_image_editing">ImageEditing</string>
+    <string name="title_activity_product_select">ProductSelect</string>
 </resources>
