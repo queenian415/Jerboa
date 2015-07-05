@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -38,10 +39,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -241,8 +244,8 @@ public class UserMain extends ActionBarActivity
                 ButterKnife.inject(this, rootView);
                 setHasOptionsMenu(true);
 
-                ServerCommunication sc = new ServerCommunication();
-                mImagesLeft = sc.loadImages(getActivity().getApplicationContext());
+                mImagesLeft = ServerCommunication.loadImages(getActivity().getApplicationContext());
+                // mImagesLeft = loadLocalImages();
                 //If we do this we need to uncomment the container on the xml layout
                 //createListBuddiesLayoutDinamically(rootView);
                 mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
@@ -277,8 +280,8 @@ public class UserMain extends ActionBarActivity
                         setCameraAndGalleryButton(rootView);
                         ButterKnife.inject(this, rootView);
                         setHasOptionsMenu(true);
-                        ServerCommunication sc = new ServerCommunication();
-                        mImagesLeft = sc.loadImages(getActivity().getApplicationContext());
+                        mImagesLeft = ServerCommunication.loadImages(getActivity().getApplicationContext());
+                        // mImagesLeft = loadLocalImages();
                         mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
                         mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
                         mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
@@ -435,6 +438,20 @@ public class UserMain extends ActionBarActivity
                 }
             };
             new Thread(task, "serverThread").start();
+        }
+
+        public List<String> loadLocalImages() {
+            List<String> imagesList = new ArrayList<>();
+
+            File dir = new File(getAppDir().toString());
+            File file[] = dir.listFiles();
+
+            for (int i = 0; i < file.length; i ++) {
+                if (file[i].isFile()) {
+                    imagesList.add("file://" + file[i].getAbsolutePath());
+                }
+            }
+            return imagesList;
         }
 
         public void setCameraAndGalleryButton(View rootView){
