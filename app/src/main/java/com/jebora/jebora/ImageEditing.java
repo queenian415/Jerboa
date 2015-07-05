@@ -2,6 +2,7 @@ package com.jebora.jebora;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -26,44 +29,103 @@ public class ImageEditing extends ActionBarActivity {
     static {
         System.loadLibrary("hello");
     }
-    public native int[] hello(int[] buf, int w, int h);
+    public native int[] hello(int[] buf, int w, int h, double alpha, int beta);
+    //public native int[] contrast(int[] buf, int w, int h);
 
     ImageView imageView;
     Button btnNDK, btnRestore;
+    SeekBar contrastBar, brightnessBar;
+    TextView contrastText, brightnessText;
+    int contrastBarVal = 0, brightnessBarVal = 0;
+    double alpha = 1.5;
+    int beta = 33;
+    int w, h;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_editing);
 
-        /*
-        TextView textView = (TextView) findViewById(R.id.textview);
-        int[] buf = null;
-        int w = 1;
-        int h = 2;
-        textView.setText(hello(buf, w, h));*/
-
         this.setTitle("使用NDK转换灰度图");
-        btnRestore = (Button) this.findViewById(R.id.btnRestore);
-        //btnRestore.setOnClickListener(new ClickEvent());
-        btnNDK = (Button) this.findViewById(R.id.btnNDK);
-        //btnNDK.setOnClickListener(new ClickEvent());
+
         imageView = (ImageView) this.findViewById(R.id.ImageView01);
+        contrastBar = (SeekBar) this.findViewById(R.id.contrastBar);
+        brightnessBar = (SeekBar) this.findViewById(R.id.brightnessBar);
+        contrastText = (TextView) this.findViewById(R.id.contrastText);
+        contrastText.setText("Contrast : " + contrastBar.getProgress() + " / " + contrastBar.getMax());
+        brightnessText = (TextView) this.findViewById(R.id.brightnessText);
+        brightnessText.setText("Brightness : " + brightnessBar.getProgress() + " / " + brightnessBar.getMax());
+
+        contrastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                contrastBarVal = progress;
+                alpha = (((double)contrastBarVal) / contrastBar.getMax()) * 2.0 + 1.0;
+                contrastText.setText("Contrast : " + progress + " / " + contrastBar.getMax());
+                Toast.makeText(ImageEditing.this, "Contrast changed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(ImageEditing.this, "Contrast start tracking", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                contrastText.setText("Contrast : " + contrastBarVal + " / " + contrastBar.getMax());
+            }
+        });
+
+        brightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                beta = progress;
+                brightnessText.setText("Brightness : " + progress + " / " + brightnessBar.getMax());
+                Toast.makeText(ImageEditing.this, "Contrast changed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(ImageEditing.this, "Brightness start tracking", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                brightnessText.setText("Brightness : " + beta + " / " + brightnessBar.getMax());
+            }
+        });
+
         Bitmap img1 = ((BitmapDrawable) getResources().getDrawable(
                 R.drawable.logo)).getBitmap();
 
-        int w = img1.getWidth(), h = img1.getHeight();
+        w = img1.getWidth();
+        h = img1.getHeight();
 
         imageView.setImageBitmap(img1);
 
-
-        int[] pix = new int[w * h];
-        img1.getPixels(pix, 0, w, 0, 0, w, h);
-        int[] resultInt = hello(pix, w, h);
-        Bitmap resultImg = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
-        resultImg.setPixels(resultInt, 0, w, 0, 0, w, h);
-        imageView.setImageBitmap(resultImg);
-
+        btnRestore = (Button) this.findViewById(R.id.btnRestore);
+        btnRestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap orig = ((BitmapDrawable) getResources().getDrawable(
+                        R.drawable.logo)).getBitmap();
+                imageView.setImageBitmap(orig);
+            }
+        });
+        btnNDK = (Button) this.findViewById(R.id.btnNDK);
+        btnNDK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap img = ((BitmapDrawable) getResources().getDrawable(
+                        R.drawable.logo)).getBitmap();
+                int[] pix = new int[w * h];
+                img.getPixels(pix, 0, w, 0, 0, w, h);
+                int[] resultInt = hello(pix, w, h, alpha, beta);
+                Bitmap resultImg = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
+                resultImg.setPixels(resultInt, 0, w, 0, 0, w, h);
+                imageView.setImageBitmap(resultImg);
+            }
+        });
     }
 /*
     class ClickEvent implements View.OnClickListener {

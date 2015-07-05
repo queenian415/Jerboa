@@ -19,6 +19,27 @@
         android:id="@+id/textview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />-->
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contrastBar"
+        android:layout_gravity="center_horizontal"
+        android:clickable="false" />
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/brightnessBar"
+        android:layout_gravity="center_horizontal"
+        android:clickable="false" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contrastText"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/brightnessText"/>
+
     <ImageView android:id="@+id/ImageView01"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
