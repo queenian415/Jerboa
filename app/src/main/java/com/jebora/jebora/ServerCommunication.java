@@ -3,6 +3,7 @@ package com.jebora.jebora;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.parse.ParseException;
@@ -13,6 +14,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,8 +114,10 @@ public class ServerCommunication {
         }
     }
 
-    public static void saveImageInBackground(Context context, Bitmap src, final String filename) {
+    public static void saveImageInBackground(Context context, String fileFullName, final String filename) {
         Log.d(TAG, "saveImage");
+
+        Bitmap src = BitmapFactory.decodeFile(fileFullName);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         src.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] data = stream.toByteArray();

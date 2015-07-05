@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -203,6 +204,8 @@ public class UserMain extends ActionBarActivity
         private CircularAdapter mAdapterRight;
         @InjectView(R.id.listbuddies)
         ListBuddiesLayout mListBuddies;
+        private String ImageFullName;
+        private String ImageName;
 
         //end
 
@@ -297,11 +300,7 @@ public class UserMain extends ActionBarActivity
             if(resultCode != RESULT_OK) return;
 
             if(requestCode == CAMERA_REQUEST){
-                Bundle extras = data.getExtras();
-                Bitmap photo = (Bitmap) extras.get("data");
-                File appExtDir = getAppDir();
-                Date photoTakenTime = new Date();
-                saveBitmapToPath(photo, appExtDir.toString(), Integer.toString(photoTakenTime.hashCode()));
+                saveBitmapToServer(ImageFullName, ImageName);
             }
             else if(requestCode == GALLERY_REQUEST){
                 Uri origUri = data.getData();
@@ -417,7 +416,6 @@ public class UserMain extends ActionBarActivity
                 fOut = new FileOutputStream(f);
                 bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                 fOut.close();
-                Date date = FileInfo.getLastModifiedTime(f);
                 result = true;
             }catch (Exception e){
                 result = false;
@@ -425,13 +423,18 @@ public class UserMain extends ActionBarActivity
             }
 
             // save to server
-            saveBitmapToServer(bm, filename);
+            saveBitmapToServer(path + File.separator + filename + ".png", filename);
             return result;
         }
 
-        public void saveBitmapToServer(Bitmap src, String filename) {
-            ServerCommunication sc = new ServerCommunication();
-            sc.saveImageInBackground(getActivity().getApplicationContext(), src, filename);
+        public void saveBitmapToServer(final String src, final String filename) {
+            Runnable task = new Runnable() {
+                @Override
+                public void run() {
+                    ServerCommunication.saveImageInBackground(getActivity().getApplicationContext(), src, filename);
+                }
+            };
+            new Thread(task, "serverThread").start();
         }
 
         public void setCameraAndGalleryButton(View rootView){
@@ -442,6 +445,13 @@ public class UserMain extends ActionBarActivity
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    Date photoTakenTime = new Date();
+                    String filename = photoTakenTime.hashCode() + ".jpg";
+                    String filePath = getAppDir().toString() + File.separator + filename;
+                    Uri imageUri = Uri.fromFile(new File(filePath));
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    ImageFullName = filePath;
+                    ImageName = filename;
                     startActivityForResult(intent, CAMERA_REQUEST);
                 }
             });
