@@ -2,116 +2,116 @@
 <items version="2" >
 
     <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-d2ffd6ee57cc86f20818b22478d24357308f3b90.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-urlconnection/2.0.0/afe8399d352713b66e597e9670c741d1e60ae923/okhttp-urlconnection-2.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="afe8399d352713b66e597e9670c741d1e60ae923">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.0.0-436ee37ffc4692d44e3d4c06a900185f75be587d.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.0.0/2534c458682c73f5b9871131ab3098d3f987ca3/okio-1.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="02534c458682c73f5b9871131ab3098d3f987ca3">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okio-1.0.0-92fa7e0df10aeb82494d3b734eba94ef3c379146.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.3/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-d3523b214ce6aa576af5ef0ca555aa19a2894de5.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/5.1.2/daf5472b0df6dabaceb6ad755b3812535863965a/butterknife-5.1.2.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="daf5472b0df6dabaceb6ad755b3812535863965a">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/butterknife-5.1.2-48f05feb34fe4115996db4633ea9889bce59e88c.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-17668d0792356d5cb40f67a19b7358566af621d0.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-f946256238504c6390bba294133629a89365f9c2.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.3/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-c5203c59aeac8cc382b36d8a50e0da8fb6b136b4.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/libs/jpct_ae.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="be484d9a9b9b8af7b11ebb79b0b6d74757fcd7ed">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/jpct_ae-2ac7bb3072cf3d623a3721960bd68461288837f2.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jar="/home/mshzhb/android-sdk-linux/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-499a02c2a0052dc52ccf6a3d84a927f14d95abd1.jar" />
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-ed3087249b8cb72bc1a6a554fc569f9ea532fd51.jar" />
     </item>
     <item
-        jar="/Users/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.3.3/1262995965440e28ba5c4d480c9c9ab4ccce84cc/picasso-2.3.3.jar"
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="1262995965440e28ba5c4d480c9c9ab4ccce84cc">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/picasso-2.3.3-58d0ccd04431c3993c861146366e9326f53951f5.jar" />
+        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-7fe2540bcd71ffbbd42b4187e4f0fa433ac7f9db.jar" />
     </item>
     <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/Jerboa/library/unspecified/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="1914a2552655bd590a22a7fcd3ccac1024208991">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-1d5eb410ed24ab6f8905f330ba56e1c65105f74e.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.0.0/4c8d1536dba3812cc1592090dc20c47a4ed3c35e/okhttp-2.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4c8d1536dba3812cc1592090dc20c47a4ed3c35e">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-2.0.0-66c6136b19fddfa5106b7eee6cce346f51ba57ea.jar" />
-    </item>
-    <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/libs/Parse-1.9.2.jar"
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/libs/Parse-1.9.2.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="fe739334780fe321141e62720822c2d456061899">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/Parse-1.9.2-5c1148ea833843ccfd5606289f8bd261e8287197.jar" />
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/Parse-1.9.2-6820c3f3f7a1d4edd035d209333650f1f598cf04.jar" />
     </item>
     <item
-        jar="/Users/mshzhb/StudioProjects/Jerboa/app/libs/metadata-extractor-2.8.1.jar"
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-efbe6da8385f97e7af88bba875e0dc7431c0a803.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/libs/jpct_ae.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="be484d9a9b9b8af7b11ebb79b0b6d74757fcd7ed">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/jpct_ae-b6c5d6458a34b429c636459e7302e523181a0370.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.3/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-aa0bca73550a3eddcca9dfb95280f6e49e23adb0.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.0.0/2534c458682c73f5b9871131ab3098d3f987ca3/okio-1.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="02534c458682c73f5b9871131ab3098d3f987ca3">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okio-1.0.0-974d41861a7af37af011ef0483895a3bf80b3257.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.0.0/4c8d1536dba3812cc1592090dc20c47a4ed3c35e/okhttp-2.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4c8d1536dba3812cc1592090dc20c47a4ed3c35e">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-2.0.0-e37ac9cda3bd97dde73261e43653939c21c28fe3.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/libs/metadata-extractor-2.8.1.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="120630f96316e0f173aedf0c88bb06c5e146ad96">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/metadata-extractor-2.8.1-b7ad2432c009f30b1b044a997ff715bfa3846498.jar" />
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/metadata-extractor-2.8.1-cc741fe5ae0235485258a89802ce80bfb38f858e.jar" />
     </item>
     <item
-        jar="/Users/mshzhb/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jar="/home/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-urlconnection/2.0.0/afe8399d352713b66e597e9670c741d1e60ae923/okhttp-urlconnection-2.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="afe8399d352713b66e597e9670c741d1e60ae923">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.0.0-485debd8d649bbf92880ec711a66f930132ee932.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-3cc1422cd7a77423ce36f03da579544e800de9b7.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
-        <dex dex="/Users/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-e90d1e865cd42007a98a8cb75386128be215a0a8.jar" />
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-32328c2ca01fd349c12249626136c6cb375a6f39.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.3.3/1262995965440e28ba5c4d480c9c9ab4ccce84cc/picasso-2.3.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1262995965440e28ba5c4d480c9c9ab4ccce84cc">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/picasso-2.3.3-37ffa85413a2b59082567b3fe2388d0612e37f78.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/Jerboa/library/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="51dee7e78680ad83c887158f9601c41c120cdfbc">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-6382cdc0d69abd6c4b9f4eba650450a6c3c12bc5.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/5.1.2/daf5472b0df6dabaceb6ad755b3812535863965a/butterknife-5.1.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="daf5472b0df6dabaceb6ad755b3812535863965a">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/butterknife-5.1.2-8f6ff487231150b72711cb881a414ab167c326b8.jar" />
+    </item>
+    <item
+        jar="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.3/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
+        <dex dex="/home/mshzhb/StudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-7c6a0aed6bf92e7ef9daa057b3738ae133f408ea.jar" />
     </item>
 
 </items>
