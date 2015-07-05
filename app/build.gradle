@@ -11,6 +11,10 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    sourceSets.main.jni.srcDirs = [] // disable gradle to build files under jni
+    sourceSets.main.jniLibs.srcDir 'src/main/libs' // set jniLibs to src/main/libs
+
     buildTypes {
         release {
             minifyEnabled false
@@ -33,4 +37,5 @@ dependencies {
 dependencies {
     compile 'com.parse.bolts:bolts-android:1.+'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
 }

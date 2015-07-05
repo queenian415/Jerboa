@@ -26,7 +26,7 @@ public class SignUp_2 extends ActionBarActivity {
 
     public static final String SIGNUP2_EMPTY = "请输入全部信息";
     public static final String SIGNUP2_NORELATION = "请输入与孩子的关系";
-    public static final String SIGNUP2_ERROR = "系统错误";
+    public static final String SIGNUP2_ERROR = "无法连接到服务器";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class SignUp_2 extends ActionBarActivity {
         setContentView(R.layout.activity_sign_up_2);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
     }
 
     @Override
@@ -78,12 +79,29 @@ public class SignUp_2 extends ActionBarActivity {
             textView.setVisibility(v.VISIBLE);
         } else {
             // Save the preferred kid
-            SharedPreferences user = getSharedPreferences(App.PREFIX + "KIDID", 0);
-            SharedPreferences.Editor editor = user.edit();
-            editor.putString("kidid", status);
-            editor.commit();
-
+            UserRecorder.setPreferredKid(status);
             startActivity(new Intent(SignUp_2.this, UserMain.class));
+            finish();
+        }
+    }
+
+    public void onClickAddNext(View v) {
+        String status = addKid();
+        TextView textView = (TextView)findViewById(R.id.signup2_fail);
+
+        if (status.equals(SIGNUP2_EMPTY)) {
+            textView.setText(status);
+            textView.setVisibility(v.VISIBLE);
+        } else if (status.equals(SIGNUP2_NORELATION)) {
+            textView.setText(status);
+            textView.setVisibility(v.VISIBLE);
+        } else if (status.equals(SIGNUP2_ERROR)) {
+            textView.setText(status);
+            textView.setVisibility(v.VISIBLE);
+        } else {
+            // Save the preferred kid
+            UserRecorder.setPreferredKid(status);
+            startActivity(new Intent(SignUp_2.this, SignUp_2.class));
             finish();
         }
     }
@@ -129,8 +147,7 @@ public class SignUp_2 extends ActionBarActivity {
             return SIGNUP2_EMPTY;
         }
 
-        ServerCommunication sc = new ServerCommunication();
-        return sc.addKid(kidName, kidBirthday, kidGender, kidRelation);
+        return ServerCommunication.addKid(kidName, kidBirthday, kidGender, kidRelation);
     }
 
 }

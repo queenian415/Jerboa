@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:background="#fffefa"
     tools:context="com.jebora.jebora.SignUp_2">
 
     <LinearLayout
@@ -21,11 +22,13 @@
 
         <EditText
             android:id="@+id/child_name"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16.0dp"
-            android:textSize="20sp"
+            android:background="@drawable/customize_textbox"
+            android:textSize="15sp"
             android:hint="@string/child_name"
             android:inputType="textPersonName" />
 
@@ -33,9 +36,12 @@
         <Button
             android:id="@+id/child_birthday"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16.0dp"
+            android:background="@drawable/button_selector"
+            android:textColor="@drawable/text_color_selector"
+            android:stateListAnimator="@null"
             android:textSize="20sp"
             android:text="@string/child_birthday"
             android:onClick="showBirthdayPickerDialog" />
@@ -51,12 +57,14 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:buttonTint="#bfe6f1"
                 android:layout_weight="1"
                 android:text="@string/boy"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:buttonTint="#bfe6f1"
                 android:layout_weight="1"
                 android:text="@string/girl"/>
 
@@ -81,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:buttonTint="#bfe6f1"
                 android:text="@string/dad"
                 android:onClick="hideOther"/>
 
@@ -88,6 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:buttonTint="#bfe6f1"
                 android:text="@string/mom"
                 android:onClick="hideOther"/>
 
@@ -95,6 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:buttonTint="#bfe6f1"
                 android:text="@string/other"
                 android:onClick="showOther"/>
 
@@ -102,18 +113,36 @@
 
         <EditText
             android:id="@+id/signup_2_other_relationship"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:textSize="15sp"
             android:layout_gravity="center"
+            android:background="@drawable/customize_textbox"
             android:hint="其他"
             android:visibility="invisible"/>
+        <Button
+            android:id="@+id/addchild"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:stateListAnimator="@null"
+            android:background="@drawable/button_selector"
+            android:textColor="@drawable/text_color_selector"
+            android:text="+"
+            android:onClick="onClickAddNext" />
 
         <Button
             android:id="@+id/complete"
             android:layout_width="280dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:stateListAnimator="@null"
+            android:background="@drawable/button_selector"
+            android:textColor="@drawable/text_color_selector"
             android:text="完成"
             android:onClick="onClickComplete" />
     </LinearLayout>

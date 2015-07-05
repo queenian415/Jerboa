@@ -4,7 +4,7 @@
         <item>@string/myphotos</item>
         <item>@string/mykids</item>
         <item>@string/myorders</item>
-        <item>@string/mycart</item>
+        <item>@string/browseproduct</item>
         <item>@string/changepw</item>
         <item>@string/aboutus</item>
         <item>@string/follwus</item>
@@ -21,4 +21,14 @@
         <item>@drawable/ic_drawer_search</item>
         <item>@drawable/ic_drawer_question</item>
     </integer-array>
+
+    <string-array name="email_dropdown">
+        <item>gmail.com</item>
+        <item>sina.com</item>
+        <item>163.com</item>
+        <item>qq.com</item>
+        <item>126.com</item>
+        <item>hotmail.com</item>
+        <item>sohu.com</item>
+    </string-array>
 </resources>

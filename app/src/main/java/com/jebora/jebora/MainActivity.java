@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         if (currentUser != null) {
+            new UserRecorder(getApplicationContext());
             startActivity(new Intent(this, UserMain.class));
             finish();
         } else {
