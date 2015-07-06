@@ -13,8 +13,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,11 +120,20 @@ public class ServerCommunication {
     public static void saveImageInBackground(Context context, String fileFullName, final String filename) {
         Log.d(TAG, "saveImage");
 
-        Bitmap src = BitmapFactory.decodeFile(fileFullName);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        src.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] data = stream.toByteArray();
-        final ParseFile image = new ParseFile(filename + ".png", data);
+        byte[] data = null;
+        try {
+            FileInputStream in = new FileInputStream(fileFullName);
+            BufferedInputStream buf = new BufferedInputStream(in);
+            data = new byte[buf.available()];
+            buf.read(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (data == null) {
+            return; // error
+        }
+
+        final ParseFile image = new ParseFile(filename, data);
         final Context mContext = context;
         image.saveInBackground(new SaveCallback() {
             @Override
