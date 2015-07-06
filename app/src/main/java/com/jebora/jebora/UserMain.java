@@ -1,23 +1,18 @@
 package com.jebora.jebora;
 
-import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,15 +31,11 @@ import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
 import com.parse.ParseUser;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -307,16 +298,20 @@ public class UserMain extends ActionBarActivity
             }
             else if(requestCode == GALLERY_REQUEST){
                 Uri origUri = data.getData();
-                Bitmap bitmap = null;
+                Context context = getActivity().getApplicationContext();
+                File kidDirectory = FileInfo.getUserKidDirectory(context);
+                File picked_photo = new File(FileInfo.getRealPathFromURI(origUri, context));
+                Date photoAddedTime = new Date();
+                String fileName = Integer.toString(photoAddedTime.hashCode());
+                String dstPath = kidDirectory.toString() + File.separator +
+                        fileName + ".jpg";
                 try{
-                    ContentResolver cr = getActivity().getApplicationContext().getContentResolver();
-                    bitmap= MediaStore.Images.Media.getBitmap(cr, origUri);
+                    File dstFile = FileInfo.newFile(dstPath);
+                    FileInfo.copyFile(picked_photo, dstFile);
+                    saveBitmapToServer(dstFile.toString(), fileName);
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-                File appExtDir = getAppDir();
-                Date photoAddedTime = new Date();
-                saveBitmapToPath(bitmap, appExtDir.toString(), Integer.toString(photoAddedTime.hashCode()));
             }
         }
         private String getImage(int buddy, int position) {
@@ -365,71 +360,6 @@ public class UserMain extends ActionBarActivity
                     .setDivider(getResources().getDrawable(R.drawable.divider));
         }
 
-        public File getAppDir(){
-            // get user & kid id. store image in the corresponding directory
-            String userId = ParseUser.getCurrentUser().getObjectId();
-            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(App.PREFIX + "KIDID", 0);
-            String kidId = sharedPreferences.getString("kidid", null);
-
-            File extFile = getActivity().getApplicationContext().getExternalFilesDir(null);
-            if(!extFile.exists()){
-                if(!extFile.mkdir()){
-                    Log.e("IO Error", "Error cannot make jerboa dir");
-                }
-            }
-
-            // user directory
-            String userPath = extFile.getAbsolutePath() + File.separator + userId;
-            File userFile = new File(userPath);
-            if(!userFile.exists()){
-                if(!userFile.mkdir()){
-                    Log.e("IO Error", "Error cannot make jerboa dir");
-                }
-            }
-
-            if (kidId == null) {
-                return userFile;
-            } else {
-            // user's kid directory
-                String kidPath = userPath + File.separator + kidId;
-                File kidFile = new File(kidPath);
-                if (!kidFile.exists()) {
-                    if (!kidFile.mkdir()) {
-                        Log.e("IO Error", "Error cannot make jerboa dir");
-                    }
-                }
-                return kidFile;
-            }
-        }
-
-        public boolean saveBitmapToPath(Bitmap bm, String path, String filename){
-            boolean result = false;
-            FileOutputStream fOut = null;
-
-            File f = new File(path + File.separator + filename + ".png");
-            boolean fExists = f.exists();
-            try{
-                if(!fExists){
-                    f.createNewFile();
-                }
-                else{
-                    f.delete();
-                    f.createNewFile();
-                }
-                fOut = new FileOutputStream(f);
-                bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                fOut.close();
-                result = true;
-            }catch (Exception e){
-                result = false;
-                e.printStackTrace();
-            }
-
-            // save to server
-            saveBitmapToServer(path + File.separator + filename + ".png", filename);
-            return result;
-        }
-
         public void saveBitmapToServer(final String src, final String filename) {
             Runnable task = new Runnable() {
                 @Override
@@ -443,7 +373,7 @@ public class UserMain extends ActionBarActivity
         public List<String> loadLocalImages() {
             List<String> imagesList = new ArrayList<>();
 
-            File dir = new File(getAppDir().toString());
+            File dir = new File(FileInfo.getUserKidDirectory(getActivity().getApplicationContext()).toString());
             File file[] = dir.listFiles();
 
             for (int i = 0; i < file.length; i ++) {
@@ -464,7 +394,7 @@ public class UserMain extends ActionBarActivity
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     Date photoTakenTime = new Date();
                     String filename = photoTakenTime.hashCode() + ".jpg";
-                    String filePath = getAppDir().toString() + File.separator + filename;
+                    String filePath = FileInfo.getUserKidDirectory(getActivity().getApplicationContext()).toString() + File.separator + filename;
                     Uri imageUri = Uri.fromFile(new File(filePath));
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                     ImageFullName = filePath;
@@ -489,6 +419,5 @@ public class UserMain extends ActionBarActivity
                 }
             });
         }
-
     }
 }
