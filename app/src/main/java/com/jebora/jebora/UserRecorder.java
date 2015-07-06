@@ -29,12 +29,15 @@ public class UserRecorder {
 
     private static Context mContext;
     private static String userId;
+    private static String username;
     private static String fileName;
     private static HashMap<String, String> kidList;
 
     public UserRecorder(Context c) {
         mContext = c;
-        userId = ParseUser.getCurrentUser().getObjectId();
+        ParseUser user = ParseUser.getCurrentUser();
+        userId = user.getObjectId();
+        username = user.getUsername();
         fileName = userId + ".txt";
 
         // read kid list, create one if not exist
@@ -104,6 +107,8 @@ public class UserRecorder {
     public static HashMap<String, String> getKidList() { return kidList; }
 
     public static String getUserId() { return userId; }
+
+    public static String getUsername() { return username; }
 
     public static boolean hasLocalKidList() { return kidList != null; }
 
