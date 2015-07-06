@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     com_jebora_jebora_ImageEditing
  * Method:    hello
- * Signature: ([III)[I
+ * Signature: ([IIIDI)[I
  */
 JNIEXPORT jintArray JNICALL Java_com_jebora_jebora_ImageEditing_hello
-  (JNIEnv *, jobject, jintArray, jint, jint);
+  (JNIEnv *, jobject, jintArray, jint, jint, jdouble, jint);
 
 #ifdef __cplusplus
 }

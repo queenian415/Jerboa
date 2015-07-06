@@ -9,7 +9,7 @@ import java.util.List;
 public class ProductManager {
 
    //private static String[] productArray = {"Cloth", "Cup", "Phone Case", "Japan Import", "UK import", "US import" };
-   private static String[] productArray = {"Cloth", "Cup","Phone Case","Japan Import", "UK import", "US import"};
+   private static String[] productArray = {"服裝", "茶杯","手機殼","日本進口", "英國進口", "美國進口"};
     private static String loremIpsum = "good";
 
     private static ProductManager mInstance;
@@ -34,11 +34,11 @@ public class ProductManager {
                 product.description = loremIpsum;
                 switch (i){
                     case 0: product.imageName = "cloth"; break;
-                    case 1: product.imageName = productName.replaceAll("\\s+","").toLowerCase(); break;
+                    case 1: product.imageName = "cup"; break;
                     case 2: product.imageName = "phonecase"; break;
-                    case 3: product.imageName = "japanimport"; break;
-                    case 4: product.imageName = "ukimport"; break;
-                    case 5: product.imageName = "usimport"; break;
+                    case 3: product.imageName = "japan"; break;
+                    case 4: product.imageName = "uk"; break;
+                    case 5: product.imageName = "us"; break;
                 }
                 i++;
                 products.add(product);
