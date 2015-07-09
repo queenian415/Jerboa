@@ -1,38 +1,159 @@
 package com.jebora.jebora;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.jebora.jebora.SlideView.OnSlideListener;
 
-public class ManageKids extends ActionBarActivity {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class ManageKids extends ActionBarActivity implements OnItemClickListener, OnClickListener,
+        OnSlideListener {
+
+    private static final String TAG = "ManageKids";
+
+    private ListViewCompat mListView;
+
+    private List<MessageItem> mMessageItems = new ArrayList<ManageKids.MessageItem>();
+
+    private SlideView mLastSlideViewWithStatusOn;
+
+    boolean slider_visibility = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_kids);
+        initView();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_manage_kids, menu);
-        return true;
+    private void initView() {
+        mListView = (ListViewCompat) findViewById(R.id.managekids_list);
+
+        Map<String, String> kids = UserRecorder.getKidList();
+        for (String key : kids.keySet()) {
+            MessageItem item = new MessageItem();
+            item.iconRes = R.drawable.ic_drawer_explore;
+            item.kidname = kids.get(key);
+            mMessageItems.add(item);
+        }
+        mListView.setAdapter(new SlideAdapter());
+        mListView.setOnItemClickListener(this);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private class SlideAdapter extends BaseAdapter {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        private LayoutInflater mInflater;
+
+        SlideAdapter() {
+            super();
+            mInflater = getLayoutInflater();
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        public int getCount() {
+            return mMessageItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mMessageItems.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            SlideView slideView = (SlideView) convertView;
+            if (slideView == null) {
+                View itemView = mInflater.inflate(R.layout.managekidslist, null);
+
+                slideView = new SlideView(ManageKids.this);
+                slideView.setContentView(itemView);
+
+                holder = new ViewHolder(slideView);
+                slideView.setOnSlideListener(ManageKids.this);
+                slideView.setTag(holder);
+            } else {
+                holder = (ViewHolder) slideView.getTag();
+            }
+            MessageItem item = mMessageItems.get(position);
+            item.slideView = slideView;
+            item.slideView.shrink();
+
+            holder.icon.setImageResource(item.iconRes);
+            holder.kidname.setText(item.kidname);
+            holder.deleteHolder.setOnClickListener(ManageKids.this);
+
+            return slideView;
+        }
+
+    }
+
+    public class MessageItem {
+        public int iconRes;
+        public String kidname;
+        public SlideView slideView;
+    }
+
+    private static class ViewHolder {
+        public ImageView icon;
+        public TextView kidname;
+        public ViewGroup deleteHolder;
+
+        ViewHolder(View view) {
+            icon = (ImageView) view.findViewById(R.id.icon);
+            kidname = (TextView) view.findViewById(R.id.manage_kidname);
+            deleteHolder = (ViewGroup)view.findViewById(R.id.holder);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        if(slider_visibility)
+            mLastSlideViewWithStatusOn.shrink();
+        if(!slider_visibility)
+            startActivity(new Intent(ManageKids.this,EditKid.class));
+    }
+
+    @Override
+    public void onSlide(View view, int status) {
+
+        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
+            mLastSlideViewWithStatusOn.shrink();
+            slider_visibility = false;
+        }
+        if (status == SLIDE_STATUS_ON) {
+            mLastSlideViewWithStatusOn = (SlideView) view;
+            slider_visibility = true;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.holder) {
+            ;
+        }
     }
 }

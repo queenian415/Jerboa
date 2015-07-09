@@ -131,6 +131,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jebora.jebora.UserMain" />
         </activity>
+        <activity
+            android:name=".EditKid"
+            android:label="@string/title_activity_edit_kid"
+            android:parentActivityName=".ManageKids" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.ManageKids" />
+        </activity>
     </application>
 
 </manifest>
