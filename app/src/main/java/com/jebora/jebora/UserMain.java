@@ -1,8 +1,12 @@
 package com.jebora.jebora;
 
+import android.accounts.NetworkErrorException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -184,6 +188,7 @@ public class UserMain extends ActionBarActivity
         private static final int CAMERA_REQUEST = 1;
         private static final int GALLERY_REQUEST = 2;
         private static final String ARG_SECTION_TITLE = "section_title";
+        private static Context mContext;
         /**
          * 返回根据title参数创建的fragment
          */
@@ -216,6 +221,7 @@ public class UserMain extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
+            mContext = getActivity().getApplicationContext();
             String[] temp = new String[listIds.size()];
             temp = listIds.toArray(temp);
 
@@ -288,9 +294,8 @@ public class UserMain extends ActionBarActivity
             }
             else if(requestCode == GALLERY_REQUEST){
                 Uri origUri = data.getData();
-                Context context = getActivity().getApplicationContext();
-                File kidDirectory = FileInfo.getUserKidDirectory(context);
-                File picked_photo = new File(FileInfo.getRealPathFromURI(origUri, context));
+                File kidDirectory = FileInfo.getUserKidDirectory(mContext);
+                File picked_photo = new File(FileInfo.getRealPathFromURI(origUri, mContext));
                 Date photoAddedTime = new Date();
                 String fileName = Integer.toString(photoAddedTime.hashCode());
                 String dstPath = kidDirectory.toString() + File.separator +
@@ -352,28 +357,44 @@ public class UserMain extends ActionBarActivity
         }
 
         public void saveBitmapToServer(final String src, final String filename) {
-            Runnable task = new Runnable() {
-                @Override
-                public void run() {
-                    ServerCommunication.saveImageInBackground(getActivity().getApplicationContext(), src, filename);
-                }
-            };
-            new Thread(task, "serverThread").start();
+            if (isNetworkConnected()) {
+                Runnable task = new Runnable() {
+                    @Override
+                    public void run() {
+                        ServerCommunication.saveImageInBackground(mContext, src, filename);
+                    }
+                };
+                new Thread(task, "serverThread").start();
+            }
         }
 
         public List<String> loadLocalImages() {
             List<String> imagesList = new ArrayList<>();
 
-            File dir = new File(FileInfo.getUserKidDirectory(getActivity().getApplicationContext()).toString());
+            File dir = new File(FileInfo.getUserKidDirectory(mContext).toString());
             File file[] = dir.listFiles();
 
             for (int i = 0; i < file.length; i ++) {
                 if (file[i].isFile()) {
-                    imagesList.add("file://" + file[i].getAbsolutePath());
+                    String filename = file[i].getName();
+                    // Make sure it's a JPEG image
+                    String ext = filename.substring(filename.lastIndexOf('.') + 1);
+                    if (ext.equals("jpg")) {
+                        imagesList.add("file://" + file[i].getAbsolutePath());
+                    }
                 }
             }
             return imagesList;
         }
+
+
+        public boolean isNetworkConnected() {
+            ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return (activeNetwork != null && activeNetwork.isConnected());
+        }
+
 
         public void setCameraAndGalleryButton(View rootView){
             ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
@@ -385,7 +406,7 @@ public class UserMain extends ActionBarActivity
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     Date photoTakenTime = new Date();
                     String filename = photoTakenTime.hashCode() + ".jpg";
-                    String filePath = FileInfo.getUserKidDirectory(getActivity().getApplicationContext()).toString() + File.separator + filename;
+                    String filePath = FileInfo.getUserKidDirectory(mContext).toString() + File.separator + filename;
                     Uri imageUri = Uri.fromFile(new File(filePath));
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                     ImageFullName = filePath;
