@@ -59,8 +59,6 @@ public class UserMain extends ActionBarActivity
     private Fragment currentFragment;
     private Fragment lastFragment;
 
-    private static List<String> mImagesLeft = new ArrayList<String>();
-    private static List<String> mImagesRight = new ArrayList<String>();
     final static List<String> listNames = new ArrayList<String>();
     final static List<String> listIds = new ArrayList<String>();
     private static int kidsnumber = 0;
@@ -194,8 +192,6 @@ public class UserMain extends ActionBarActivity
         int mMarginDefault;
         int[] mScrollConfig;
         private boolean isOpenActivities;
-        private CircularAdapter mAdapterLeft;
-        private CircularAdapter mAdapterRight;
         @InjectView(R.id.listbuddies)
         ListBuddiesLayout mListBuddies;
         private String ImageFullName;
@@ -228,24 +224,7 @@ public class UserMain extends ActionBarActivity
                 return rootView;
             }
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
-                View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
-
-                setCameraAndGalleryButton(rootView);
-
-                ButterKnife.inject(this, rootView);
-                setHasOptionsMenu(true);
-
-                mImagesLeft = ServerCommunication.loadImages(getActivity().getApplicationContext());
-                // mImagesLeft = loadLocalImages();
-                //If we do this we need to uncomment the container on the xml layout
-                //createListBuddiesLayoutDinamically(rootView);
-                mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
-                mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
-                mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
-                mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
-                mListBuddies.setSpeed(0);
-                //mListBuddies.setOnItemClickListener(this);
-                return rootView;
+                return setUpMainPage(inflater, container);
             }
             else if (getArguments().getString(ARG_SECTION_TITLE).equals("注销")) {
                 ParseUser.logOut();
@@ -267,19 +246,7 @@ public class UserMain extends ActionBarActivity
             else{
                 for (int i=0; i<=kidsnumber; i++) {
                     if(getArguments().getString(ARG_SECTION_TITLE).equals(temp[i])){
-                        View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
-                        setCameraAndGalleryButton(rootView);
-                        ButterKnife.inject(this, rootView);
-                        setHasOptionsMenu(true);
-                        mImagesLeft = ServerCommunication.loadImages(getActivity().getApplicationContext());
-                        // mImagesLeft = loadLocalImages();
-                        mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
-                        mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
-                        mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
-                        mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
-                        mListBuddies.setSpeed(0);
-                        //mListBuddies.setOnItemClickListener(this);
-                        return rootView;
+                        return setUpMainPage(inflater, container);
                     }
                 }
                 View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -289,6 +256,29 @@ public class UserMain extends ActionBarActivity
             }
 
         }
+
+        private View setUpMainPage(LayoutInflater inflater, ViewGroup container) {
+            View rootView = inflater.inflate(R.layout.fragment_user_main_list, container, false);
+
+            setCameraAndGalleryButton(rootView);
+
+            ButterKnife.inject(this, rootView);
+            setHasOptionsMenu(true);
+
+            //List<String> mImagesLeft = ServerCommunication.loadImages(getActivity().getApplicationContext());
+            List<String> mImagesRight = new ArrayList<>();
+            List<String> mImagesLeft = loadLocalImages();
+            //If we do this we need to uncomment the container on the xml layout
+            //createListBuddiesLayoutDinamically(rootView);
+            mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
+            CircularAdapter mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
+            CircularAdapter mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
+            mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
+            mListBuddies.setSpeed(0);
+            //mListBuddies.setOnItemClickListener(this);
+            return rootView;
+        }
+
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             if(resultCode != RESULT_OK) return;
@@ -314,6 +304,7 @@ public class UserMain extends ActionBarActivity
                 }
             }
         }
+
         private String getImage(int buddy, int position) {
             return buddy == 0 ? ImagesUrls.imageUrls_left[position] : ImagesUrls.imageUrls_right[position];
         }
