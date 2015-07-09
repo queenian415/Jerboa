@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -90,6 +91,8 @@ public class NavigationDrawerFragment extends Fragment {
             Bundle savedInstanceState) {
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         View headerView = inflater.inflate(R.layout.list_header, null);
+        TextView Account = (TextView) headerView.findViewById(R.id.item_title);
+        Account.setText(UserRecorder.getUsername());
         mDrawerListView.addHeaderView(headerView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
