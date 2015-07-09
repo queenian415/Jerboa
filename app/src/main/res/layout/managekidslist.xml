@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="58dp"
+    android:background="@color/white" android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical" android:paddingBottom="5dp" android:paddingLeft="10dp"
+    android:paddingRight="10dp" android:paddingTop="5dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/circleaccount" />
+
+    <TextView
+        android:id="@+id/manage_kidname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/icon"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+</RelativeLayout>
