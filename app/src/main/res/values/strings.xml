@@ -53,4 +53,7 @@
 
     <string name="title_activity_image_editing">ImageEditing</string>
     <string name="title_activity_product_select">ProductSelect</string>
+    <string name="title_activity_profile_editing">ProfileEditing</string>
+    <string name="title_activity_manage_kids">ManageKids</string>
+    <string name="title_activity_edit_kid">EditKid</string>
 </resources>

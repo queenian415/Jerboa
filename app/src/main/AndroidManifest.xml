@@ -13,9 +13,10 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".App"
@@ -106,7 +107,6 @@
             android:exported="true"
             android:label="@string/title_activity_image_editing" >
         </activity>
-
         <activity
             android:name=".ProductSelect"
             android:label="ProductSelect"
@@ -115,8 +115,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".UserMain" />
         </activity>
-
-
+        <activity
+            android:name=".AddKids"
+            android:label="@string/title_activity_add_kids"
+            android:parentActivityName=".UserMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.UserMain" />
+        </activity>
+        <activity
+            android:name=".ManageKids"
+            android:label="@string/title_activity_manage_kids"
+            android:parentActivityName=".UserMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.UserMain" />
+        </activity>
+        <activity
+            android:name=".EditKid"
+            android:label="@string/title_activity_edit_kid"
+            android:parentActivityName=".ManageKids" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.ManageKids" />
+        </activity>
     </application>
 
 </manifest>

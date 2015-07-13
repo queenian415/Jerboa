@@ -30,7 +30,7 @@ public class UserRecorder {
     private static Context mContext;
     private static String userId;
     private static String username;
-    private static String fileName;
+    private static String kidFileName;
     private static HashMap<String, String> kidList;
 
     public UserRecorder(Context c) {
@@ -38,13 +38,13 @@ public class UserRecorder {
         ParseUser user = ParseUser.getCurrentUser();
         userId = user.getObjectId();
         username = user.getUsername();
-        fileName = userId + ".txt";
+        kidFileName = userId + ".txt";
 
         // read kid list, create one if not exist
-        File file = mContext.getFileStreamPath(fileName);
+        File file = mContext.getFileStreamPath(kidFileName);
         if (!file.exists()) {
             try {
-                FileOutputStream fos = mContext.openFileOutput(fileName, mContext.MODE_PRIVATE);
+                FileOutputStream fos = mContext.openFileOutput(kidFileName, mContext.MODE_PRIVATE);
                 fos.close();
                 kidList = null;
             } catch (Exception e) {
@@ -53,7 +53,7 @@ public class UserRecorder {
         } else {
             try {
                 kidList = new HashMap<>();
-                FileInputStream fis = mContext.openFileInput(fileName);
+                FileInputStream fis = mContext.openFileInput(kidFileName);
                 InputStreamReader in = new InputStreamReader(fis);
                 BufferedReader reader = new BufferedReader(in);
                 String line = reader.readLine();
@@ -74,7 +74,7 @@ public class UserRecorder {
         }
 
         try {
-            FileOutputStream fos = mContext.openFileOutput(fileName, Context.MODE_APPEND);
+            FileOutputStream fos = mContext.openFileOutput(kidFileName, Context.MODE_APPEND);
             String newLine = kidId + ':' + kidName + "\n";
             fos.write(newLine.getBytes());
             fos.close();
@@ -87,7 +87,7 @@ public class UserRecorder {
 
     public static void updateKidList(HashMap<String, String> list) {
         try {
-            FileOutputStream fos = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            FileOutputStream fos = mContext.openFileOutput(kidFileName, Context.MODE_PRIVATE);
 
             if (list != null) {
                 for (Map.Entry<String, String> entry : list.entrySet()) {
@@ -139,7 +139,7 @@ public class UserRecorder {
     public static void printFile() {
         System.out.println("file: ");
         try {
-            FileInputStream fis = mContext.openFileInput(fileName);
+            FileInputStream fis = mContext.openFileInput(kidFileName);
             InputStreamReader in = new InputStreamReader(fis);
             BufferedReader reader = new BufferedReader(in);
             String line = reader.readLine();
