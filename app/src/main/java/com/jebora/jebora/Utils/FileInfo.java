@@ -25,14 +25,11 @@ import java.util.Date;
 
 /**
  * Created by danchen on 15-07-01.
+ * This class cannot use methods in UserRecorder because UserRecorder may not be initialized
  */
 public class FileInfo {
 
-    public static File getUserKidDirectory(Context context){
-        String userId = ParseUser.getCurrentUser().getObjectId();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(App.PREFIX + "KIDID", 0);
-        String kidId = sharedPreferences.getString("kidid", null);
-
+    public static File getUserDirectory(Context context) {
         File extFile = context.getExternalFilesDir(null);
         if(!extFile.exists()){
             if(!extFile.mkdir()){
@@ -40,7 +37,7 @@ public class FileInfo {
             }
         }
 
-        // user directory
+        String userId = ParseUser.getCurrentUser().getObjectId();
         String userPath = extFile.getAbsolutePath() + File.separator + userId;
         File userDirectory = null;
         try{
@@ -49,13 +46,22 @@ public class FileInfo {
             e.printStackTrace();
         }
 
+        return userDirectory;
+    }
+
+    public static File getUserKidDirectory(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(App.PREFIX + "KIDID", 0);
+        String kidId = sharedPreferences.getString("kidid", null);
+
+        File userDirectory = getUserDirectory(context);
+
         if (kidId == null) {
             // User has no kid, use
             return userDirectory;
         }
 
         // user's kid directory
-        String kidPath = userPath + File.separator + kidId;
+        String kidPath = userDirectory.getAbsolutePath() + File.separator + kidId;
         File kidDirectory = null;
         try {
             kidDirectory = FileInfo.newDir(kidPath);
