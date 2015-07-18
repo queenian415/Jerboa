@@ -14,7 +14,7 @@ import com.jebora.jebora.models.ProductManager;
 
 public class ProductSelect extends Activity {
 
-    private RecyclerView mRecyclerView;
+    public RecyclerView mRecyclerView;
     private ProductAdapter mAdapter;
 
     @Override
