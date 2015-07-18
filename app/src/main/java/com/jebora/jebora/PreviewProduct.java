@@ -1,14 +1,18 @@
 package com.jebora.jebora;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -20,12 +24,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 
-public class PreviewProduct extends Activity implements View.OnTouchListener {
+public class PreviewProduct extends ActionBarActivity implements View.OnTouchListener {
 
     // these matrices will be used to move and zoom image
     public static Matrix matrix = new Matrix();
     private Matrix savedMatrix = new Matrix();
-
+    private final int GALLERY_REQUEST_CODE = 2222;
 
     public static Matrix matrixtxt = new Matrix();
     private Matrix savedMatrixtxt = new Matrix();
@@ -44,11 +48,13 @@ public class PreviewProduct extends Activity implements View.OnTouchListener {
     private Button colorButton;
     private Button sizeButton;
     private Button threeDButton;
+    private Button photoButton;
     private ImageView img;
     private ImageView txtimg;
     private ImageView shirt;
     private EditText editText;
     private Bitmap textbitmap;
+    private Bitmap pictureObject;
     int shirtState = 0; //0 白 1 黑
 
 
@@ -59,17 +65,18 @@ public class PreviewProduct extends Activity implements View.OnTouchListener {
         colorButton = (Button) findViewById(R.id.colorbutton);
         sizeButton = (Button) findViewById(R.id.sizebutton);
         threeDButton = (Button) findViewById(R.id.button3d);
+        photoButton = (Button) findViewById(R.id.photogallary);
         shirt = (ImageView) findViewById(R.id.shirt);
         img = (ImageView) findViewById(R.id.logo);
-        txtimg = (ImageView)findViewById(R.id.textImg);
-        editText = (EditText) findViewById(R.id.editText);
+       // txtimg = (ImageView)findViewById(R.id.textImg);
+
         img.setOnTouchListener(this);
-        txtimg.setOnTouchListener(this);
+//        txtimg.setOnTouchListener(this);
         //初始化
         matrix.postTranslate(0, 0);
         img.setImageMatrix(matrix);
         matrixtxt.postTranslate(0, 0);
-        txtimg.setImageMatrix(matrixtxt);
+//        txtimg.setImageMatrix(matrixtxt);
     }
 
     public boolean onTouch(View v, MotionEvent event) {
@@ -134,7 +141,7 @@ public class PreviewProduct extends Activity implements View.OnTouchListener {
 
             view.setImageMatrix(matrix);
                 break;
-            case R.id.textImg:
+          /*  case R.id.textImg:
                 // handle touch events here
                 ImageView viewtxt = (ImageView) v;
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -189,12 +196,12 @@ public class PreviewProduct extends Activity implements View.OnTouchListener {
                                 matrixtxt.postRotate(r, tx + xc, ty + yc);
                             }
                         }
-                        break;
+                        break;*/
                 }
 
-                viewtxt.setImageMatrix(matrixtxt);
-                break;
-        }
+               // viewtxt.setImageMatrix(matrixtxt);
+           //     break;
+     //   }
 
         return true;
     }
@@ -298,6 +305,37 @@ public class PreviewProduct extends Activity implements View.OnTouchListener {
         String name=editText.getText().toString();
         textbitmap = drawText(name, 200, 200);
         txtimg.setImageBitmap(textbitmap);
+    }
+
+    public void selectPhoto(View v) {
+
+        final Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+
+}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // To Handle Gallery Result
+        if (data != null && requestCode == GALLERY_REQUEST_CODE) {
+
+            Uri selectedImageUri = data.getData();
+            String[] fileColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor imageCursor = getContentResolver().query(selectedImageUri,
+                    fileColumn, null, null, null);
+            imageCursor.moveToFirst();
+
+            int fileColumnIndex = imageCursor.getColumnIndex(fileColumn[0]);
+            String picturePath = imageCursor.getString(fileColumnIndex);
+
+            pictureObject = BitmapFactory.decodeFile(picturePath);
+            img.setImageBitmap(pictureObject);
+
+        }
     }
 
 }
