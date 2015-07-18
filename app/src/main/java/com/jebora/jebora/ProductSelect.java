@@ -1,14 +1,18 @@
 package com.jebora.jebora;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.jebora.jebora.adapters.ProductAdapter;
+import com.jebora.jebora.adapters.RecyclerItemClickListener;
 import com.jebora.jebora.models.ProductManager;
 
 
@@ -29,6 +33,23 @@ public class ProductSelect extends Activity {
 
         mAdapter = new ProductAdapter(ProductManager.getInstance().getProducts(), R.layout.row_product, this);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(ProductAdapter.mContext, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        // do whatever
+
+                        Toast.makeText(ProductAdapter.mContext, "The Item Clicked is: " + position, Toast.LENGTH_SHORT).show();
+
+                        switch (position){
+                            case 0: Intent intent = new Intent();
+                                    intent.setClass(ProductSelect.this, PreviewProduct.class);
+                                    startActivity(intent);
+                                    break;
+                        }
+                    }
+                })
+        );
     }
 
     @Override

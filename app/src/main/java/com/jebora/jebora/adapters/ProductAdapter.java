@@ -22,7 +22,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     private List<Product> products;
     private int rowLayout;
-    private static  Context mContext;
+    public static  Context mContext;
 
 
     public ProductAdapter(List<Product> products, int rowLayout, Context context) {
@@ -57,7 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView productName;
         public ImageView productImage;
-        public View view;
+
 
 
         public ViewHolder(View itemView) {
@@ -66,7 +66,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             itemView.setOnClickListener(this);
             productName = (TextView) itemView.findViewById(R.id.productName);
             productImage = (ImageView)itemView.findViewById(R.id.productImage);
-            view = itemView;
+
 
         }
         public void onClick(View v) {
