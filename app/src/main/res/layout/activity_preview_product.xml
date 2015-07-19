@@ -38,13 +38,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="25dp" />
 
-        <ImageView
-            android:layout_width="253dp"
-            android:layout_height="253dp"
-            android:id="@+id/textImg"
-            android:layout_gravity="center_horizontal|top"
-            android:scaleType="matrix" />
-
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,6 +91,13 @@
                     android:onClick="selectPhoto" />
             </LinearLayout>
         </HorizontalScrollView>
+
+        <ImageView
+            android:layout_width="253dp"
+            android:layout_height="253dp"
+            android:id="@+id/textImg"
+            android:layout_gravity="center"
+            android:scaleType="matrix" />
 
     </FrameLayout>
 
