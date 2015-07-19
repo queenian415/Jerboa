@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -37,9 +38,12 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -66,6 +70,8 @@ public class UserMain extends ActionBarActivity
     final static List<String> listNames = new ArrayList<String>();
     final static List<String> listIds = new ArrayList<String>();
     private static int kidsnumber = 0;
+
+    private static List<Thread> talkToServerThreads = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +118,16 @@ public class UserMain extends ActionBarActivity
 
     @Override
     protected void onDestroy (){
+        // We need to wait until all the threads exit
+        for (Thread thread : talkToServerThreads) {
+            try {
+                thread.join();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        talkToServerThreads.clear();
+        UserRecorder.cleanUpThread();
         listIds.clear();
         listNames.clear();
         kidsnumber = 0;
@@ -241,10 +257,20 @@ public class UserMain extends ActionBarActivity
                 return rootView;
             }
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
+                syncUpServerInBackground();
                 return setUpMainPage(inflater, container);
             }
             else if (getArguments().getString(ARG_SECTION_TITLE).equals("注销")) {
-                ParseUser.logOut();
+                // We need to wait until all the threads exit before loging out
+                for (Thread thread : talkToServerThreads) {
+                    try {
+                        thread.join();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                ServerCommunication.logOut();
+                talkToServerThreads.clear();
                 kidsnumber = 0;
                 listNames.clear();
                 listIds.clear();
@@ -370,46 +396,6 @@ public class UserMain extends ActionBarActivity
                     .setDivider(getResources().getDrawable(R.drawable.divider));
         }
 
-        public void saveBitmapToServer(final String src, final String filename) {
-            if (isNetworkConnected()) {
-                Runnable task = new Runnable() {
-                    @Override
-                    public void run() {
-                        ServerCommunication.saveImageInBackground(mContext, src, filename);
-                    }
-                };
-                new Thread(task, "serverThread").start();
-            }
-        }
-
-        public List<String> loadLocalImages() {
-            List<String> imagesList = new ArrayList<>();
-
-            File dir = new File(FileInfo.getUserKidDirectory(mContext).toString());
-            File file[] = dir.listFiles();
-
-            for (int i = 0; i < file.length; i ++) {
-                if (file[i].isFile()) {
-                    String filename = file[i].getName();
-                    // Make sure it's a JPEG image
-                    String ext = filename.substring(filename.lastIndexOf('.') + 1);
-                    if (ext.equals("jpg")) {
-                        imagesList.add("file://" + file[i].getAbsolutePath());
-                    }
-                }
-            }
-            return imagesList;
-        }
-
-
-        public boolean isNetworkConnected() {
-            ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            return (activeNetwork != null && activeNetwork.isConnected());
-        }
-
-
         public void setCameraAndGalleryButton(View rootView){
             ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
             ImageButton galleryButton = (ImageButton) rootView.findViewById(R.id.gallery_button);
@@ -419,7 +405,10 @@ public class UserMain extends ActionBarActivity
                 public void onClick(View v) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     Date photoTakenTime = new Date();
-                    String filename = photoTakenTime.hashCode() + ".jpg";
+                    int hashCode = photoTakenTime.hashCode();
+                    // Avoid negative hashcode in filename
+                    long unsignedHashCode = hashCode & 0x00000000ffffffffL;
+                    String filename = unsignedHashCode + ".jpg";
                     String filePath = FileInfo.getUserKidDirectory(mContext).toString() + File.separator + filename;
                     Uri imageUri = Uri.fromFile(new File(filePath));
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -445,5 +434,58 @@ public class UserMain extends ActionBarActivity
                 }
             });
         }
+
+
+        /***
+         * Functions have to do with saving/loading images
+         */
+
+        public void saveBitmapToServer(final String src, final String filename) {
+            Runnable task = new Runnable() {
+                @Override
+                public void run() {
+                    ServerCommunication.saveImageInBackground(mContext, src, filename, UserRecorder.getPreferredKidId());
+                }
+            };
+            Thread thread = new Thread(task, "UserMain: saveBitmapToServer");
+            talkToServerThreads.add(thread);
+            thread.start();
+        }
+
+        public List<String> loadLocalImages() {
+            List<String> imagesList = new ArrayList<>();
+
+            File dir = new File(FileInfo.getUserKidDirectory(mContext).toString());
+            File file[] = dir.listFiles();
+
+            for (int i = 0; i < file.length; i ++) {
+                if (file[i].isFile()) {
+                    String filename = file[i].getName();
+                    // Make sure it's a JPEG image
+                    String ext = filename.substring(filename.lastIndexOf('.') + 1);
+                    if (ext.equals("jpg")) {
+                        imagesList.add("file://" + file[i].getAbsolutePath());
+                    }
+                }
+            }
+            return imagesList;
+        }
+
+        public void syncUpServerInBackground() {
+            // Create a thread to sync with server in the background
+            final List<File> images = UserRecorder.getImagesNotInServerList();
+            if (images.size() > 0) {
+                Runnable task = new Runnable() {
+                    @Override
+                    public void run() {
+                        ServerCommunication.syncUpImages(mContext);
+                    }
+                };
+                Thread thread = new Thread(task, "UserMain: syncUpServerInBackground");
+                talkToServerThreads.add(thread);
+                thread.start();
+            }
+        }
+
     }
 }

@@ -16,6 +16,7 @@ import com.drew.metadata.file.FileMetadataDirectory;
 import com.jebora.jebora.App;
 import com.parse.ParseUser;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -145,5 +146,18 @@ public class FileInfo {
             e.printStackTrace();
         }
         return d;
+    }
+
+    public static byte[] getFileByteArray(String path) {
+        byte[] data = null;
+        try {
+            FileInputStream in = new FileInputStream(path);
+            BufferedInputStream buf = new BufferedInputStream(in);
+            data = new byte[buf.available()];
+            buf.read(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }
