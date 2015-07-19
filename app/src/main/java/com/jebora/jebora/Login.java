@@ -1,5 +1,6 @@
 package com.jebora.jebora;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
@@ -13,7 +14,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.logging.Handler;
 
 
 public class Login extends ActionBarActivity {
@@ -63,8 +67,14 @@ public class Login extends ActionBarActivity {
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (accountAuthentication()) {
-                    startActivity(new Intent(Login.this, UserMain.class));
-                    finish();
+                    if (UserRecorder.isFirstTimeLogIn()) {
+                        // we cannot proceed to UserMain until we've downloaded all
+                        // the images to local
+                        launchRingDialog();
+                    } else {
+                        startActivity(new Intent(Login.this, UserMain.class));
+                        finish();
+                    }
                 } else {
                     TextView textView = (TextView) findViewById(R.id.signin_fail);
                     textView.setVisibility(View.VISIBLE);
@@ -72,6 +82,20 @@ public class Login extends ActionBarActivity {
             }
         });
 
+    }
+
+    public void launchRingDialog() {
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(Login.this, "Please wait ...", "Downloading Images ...", true);
+        ringProgressDialog.setCancelable(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ServerCommunication.syncDownImages(getApplicationContext(), 1000);
+                ringProgressDialog.dismiss();
+                startActivity(new Intent(Login.this, UserMain.class));
+                finish();
+            }
+        }).start();
     }
 
     @Override

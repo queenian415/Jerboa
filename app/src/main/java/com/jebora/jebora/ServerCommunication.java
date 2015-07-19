@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.jebora.jebora.Utils.FileInfo;
+import com.jpardogo.listbuddies.lib.views.ObservableListView;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -14,10 +18,13 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +44,13 @@ public class ServerCommunication {
         user.setPassword(password);
         try {
             user.signUp();
-            new UserRecorder(context);
+            new UserRecorder(context, UserRecorder.NEW_USER);
             return user.getObjectId();
         } catch (ParseException e) {
             if (e.getCode() == ParseException.USERNAME_TAKEN) {
                 return SignUp.SIGNUP_EXISTS;
             } else {
-                e.printStackTrace();
+                Log.d(TAG, "signUp failed: " + e.getMessage());
                 return SignUp.SIGNUP_ERROR;
             }
         }
@@ -54,10 +61,10 @@ public class ServerCommunication {
 
         try {
             ParseUser.logIn(username, password);
-            new UserRecorder(context);
-            if (!UserRecorder.hasLocalKidList()) {
-                // user don't have local copy in log in
-                // maybe that user is using a new phone
+            new UserRecorder(context, UserRecorder.RETURNED_USER);
+
+            if (UserRecorder.isFirstTimeLogIn()) {
+                // user is using a new phone
                 // we want to update the kid list in this case
                 UserRecorder.updateKidList(getKids());
             }
@@ -66,6 +73,11 @@ public class ServerCommunication {
             Log.d(TAG, "logIn failed: " + e.getMessage());
             return false;
         }
+    }
+
+    public static void logOut() {
+        ParseUser.logOut();
+        UserRecorder.cleanUpThread();
     }
 
     public static String addKid(String kidName, String kidBirthday, String kidGender, String kidRelation) {
@@ -112,65 +124,142 @@ public class ServerCommunication {
             return kidList;
 
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.d("getKids", e.getMessage());
             return null;
         }
     }
 
-    public static void saveImageInBackground(Context context, String fileFullName, final String filename) {
-        Log.d(TAG, "saveImage");
+    public static void saveImageInBackground(Context context, final String fileFullName, final String filename, final String kidId) {
+        Log.d(TAG, "saveImageInBackground");
 
-        byte[] data = null;
-        try {
-            FileInputStream in = new FileInputStream(fileFullName);
-            BufferedInputStream buf = new BufferedInputStream(in);
-            data = new byte[buf.available()];
-            buf.read(data);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (data == null) {
-            return; // error
-        }
-
-        final ParseFile image = new ParseFile(filename, data);
-        final Context mContext = context;
-        image.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    // Image saved successfully, now link image to user and kid
-                    ParseUser currentUser = ParseUser.getCurrentUser();
-
-                    // Get current kid
-                    SharedPreferences sharedPreferences = mContext.getSharedPreferences(App.PREFIX + "KIDID", 0);
-                    String kidId = sharedPreferences.getString("kidid", null);
-                    boolean isKid = true;
-                    if (kidId == null) {
-                        isKid = false;
-                    }
-
-                    ParseObject parseObject = new ParseObject("Image");
-                    parseObject.put("image", image);
-                    parseObject.put("user", currentUser);
-                    if (isKid) {
-                        parseObject.put("kid", ParseObject.createWithoutData("Kid", kidId));
-                    }
-                    parseObject.put("isKid", isKid);
-                    parseObject.saveInBackground();
-                } else {
-                    Log.d(TAG, "saveImage: " + e.getMessage() + "filename: " + filename);
-                }
+        // TODO: Parse file limit is 10M. Decrease size if size is over limit
+        if (isNetworkConnected(context)) {
+            byte[] data = FileInfo.getFileByteArray(fileFullName);
+            if (data == null) {
+                return; // error
             }
-        });
+
+            final ParseFile image = new ParseFile(filename, data);
+            image.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        // Image saved successfully, now link image to user and kid
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+
+                        boolean isKid = true;
+                        if (kidId == null) {
+                            isKid = false;
+                        }
+
+                        ParseObject parseObject = new ParseObject("Image");
+                        parseObject.put("image", image);
+                        parseObject.put("imageName", filename);
+                        parseObject.put("user", currentUser);
+                        if (isKid) {
+                            parseObject.put("kid", ParseObject.createWithoutData("Kid", kidId));
+                        }
+                        parseObject.put("isKid", isKid);
+                        parseObject.saveInBackground();
+                    } else {
+                        Log.d(TAG, "saveImage: " + e.getMessage() + "filename: " + filename);
+                        File image = new File(fileFullName);
+                        UserRecorder.addToImagesNotInServerList(image);
+                    }
+                }
+            });
+        } else {
+            File image = new File(fileFullName);
+            UserRecorder.addToImagesNotInServerList(image);
+        }
     }
 
-    public static List<String> loadImages(Context context) {
+    // This method is called in threads, so it has to be synchronized.
+    // If not, multiple threads may do the same thing and mess it up
+    public static synchronized void syncUpImages(Context context) {
+        Log.d(TAG, "syncUpImages");
+
+        List<File> imageList = UserRecorder.getImagesNotInServerList();
+        if (isNetworkConnected(context) && imageList.size() > 0) {
+            for (File image : imageList) {
+                // First check if image is already in the server
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Image");
+                query.whereEqualTo("user", ParseUser.getCurrentUser());
+                query.whereEqualTo("imageName", image.getName());
+                try {
+                    query.getFirst();
+                    // Image found in the server. Remove image without saving
+                    UserRecorder.deleteFromImagesNotInServerList(image);
+                } catch (ParseException e) {
+                    // Image is not in the server. Store it.
+                    if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+                        Log.d(TAG, "syncUpImages: " + image.getName() + " not in server");
+                        // Retrieve the parent dir name
+                        String parentDir = image.getParent();
+                        String parentName = parentDir.substring(parentDir.lastIndexOf("/") + 1, parentDir.length());
+                        // If parent directory's name is not userid, then it's kidid and belongs to user's kid
+                        if (!parentName.equals(UserRecorder.getUserId())) {
+                            saveImageInBackground(context, image.getAbsolutePath(), image.getName(), parentName);
+                        } else {
+                            saveImageInBackground(context, image.getAbsolutePath(), image.getName(), null);
+                        }
+                        UserRecorder.deleteFromImagesNotInServerList(image);
+                    } else {
+                        Log.d("syncUpImages", e.getMessage());
+                    }
+                }
+            }
+        }
+    }
+
+    // Only used when first log in
+    public static void syncDownImages(Context context, int numOfImages) {
+        Log.d(TAG, "syncDownImages");
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Image");
+        query.whereEqualTo("user", currentUser);
+        query.setLimit(numOfImages);
+
+        try {
+            List<ParseObject> list = query.find();
+            for (ParseObject object : list) {
+                String imageName = object.getString("imageName");
+                ParseFile image = (ParseFile) object.get("image");
+
+                if (object.getBoolean("isKid")) {
+                    String kidId = ((ParseObject)object.get("kid")).getObjectId();
+                    // set preferred kid to create kid image path
+                    UserRecorder.setPreferredKid(kidId);
+                } else {
+                    // set preferred kid to update image path
+                    UserRecorder.setPreferredKid(null);
+                }
+                String filePath = FileInfo.getUserKidDirectory(context).toString() + File.separator + imageName;
+                try {
+                    OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath));
+                    out.write(image.getData());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (ParseException e) {
+            Log.d("loadImages", e.getMessage());
+        }
+    }
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return (activeNetwork != null && activeNetwork.isConnected());
+    }
+
+    public static List<String> loadImages() {
         Log.d(TAG, "loadImages");
-        final ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseUser currentUser = ParseUser.getCurrentUser();
         // Get current kid, null if user's images
-        SharedPreferences sharedPreferences = context.getSharedPreferences(App.PREFIX + "KIDID", 0);
-        String kidId = sharedPreferences.getString("kidid", null);
+        String kidId = UserRecorder.getPreferredKidId();
         ParseObject currentKid = null;
         if (kidId != null) {
             // Get kid object
@@ -182,7 +271,7 @@ public class ServerCommunication {
             }
         }
 
-        List<String> imageUrl = new ArrayList();
+        List<String> imageUrl = new ArrayList<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Image");
         query.whereEqualTo("user", currentUser);
         if (currentKid != null) {
@@ -197,7 +286,7 @@ public class ServerCommunication {
             }
 
         } catch (ParseException e) {
-            Log.d(TAG, "loadImagesInBackground: " + e.getMessage());
+            Log.d(TAG, "loadImages: " + e.getMessage());
         }
         return imageUrl;
     }

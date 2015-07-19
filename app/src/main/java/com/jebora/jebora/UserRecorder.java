@@ -3,6 +3,7 @@ package com.jebora.jebora;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.jebora.jebora.Utils.FileInfo;
 import com.parse.ParseUser;
 
 import java.io.BufferedInputStream;
@@ -12,8 +13,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,27 +35,44 @@ public class UserRecorder {
     private static String username;
     private static String kidFileName;
     private static HashMap<String, String> kidList;
+    private static List<File> imagesNotInServer;  // ONLY MODIFIED WITH SYNCHRONIZED METHODS
+    private static Thread saveToServerThread;
 
-    public UserRecorder(Context c) {
+    // User status identifier
+    public static final int NEW_USER = 1;
+    public static final int RETURNED_USER = 2;
+
+    public static boolean firstTimeLogIn;
+
+    public UserRecorder(Context c, int status) {
         mContext = c;
         ParseUser user = ParseUser.getCurrentUser();
         userId = user.getObjectId();
         username = user.getUsername();
         kidFileName = userId + ".txt";
+        firstTimeLogIn = false;
+        imagesNotInServer = new ArrayList<>();
+        kidList = new HashMap<>();
 
-        // read kid list, create one if not exist
+        /***
+         * Read or create kid list file, which stores all the kids of one user locally
+         */
         File file = mContext.getFileStreamPath(kidFileName);
         if (!file.exists()) {
             try {
+                // Only new user or new phone would not have kid list
                 FileOutputStream fos = mContext.openFileOutput(kidFileName, mContext.MODE_PRIVATE);
                 fos.close();
-                kidList = null;
+
+                if (status == RETURNED_USER) {
+                    // returned user get here only when they switch to a new phone
+                    firstTimeLogIn = true;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                kidList = new HashMap<>();
                 FileInputStream fis = mContext.openFileInput(kidFileName);
                 InputStreamReader in = new InputStreamReader(fis);
                 BufferedReader reader = new BufferedReader(in);
@@ -66,6 +86,62 @@ public class UserRecorder {
                 e.printStackTrace();
             }
         }
+
+        /***
+         * Get all images and sync up to server if applicable
+         */
+        if (!firstTimeLogIn) {
+            Runnable task = new Runnable() {
+                @Override
+                public void run() {
+                    addAllToImagesNotInServerList();
+                }
+            };
+            saveToServerThread = new Thread(task, "add sync images to server in UserRecorder constructor");
+            saveToServerThread.start();
+        }
+    }
+
+    // Clean up user info when switching user
+    public static void cleanUpThread() {
+        // Wait until this class' thread exits
+        if (saveToServerThread != null) {
+            try {
+                saveToServerThread.join();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static List<File> getAllImages() {
+        File dir = new File(FileInfo.getUserDirectory(mContext).toString());
+        File files[] = dir.listFiles();
+        List<File> imagesList = new ArrayList<>();
+
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isFile()) {
+                String filename = files[i].getName();
+                // Make sure it's a JPEG image
+                String ext = filename.substring(filename.lastIndexOf('.') + 1);
+                if (ext.equals("jpg")) {
+                    imagesList.add(files[i]);
+                }
+            } else {
+                // in kid's directory, iterate to get kid's images
+                File kidFiles[] = files[i].listFiles();
+                for (int j = 0; j < kidFiles.length; i++) {
+                    if (kidFiles[j].isFile()) {
+                        String name = kidFiles[j].getName();
+                        String ext = name.substring(name.lastIndexOf('.') + 1);
+                        if (ext.equals("jpg")) {
+                            imagesList.add(kidFiles[j]);
+                        }
+                    }
+                }
+            }
+        }
+        return imagesList;
     }
 
     public static void addOneKid(String kidId, String kidName) {
@@ -78,11 +154,10 @@ public class UserRecorder {
             String newLine = kidId + ':' + kidName + "\n";
             fos.write(newLine.getBytes());
             fos.close();
+            kidList.put(kidId, kidName);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        kidList.put(kidId, kidName);
     }
 
     public static void updateKidList(HashMap<String, String> list) {
@@ -110,7 +185,7 @@ public class UserRecorder {
 
     public static String getUsername() { return username; }
 
-    public static boolean hasLocalKidList() { return kidList != null; }
+    public static boolean isFirstTimeLogIn() { return firstTimeLogIn; }
 
     public static String getPreferredKidId() {
         SharedPreferences pref = mContext.getSharedPreferences(App.PREFIX + "KIDID", 0);
@@ -131,6 +206,26 @@ public class UserRecorder {
         SharedPreferences.Editor editor = user.edit();
         editor.putString("kidid", kidId);
         editor.commit();
+    }
+
+    public static synchronized void addAllToImagesNotInServerList() {
+        imagesNotInServer.addAll(getAllImages());
+    }
+
+    public static synchronized void addToImagesNotInServerList(File image) {
+        imagesNotInServer.add(image);
+    }
+
+    public static synchronized void deleteFromImagesNotInServerList(File image) {
+        imagesNotInServer.remove(image);
+    }
+
+    public static synchronized List<File> getImagesNotInServerList() {
+        // return a new list to avoid other threads iterate over the same list
+        // while UserRecorder is modifying the list
+        List<File> images = new ArrayList<>();
+        images.addAll(imagesNotInServer);
+        return images;
     }
 
     /**
