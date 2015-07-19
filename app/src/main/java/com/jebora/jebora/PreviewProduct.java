@@ -1,5 +1,7 @@
 package com.jebora.jebora;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -22,6 +24,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 
 public class PreviewProduct extends ActionBarActivity implements View.OnTouchListener {
@@ -54,7 +60,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private ImageView shirt;
     private EditText editText;
     private Bitmap textbitmap;
-    private Bitmap pictureObject;
+    public static Bitmap pictureObject;
     int shirtState = 0; //0 白 1 黑
 
 
@@ -302,9 +308,29 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     }
 
     public void setTextImg(View v){
-        String name=editText.getText().toString();
-        textbitmap = drawText(name, 200, 200);
-        txtimg.setImageBitmap(textbitmap);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("请输入文字");
+        alert.setMessage("   ");
+
+// Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
     }
 
     public void selectPhoto(View v) {
@@ -331,11 +357,36 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
 
             int fileColumnIndex = imageCursor.getColumnIndex(fileColumn[0]);
             String picturePath = imageCursor.getString(fileColumnIndex);
-
-            pictureObject = BitmapFactory.decodeFile(picturePath);
+            File f =new File(picturePath);
+            pictureObject = decodeFile(f);
             img.setImageBitmap(pictureObject);
 
         }
     }
 
+
+    private Bitmap decodeFile(File f) {
+        try {
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            // The new size we want to scale to
+            final int REQUIRED_SIZE=128;
+
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                scale *= 2;
+            }
+
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {}
+        return null;
+    }
 }
