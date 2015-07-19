@@ -337,7 +337,8 @@ public class UserMain extends ActionBarActivity
                 File kidDirectory = FileInfo.getUserKidDirectory(mContext);
                 File picked_photo = new File(FileInfo.getRealPathFromURI(origUri, mContext));
                 Date photoAddedTime = new Date();
-                String fileName = Integer.toString(photoAddedTime.hashCode()) + ".jpg";
+                long unsignedHashCode = photoAddedTime.hashCode() & 0x00000000ffffffffL;
+                String fileName = unsignedHashCode + ".jpg";
                 String dstPath = kidDirectory.toString() + File.separator +
                         fileName;
                 try{
