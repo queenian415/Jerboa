@@ -15,6 +15,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 
 import java.io.BufferedInputStream;
@@ -253,6 +254,19 @@ public class ServerCommunication {
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return (activeNetwork != null && activeNetwork.isConnected());
+    }
+
+    public static void resetPassword(String email) {
+        ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    // An email was successfully sent with reset instructions.
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public static List<String> loadImages() {

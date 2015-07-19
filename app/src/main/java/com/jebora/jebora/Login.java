@@ -1,5 +1,6 @@
 package com.jebora.jebora;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,6 +24,11 @@ import java.util.logging.Handler;
 
 
 public class Login extends ActionBarActivity {
+
+    LinearLayout layoutOfPopup;
+    PopupWindow popupMessage;
+    Button insidePopupButton;
+    TextView popupText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,22 @@ public class Login extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Initialize pop up window for password reset
+        // final Button resetButton = (Button)findViewById(R.id.resetpwd);
+        TextView popupText = new TextView(this);
+        insidePopupButton = new Button(this);
+        layoutOfPopup = new LinearLayout(this);
+        insidePopupButton.setText("我知道了");
+        insidePopupButton.setWidth(ActionBar.LayoutParams.WRAP_CONTENT);
+        popupText.setText("重设密码的邮件已发到您的邮箱，请查看邮件重设密码");
+        popupText.setPadding(0, 0, 0, 20);
+        layoutOfPopup.setOrientation(LinearLayout.VERTICAL);
+        layoutOfPopup.addView(popupText);
+        layoutOfPopup.addView(insidePopupButton);
+        popupMessage = new PopupWindow(layoutOfPopup, ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.WRAP_CONTENT);
+        popupMessage.setContentView(layoutOfPopup);
+
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (accountAuthentication()) {
@@ -79,6 +103,24 @@ public class Login extends ActionBarActivity {
                     TextView textView = (TextView) findViewById(R.id.signin_fail);
                     textView.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        /*
+        findViewById(R.id.resetpwd).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = ((TextView)findViewById(R.id.username)).getText().toString().trim();
+                ServerCommunication.resetPassword(username);
+                // Notify user that pwd reset email has been sent
+                popupMessage.showAsDropDown(resetButton, 0 ,0);
+            }
+        });*/
+
+        insidePopupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupMessage.dismiss();
             }
         });
 
