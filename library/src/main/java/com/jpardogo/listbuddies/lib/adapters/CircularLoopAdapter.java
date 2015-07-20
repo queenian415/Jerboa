@@ -19,7 +19,7 @@ public abstract class CircularLoopAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if (getCircularCount() == 0) return 0;
-        return Integer.MAX_VALUE;
+        return getCircularCount();
     }
 
     protected abstract int getCircularCount();

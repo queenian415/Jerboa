@@ -3,6 +3,7 @@ package com.jebora.jebora;
 import android.accounts.NetworkErrorException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -29,8 +30,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jebora.jebora.Utils.FileInfo;
+import com.jebora.jebora.Utils.UserMainCheck;
 import com.jebora.jebora.adapters.CircularAdapter;
 import com.jebora.jebora.provider.ImagesUrls;
+import com.jebora.jebora.provider.ListsSize;
 import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
 import com.parse.ParseUser;
@@ -48,6 +51,8 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 
 public class UserMain extends ActionBarActivity
@@ -58,14 +63,12 @@ public class UserMain extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * 存放上次显示在action bar中的title
-     * {@link #restoreActionBar()}.
-     */
+
     private CharSequence mTitle;
 
     private Fragment currentFragment;
     private Fragment lastFragment;
+    private boolean isOpenActivitiesActivated = true;
 
     final static List<String> listNames = new ArrayList<String>();
     final static List<String> listIds = new ArrayList<String>();
@@ -77,16 +80,36 @@ public class UserMain extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
+
         Map <String, String> kids = UserRecorder.getKidList();
-        for (String key : kids.keySet()) {
-            listNames.add(kids.get(key));
-            listIds.add(key);
-            kidsnumber++;
+        if (UserMainCheck.getUserMainEnter() == 0){
+            for (String key : kids.keySet()) {
+                listNames.add(kids.get(key));
+                listIds.add(key);
+                kidsnumber++;
+            }
+            listNames.add("全部照片");
+            listNames.add("+");
+            listIds.add("全部照片");
+            listIds.add("+");
+            ListsSize.kidsnumber = listNames.size() - 2;
         }
-        listNames.add("全部照片");
-        listNames.add("+");
-        listIds.add("全部照片");
-        listIds.add("+");
+        else if(UserMainCheck.getKidNumberStatus()){
+            listIds.clear();
+            listNames.clear();
+            for (String key : kids.keySet()) {
+                listNames.add(kids.get(key));
+                listIds.add(key);
+                kidsnumber++;
+            }
+            listNames.add("全部照片");
+            listNames.add("+");
+            listIds.add("全部照片");
+            listIds.add("+");
+            ListsSize.kidsnumber = listNames.size() - 2;
+            UserMainCheck.setKidNumberUpdated(false);
+        }
+        UserMainCheck.UserMainEnters();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -105,8 +128,11 @@ public class UserMain extends ActionBarActivity
                     kidsnumber++;
                     startActivity(new Intent(UserMain.this, AddKids.class));
                 }
-                else
-                    onNavigationDrawerItemSelected(temp[itemPosition]);
+                else{
+                    UserMainCheck.FilterItemStatus(true);
+                    UserMainCheck.SetKidSelected(temp[itemPosition]);
+                    onNavigationDrawerItemSelected("ListBuddies");
+                }
                 return false;
             }
         };
@@ -116,6 +142,13 @@ public class UserMain extends ActionBarActivity
 
     }
 
+    @Override
+    protected void onPause (){
+        UserMainCheck.ResetUserMainEnter();
+        listIds.clear();
+        listNames.clear();
+        super.onPause();
+    }
     @Override
     protected void onDestroy (){
         // We need to wait until all the threads exit
@@ -131,6 +164,7 @@ public class UserMain extends ActionBarActivity
         listIds.clear();
         listNames.clear();
         kidsnumber = 0;
+        UserMainCheck.ResetUserMainEnter();
         super.onDestroy();
     }
 
@@ -139,33 +173,59 @@ public class UserMain extends ActionBarActivity
 
         if(title.equals("我的孩子")){
             startActivity(new Intent(UserMain.this, ManageKids.class));
+            return;
         }
-        else{
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            currentFragment = fragmentManager.findFragmentByTag(title);
-            if(currentFragment == null) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        currentFragment = fragmentManager.findFragmentByTag(title);
+        if(currentFragment == null) {
+            if(UserMainCheck.isFilterItemSlected()||UserMainCheck.getUserMainEnter() == 0)
+                currentFragment = ListBuddiesFragment.newInstance(isOpenActivitiesActivated);
+            else
                 currentFragment = ContentFragment.newInstance(title);
-                ft.add(R.id.container, currentFragment, title);
-            }
-            if(lastFragment != null) {
-                ft.detach(lastFragment);
-            }
-            if(currentFragment.isDetached()){
-                ft.attach(currentFragment);
-            }
-            ft.show(currentFragment);
-            lastFragment = currentFragment;
-            ft.commit();
-            onSectionAttached(title);
+            ft.add(R.id.container, currentFragment, title);
         }
+        if(lastFragment != null) {
+            ft.detach(lastFragment);
+        }
+        if(currentFragment.isDetached()||currentFragment.getTag().equals("ListBuddies")){
+            ft.attach(currentFragment);
+        }
+        ft.show(currentFragment);
+        lastFragment = currentFragment;
+        ft.commit();
+        UserMainCheck.FilterItemStatus(false);
+        onSectionAttached(title);
+
+    }
+
+    /*private void manageFragment(Fragment newInstanceFragment, FragmentTags tag, boolean addToBackStack) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment currentIntanceFragment = findFragmentByTag(tag);
+        if (currentIntanceFragment == null || (currentIntanceFragment != null && currentIntanceFragment.isHidden())) {
+            if (currentIntanceFragment != null) {
+                ft.show(currentIntanceFragment);
+            } else {
+                currentIntanceFragment = newInstanceFragment;
+                ft.add(R.id.container, currentIntanceFragment, tag.toString());
+                if (addToBackStack) {
+                    ft.addToBackStack(null);
+                }
+            }
+        } else {
+            ft.hide(currentIntanceFragment);
+            fm.popBackStack();
+        }
+        ft.commit();
+    }*/
+
+    private Fragment findFragmentByTag(FragmentTags tag) {
+        return getSupportFragmentManager().findFragmentByTag(tag.toString());
     }
 
     public void onSectionAttached(String title) {
         mTitle = title;
-    }
-
-    public void restoreActionBar() {
     }
 
     @Override
@@ -177,7 +237,13 @@ public class UserMain extends ActionBarActivity
             HashMap<String, String> kidlist = UserRecorder.getKidList();
             String CurrentKid = kidlist.get(mTitle);
             ActionBar actionBar = getSupportActionBar();
-            for(int i=0; i<kidsnumber+1; i++){
+            if(UserMainCheck.getUserMainEnter()==1||UserMainCheck.whoCalledUpdOptMenu().equals("ListBuddies"))
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            else{
+                getMenuInflater().inflate(R.menu.user_main, menu);
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            }
+            /*for(int i=0; i<kidsnumber; i++){
                 if(CurrentKid != null) {
                     if (CurrentKid.equals(temp[i]))
                         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -188,7 +254,7 @@ public class UserMain extends ActionBarActivity
                     getMenuInflater().inflate(R.menu.user_main, menu);
                     actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 }
-            }
+            }*/
 
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(mTitle);
@@ -258,6 +324,7 @@ public class UserMain extends ActionBarActivity
             }
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("Jebora")){
                 syncUpServerInBackground();
+                UserMainCheck.reqUpdOptMenu("Jebora");
                 return setUpMainPage(inflater, container);
             }
             else if (getArguments().getString(ARG_SECTION_TITLE).equals("注销")) {
@@ -292,6 +359,7 @@ public class UserMain extends ActionBarActivity
             else{
                 for (int i=0; i<=kidsnumber; i++) {
                     if(getArguments().getString(ARG_SECTION_TITLE).equals(temp[i])){
+                        UserMainCheck.reqUpdOptMenu(temp[i]);
                         return setUpMainPage(inflater, container);
                     }
                 }
