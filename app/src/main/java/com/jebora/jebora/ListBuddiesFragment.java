@@ -80,7 +80,7 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
         mContext = getActivity().getApplicationContext();
         //If we do this we need to uncomment the container on the xml layout
         //createListBuddiesLayoutDinamically(rootView);
-        mImagesLeft.addAll(Arrays.asList(ImagesUrls.imageUrls_left));// = loadLocalImages();
+        mImagesLeft = loadLocalImages();
         mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
         mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
         mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
@@ -152,7 +152,7 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
     public List<String> loadLocalImages() {
         List<String> imagesList = new ArrayList<>();
 
-        File dir = new File(FileInfo.getUserKidDirectory(getActivity().getApplicationContext()).toString());
+        File dir = new File(FileInfo.getUserKidDirectory(mContext).toString());
         File file[] = dir.listFiles();
 
         for (int i = 0; i < file.length; i ++) {
@@ -260,4 +260,5 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
                 .setManualScrollFaster(mScrollConfig[ScrollConfigOptions.LEFT.getConfigValue()])
                 .setDivider(getResources().getDrawable(R.drawable.divider));
     }
+
 }

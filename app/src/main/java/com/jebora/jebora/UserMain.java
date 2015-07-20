@@ -199,31 +199,6 @@ public class UserMain extends ActionBarActivity
 
     }
 
-    /*private void manageFragment(Fragment newInstanceFragment, FragmentTags tag, boolean addToBackStack) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment currentIntanceFragment = findFragmentByTag(tag);
-        if (currentIntanceFragment == null || (currentIntanceFragment != null && currentIntanceFragment.isHidden())) {
-            if (currentIntanceFragment != null) {
-                ft.show(currentIntanceFragment);
-            } else {
-                currentIntanceFragment = newInstanceFragment;
-                ft.add(R.id.container, currentIntanceFragment, tag.toString());
-                if (addToBackStack) {
-                    ft.addToBackStack(null);
-                }
-            }
-        } else {
-            ft.hide(currentIntanceFragment);
-            fm.popBackStack();
-        }
-        ft.commit();
-    }*/
-
-    private Fragment findFragmentByTag(FragmentTags tag) {
-        return getSupportFragmentManager().findFragmentByTag(tag.toString());
-    }
-
     public void onSectionAttached(String title) {
         mTitle = title;
     }
@@ -232,10 +207,6 @@ public class UserMain extends ActionBarActivity
     public boolean onCreateOptionsMenu(Menu menu) {
 
         if(!mNavigationDrawerFragment.isDrawerOpen()){
-            String[] temp = new String[listNames.size()];
-            temp = listNames.toArray(temp);
-            HashMap<String, String> kidlist = UserRecorder.getKidList();
-            String CurrentKid = kidlist.get(mTitle);
             ActionBar actionBar = getSupportActionBar();
             if(UserMainCheck.getUserMainEnter()==1||UserMainCheck.whoCalledUpdOptMenu().equals("ListBuddies"))
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -243,18 +214,6 @@ public class UserMain extends ActionBarActivity
                 getMenuInflater().inflate(R.menu.user_main, menu);
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
             }
-            /*for(int i=0; i<kidsnumber; i++){
-                if(CurrentKid != null) {
-                    if (CurrentKid.equals(temp[i]))
-                        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-                }
-                else if(mTitle.equals("全部照片")||mTitle.equals("Jebora")||mTitle.equals("UserMain"))
-                    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-                else{
-                    getMenuInflater().inflate(R.menu.user_main, menu);
-                    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-                }
-            }*/
 
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(mTitle);
@@ -419,50 +378,8 @@ public class UserMain extends ActionBarActivity
             }
         }
 
-        private String getImage(int buddy, int position) {
-            return buddy == 0 ? ImagesUrls.imageUrls_left[position] : ImagesUrls.imageUrls_right[position];
-        }
-
-        public void setGap(int value) {
-            mListBuddies.setGap(value);
-        }
-
-        public void setSpeed(int value) {
-            mListBuddies.setSpeed(value);
-        }
-
-        public void setDividerHeight(int value) {
-            mListBuddies.setDividerHeight(value);
-        }
-
-        public void setGapColor(int color) {
-            mListBuddies.setGapColor(color);
-        }
-
-        public void setAutoScrollFaster(int option) {
-            mListBuddies.setAutoScrollFaster(option);
-        }
-
-        public void setScrollFaster(int option) {
-            mListBuddies.setManualScrollFaster(option);
-        }
-
         public void setDivider(Drawable drawable) {
             mListBuddies.setDivider(drawable);
-        }
-
-        public void setOpenActivities(Boolean openActivities) {
-            this.isOpenActivities = openActivities;
-        }
-
-        public void resetLayout() {
-            mListBuddies.setGap(mMarginDefault)
-                    .setSpeed(ListBuddiesLayout.DEFAULT_SPEED)
-                    .setDividerHeight(mMarginDefault)
-                    .setGapColor(getResources().getColor(R.color.frame))
-                    .setAutoScrollFaster(mScrollConfig[ScrollConfigOptions.RIGHT.getConfigValue()])
-                    .setManualScrollFaster(mScrollConfig[ScrollConfigOptions.LEFT.getConfigValue()])
-                    .setDivider(getResources().getDrawable(R.drawable.divider));
         }
 
         public void setCameraAndGalleryButton(View rootView){
