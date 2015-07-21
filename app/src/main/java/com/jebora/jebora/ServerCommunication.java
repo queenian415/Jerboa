@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.jebora.jebora.Utils.FileInfo;
 import com.jpardogo.listbuddies.lib.views.ObservableListView;
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -108,6 +110,45 @@ public class ServerCommunication {
             Log.d("addKid", e.getMessage());
             return SignUp_2.SIGNUP2_ERROR;
         }
+    }
+
+    public static boolean deleteKidInBackground(Context context, String kidId) {
+        Log.d(TAG, "deleteKid");
+
+        if (!isNetworkConnected(context))
+            return false;
+
+        final ParseObject kid = ParseObject.createWithoutData("Kid", kidId);
+        ParseUser user = ParseUser.getCurrentUser();
+        // Delete all images associated
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Image");
+        query.whereEqualTo("user", user);
+        query.whereEqualTo("kid", kid);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> imageEntries, ParseException e) {
+                if (e == null) {
+                    if (imageEntries.size() > 0) {
+                        ParseObject.deleteAllInBackground(imageEntries, new DeleteCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    kid.deleteInBackground();
+                                } else {
+                                    Log.d(TAG, "deleteKidInBackground: error: " + e.getMessage());
+                                }
+                            }
+                        });
+                    } else {
+                        // No kid images. Delete directly
+                        kid.deleteInBackground();
+                    }
+                } else {
+                    Log.d(TAG, "deleteKidInBackground: error: " + e.getMessage());
+                }
+            }
+        });
+        return true;
     }
 
     public static HashMap<String, String> getKids() {

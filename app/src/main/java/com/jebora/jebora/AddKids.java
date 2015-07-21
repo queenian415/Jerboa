@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.jebora.jebora.Utils.UserMainCheck;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -146,7 +147,7 @@ public class AddKids extends ActionBarActivity {
         if (kidName.equals("") || kidBirthday.equals(getString(R.string.child_birthday))) {
             return SIGNUP2_EMPTY;
         }
-
+        UserMainCheck.setKidNumberUpdated(true);
         return ServerCommunication.addKid(kidName, kidBirthday, kidGender, kidRelation);
     }
 

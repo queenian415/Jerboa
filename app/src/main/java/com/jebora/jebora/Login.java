@@ -8,7 +8,10 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.text.style.URLSpan;
 
 import java.util.logging.Handler;
 
@@ -123,6 +127,13 @@ public class Login extends ActionBarActivity {
                 popupMessage.dismiss();
             }
         });
+
+        TextView forgetpw = (TextView) findViewById(R.id.forgetpw);
+        SpannableString sp = new SpannableString("忘记密码");
+        sp.setSpan(new URLSpan("http://www.baidu.com"), 0, 4,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        forgetpw.setText(sp);
+        forgetpw.setMovementMethod(LinkMovementMethod.getInstance());
 
     }
 
