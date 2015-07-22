@@ -29,10 +29,12 @@ import java.util.logging.Handler;
 
 public class Login extends ActionBarActivity {
 
+    /*
     LinearLayout layoutOfPopup;
     PopupWindow popupMessage;
     Button insidePopupButton;
     TextView popupText;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class Login extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        /*
         // Initialize pop up window for password reset
         // final Button resetButton = (Button)findViewById(R.id.resetpwd);
         TextView popupText = new TextView(this);
@@ -91,6 +94,7 @@ public class Login extends ActionBarActivity {
         popupMessage = new PopupWindow(layoutOfPopup, ActionBar.LayoutParams.MATCH_PARENT,
                 ActionBar.LayoutParams.WRAP_CONTENT);
         popupMessage.setContentView(layoutOfPopup);
+        */
 
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -119,7 +123,7 @@ public class Login extends ActionBarActivity {
                 // Notify user that pwd reset email has been sent
                 popupMessage.showAsDropDown(resetButton, 0 ,0);
             }
-        });*/
+        });
 
         insidePopupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +138,7 @@ public class Login extends ActionBarActivity {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         forgetpw.setText(sp);
         forgetpw.setMovementMethod(LinkMovementMethod.getInstance());
+        */
 
     }
 
