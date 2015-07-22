@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -36,7 +37,7 @@
         android:background="@drawable/customize_textbox"
         android:layout_marginBottom="16.0dp"
         android:textSize="15sp"
-        android:hint="密码"
+        android:hint="@string/password"
         android:inputType="textPassword" />
 
     <Button
@@ -47,7 +48,7 @@
         android:background="@drawable/button_selector"
         android:textColor="@drawable/text_color_selector"
         android:stateListAnimator="@null"
-        android:text="登录"/>
+        android:text="@string/login"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="40dp"

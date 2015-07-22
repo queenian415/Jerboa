@@ -340,6 +340,8 @@ public class ServerCommunication {
     }
 
     public static void resetPassword(String email) {
+        Log.d(TAG, "resetPassword");
+
         ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
             @Override
             public void done(ParseException e) {
