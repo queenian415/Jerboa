@@ -34,6 +34,7 @@
             <Button
                 android:id="@+id/dismiss"
                 android:layout_width="fill_parent"
+                android:textColor="@drawable/text_color_selector"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_selector"
                 android:text="@string/finish"/>
