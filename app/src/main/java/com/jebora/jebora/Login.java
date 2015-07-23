@@ -12,12 +12,16 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -29,10 +33,8 @@ import java.util.logging.Handler;
 
 public class Login extends ActionBarActivity {
 
-    LinearLayout layoutOfPopup;
-    PopupWindow popupMessage;
-    Button insidePopupButton;
-    TextView popupText;
+    TextView forgetpw;
+    PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,22 +78,6 @@ public class Login extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Initialize pop up window for password reset
-        // final Button resetButton = (Button)findViewById(R.id.resetpwd);
-        TextView popupText = new TextView(this);
-        insidePopupButton = new Button(this);
-        layoutOfPopup = new LinearLayout(this);
-        insidePopupButton.setText("我知道了");
-        insidePopupButton.setWidth(ActionBar.LayoutParams.WRAP_CONTENT);
-        popupText.setText("重设密码的邮件已发到您的邮箱，请查看邮件重设密码");
-        popupText.setPadding(0, 0, 0, 20);
-        layoutOfPopup.setOrientation(LinearLayout.VERTICAL);
-        layoutOfPopup.addView(popupText);
-        layoutOfPopup.addView(insidePopupButton);
-        popupMessage = new PopupWindow(layoutOfPopup, ActionBar.LayoutParams.MATCH_PARENT,
-                ActionBar.LayoutParams.WRAP_CONTENT);
-        popupMessage.setContentView(layoutOfPopup);
-
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (accountAuthentication()) {
@@ -110,31 +96,49 @@ public class Login extends ActionBarActivity {
             }
         });
 
-        /*
-        findViewById(R.id.resetpwd).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = ((TextView)findViewById(R.id.username)).getText().toString().trim();
-                ServerCommunication.resetPassword(username);
-                // Notify user that pwd reset email has been sent
-                popupMessage.showAsDropDown(resetButton, 0 ,0);
-            }
-        });*/
-
-        insidePopupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupMessage.dismiss();
-            }
-        });
-
-        TextView forgetpw = (TextView) findViewById(R.id.forgetpw);
+        forgetpw = (TextView) findViewById(R.id.forgetpw);
         SpannableString sp = new SpannableString("忘记密码");
-        sp.setSpan(new URLSpan("http://www.baidu.com"), 0, 4,
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                // Initialize the popup window layout
+                LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+                popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT,
+                        ActionBar.LayoutParams.WRAP_CONTENT);
+
+                final String username = ((TextView)findViewById(R.id.username)).getText().toString().trim();
+
+                // Set up pop up window
+                TextView text = (TextView)popupView.findViewById(R.id.popuptext);
+                text.setText("请输入注册为用户名的邮箱，修改密码的邮件将会发送至您的邮箱");
+
+                final EditText userEmail = (EditText)popupView.findViewById(R.id.userinput);
+                userEmail.setText(username);
+                userEmail.setVisibility(View.VISIBLE);
+                popupWindow.setFocusable(true);
+                popupWindow.update();
+
+                popupView.findViewById(R.id.dismiss).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ServerCommunication.resetPassword(userEmail.getText().toString().trim());
+                        popupWindow.dismiss();
+                    }
+                });
+
+                findViewById(R.id.login_layout).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        popupWindow.showAtLocation(findViewById(R.id.login_layout), Gravity.CENTER, 0, 0);
+                    }
+                });
+            }
+        };
+        sp.setSpan(clickableSpan, 0, 4,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         forgetpw.setText(sp);
         forgetpw.setMovementMethod(LinkMovementMethod.getInstance());
-
     }
 
     public void launchRingDialog() {

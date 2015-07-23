@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.jebora.jebora.Utils.FileInfo;
+import com.jebora.jebora.Utils.KidInfo;
 import com.jpardogo.listbuddies.lib.views.ObservableListView;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
@@ -134,6 +135,7 @@ public class ServerCommunication {
                             public void done(ParseException e) {
                                 if (e == null) {
                                     kid.deleteInBackground();
+                                    UserRecorder.updateKidList(getKids());
                                 } else {
                                     Log.d(TAG, "deleteKidInBackground: error: " + e.getMessage());
                                 }
@@ -142,6 +144,7 @@ public class ServerCommunication {
                     } else {
                         // No kid images. Delete directly
                         kid.deleteInBackground();
+                        UserRecorder.updateKidList(getKids());
                     }
                 } else {
                     Log.d(TAG, "deleteKidInBackground: error: " + e.getMessage());
@@ -149,6 +152,45 @@ public class ServerCommunication {
             }
         });
         return true;
+    }
+
+    public KidInfo getKidObject(String kidId) {
+        Log.d(TAG, "getKidObjects");
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Kid");
+        try {
+            ParseObject kid = query.get(kidId);
+
+            return new KidInfo(kid.getObjectId(), kid.getString("kidBirthday"),
+                    kid.getString("kidGender"), kid.getString("kidName"), kid.getString("kidRelation"));
+        } catch (ParseException e) {
+            Log.d("getKidObjects", e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean editKidObject(KidInfo kidInfo) {
+        Log.d(TAG, "editKidObject");
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Kid");
+        try {
+            ParseObject kid = query.get(kidInfo.getKidId());
+            kid.put("kidBirthday", kidInfo.getKidBirthday());
+            kid.put("kidGender", kidInfo.getKidGender());
+            kid.put("kidName", kidInfo.getKidName());
+            kid.put("kidRelation", kidInfo.getKidRelation());
+            try {
+                kid.save();
+                UserRecorder.updateKidList(getKids());
+                return true;
+            } catch (ParseException e) {
+                Log.d(TAG, "editKidObject: " + e.getMessage());
+                return false;
+            }
+        } catch (ParseException e) {
+            Log.d(TAG, "editKidObject: " + e.getMessage());
+            return false;
+        }
     }
 
     public static HashMap<String, String> getKids() {
@@ -298,6 +340,8 @@ public class ServerCommunication {
     }
 
     public static void resetPassword(String email) {
+        Log.d(TAG, "resetPassword");
+
         ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
             @Override
             public void done(ParseException e) {

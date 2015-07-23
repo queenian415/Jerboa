@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/background_light">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="1dp"
+        android:background="@android:color/darker_gray">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp">
+            <TextView
+                android:id="@+id/popuptext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/userinput"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/customize_textbox"
+                android:layout_marginBottom="16.0dp"
+                android:textSize="15sp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/dismiss"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/finish"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -12,6 +12,7 @@
     <string name="skip">跳过</string>
     <string name="Return">返回</string>
     <string name="Register">注册</string>
+    <string name="login">登陆</string>
     <string name="boy">男孩</string>
     <string name="girl">女孩</string>
     <string name="child_name">孩子名字</string>
