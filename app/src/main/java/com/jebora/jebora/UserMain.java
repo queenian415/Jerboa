@@ -175,6 +175,11 @@ public class UserMain extends ActionBarActivity
             startActivity(new Intent(UserMain.this, ManageKids.class));
             return;
         }
+        if(title.equals("浏览产品")){
+            Intent intent = new Intent(UserMain.this, ProductSelect.class);
+            startActivity(intent);
+            return;
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         currentFragment = fragmentManager.findFragmentByTag(title);
@@ -306,7 +311,7 @@ public class UserMain extends ActionBarActivity
             else if(getArguments().getString(ARG_SECTION_TITLE).equals("关注我们")){
                 View rootView = inflater.inflate(R.layout.preview_temp_layout, container, false);
                 Button preview = (Button) rootView.findViewById(R.id.preview);
-                preview.setOnClickListener(new View.OnClickListener(){
+                preview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), ProductSelect.class);

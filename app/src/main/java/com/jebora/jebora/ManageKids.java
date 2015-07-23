@@ -35,6 +35,8 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
 
     boolean slider_visibility = false;
 
+    private int slided_item_position;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
 
         @Override
         public long getItemId(int position) {
+            slided_item_position = position;
             return position;
         }
 
@@ -153,7 +156,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.holder) {
-            ;
+            mMessageItems.remove(slided_item_position);
         }
     }
 }
