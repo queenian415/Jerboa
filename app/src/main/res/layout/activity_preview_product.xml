@@ -7,13 +7,11 @@
     android:paddingTop="0dp"
     android:paddingRight="0dp"
     android:paddingBottom="0dp">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="0dp">
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,14 +27,40 @@
         android:padding="0dp"
         android:layout_alignParentBottom="true">
 
-        <ImageView
-            android:layout_width="166dp"
-            android:layout_height="300dp"
-            android:id="@+id/logo"
-            android:src="@drawable/logo"
-            android:scaleType="matrix"
-            android:layout_gravity="center"
-            android:layout_marginBottom="25dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="166dp"
+                android:layout_height="300dp"
+                android:id="@+id/logo"
+                android:src="@drawable/logo"
+                android:scaleType="matrix"
+                android:layout_gravity="center"
+                android:layout_alignTop="@+id/textView"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/textView"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="92dp"
+                android:textColor="#ff090909"
+                android:textSize="30dp"
+                android:textStyle="bold|normal" />
+
+            <SeekBar
+                android:layout_width="309dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -67,7 +91,6 @@
                     android:layout_height="75dp"
                     android:text="文字"
                     android:id="@+id/sizebutton"
-                    android:layout_gravity="center_horizontal|bottom"
                     android:onClick="setTextImg"
                     android:padding="0dp" />
 
@@ -91,13 +114,6 @@
                     android:onClick="selectPhoto" />
             </LinearLayout>
         </HorizontalScrollView>
-
-        <ImageView
-            android:layout_width="253dp"
-            android:layout_height="253dp"
-            android:id="@+id/textImg"
-            android:layout_gravity="center"
-            android:scaleType="matrix" />
 
     </FrameLayout>
 
