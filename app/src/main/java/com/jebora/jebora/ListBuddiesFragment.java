@@ -3,6 +3,8 @@ package com.jebora.jebora;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,7 +29,11 @@ import com.jebora.jebora.DetailActivity;
 import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -80,7 +86,7 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
         mContext = getActivity().getApplicationContext();
         //If we do this we need to uncomment the container on the xml layout
         //createListBuddiesLayoutDinamically(rootView);
-        mImagesLeft = loadLocalImages();
+        mImagesLeft = loadLocalImages(false);
         mImagesRight.addAll(Arrays.asList(ImagesUrls.imageUrls_right));
         mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
         mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
@@ -149,22 +155,14 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
         this.isOpenActivities = openActivities;
     }
 
-    public List<String> loadLocalImages() {
+    public List<String> loadLocalImages(boolean loadUserOnly) {
         List<String> imagesList = new ArrayList<>();
 
-        File dir = new File(FileInfo.getUserKidDirectory(mContext).toString());
-        File file[] = dir.listFiles();
-
-        for (int i = 0; i < file.length; i ++) {
-            if (file[i].isFile()) {
-                String filename = file[i].getName();
-                // Make sure it's a JPEG image
-                String ext = filename.substring(filename.lastIndexOf('.') + 1);
-                if (ext.equals("jpg")) {
-                    imagesList.add("file://" + file[i].getAbsolutePath());
-                }
-            }
+        List<String> imagesPath = FileInfo.loadLocalCompressedImagesPath(mContext, loadUserOnly);
+        for (String path : imagesPath) {
+            imagesList.add("file://" + path);
         }
+
         return imagesList;
     }
 
@@ -174,6 +172,7 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
 
         if(requestCode == CAMERA_REQUEST){
             saveBitmapToServer(ImageFullName, ImageName);
+            saveCompressedToLocal(ImageFullName, ImageName);
         }
         else if(requestCode == GALLERY_REQUEST){
             Uri origUri = data.getData();
@@ -182,27 +181,42 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
             Date photoAddedTime = new Date();
             long unsignedHashCode = photoAddedTime.hashCode() & 0x00000000ffffffffL;
             String fileName = unsignedHashCode + ".jpg";
-            String dstPath = kidDirectory.toString() + File.separator +
+            String dstPath = kidDirectory.getAbsolutePath() + File.separator +
                     fileName;
             try{
                 File dstFile = FileInfo.newFile(dstPath);
                 FileInfo.copyFile(picked_photo, dstFile);
-                saveBitmapToServer(dstFile.toString(), fileName);
+                saveBitmapToServer(dstPath, fileName);
+                saveCompressedToLocal(dstPath, fileName);
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    public void saveBitmapToServer(final String src, final String filename) {
+    public void saveBitmapToServer(final String path, final String filename) {
         if (isNetworkConnected()) {
             Runnable task = new Runnable() {
                 @Override
                 public void run() {
-                    ServerCommunication.saveImageInBackground(mContext, src, filename, UserRecorder.getPreferredKidId());
+                    ServerCommunication.saveImageInBackground(mContext, path, filename, UserRecorder.getPreferredKidId());
                 }
             };
             new Thread(task, "serverThread").start();
+        }
+    }
+
+    public void saveCompressedToLocal(String path, String fileName) {
+        File file = new File(path);
+        Bitmap bmp = FileInfo.compressImage(file);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        try {
+            OutputStream outputStream = new FileOutputStream(
+                    FileInfo.getUserKidCompressedDirectory(mContext).getAbsolutePath() + File.separator + fileName);
+            bos.writeTo(outputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

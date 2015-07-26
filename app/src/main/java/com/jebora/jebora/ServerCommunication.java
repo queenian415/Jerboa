@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -320,6 +322,20 @@ public class ServerCommunication {
                 try {
                     OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath));
                     out.write(image.getData());
+                    out.close();
+
+                    // compress images
+                    Bitmap compressed = FileInfo.compressImage(new File(filePath));
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    compressed.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                    try {
+                        OutputStream outputStream = new FileOutputStream(
+                                FileInfo.getUserKidCompressedDirectory(context).getAbsolutePath() + File.separator + imageName);
+                        bos.writeTo(outputStream);
+                        bos.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
