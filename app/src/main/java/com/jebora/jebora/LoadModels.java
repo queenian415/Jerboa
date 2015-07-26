@@ -324,7 +324,10 @@ public class LoadModels extends Activity {
             if(type == 0) //T-shirt
             {
                 background = BitmapFactory.decodeStream(res.openRawResource(R.raw.color));
+                if (PreviewProduct.isPreview == 1)
                 logo = PreviewProduct.pictureObject;
+                else
+                    logo = BitmapFactory.decodeStream(res.openRawResource(R.raw.logo));
             }
 
             return ImageFilter.mergeBitmap(background,logo,type);

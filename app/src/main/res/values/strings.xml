@@ -58,4 +58,13 @@
     <string name="title_activity_profile_editing">ProfileEditing</string>
     <string name="title_activity_manage_kids">ManageKids</string>
     <string name="title_activity_edit_kid">EditKid</string>
+
+
+        <string-array name="fronts_array">
+            <item>Billion Stars</item>
+            <item>28 Days Later</item>
+            <item>Wedgie</item>
+            <item>Android</item>
+        </string-array>
+
 </resources>

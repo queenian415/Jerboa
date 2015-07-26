@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,11 +22,15 @@ import android.text.TextPaint;
 import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,11 +68,12 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private EditText editText;
     private Bitmap textbitmap;
     public static Bitmap pictureObject;
+    public static int isPreview = 0;
     int shirtState = 0; //0 白 1 黑
     private String stringInfo;
     private TextView textView;
     private TextView textViewXY;
-
+    private Spinner spinner;
     /*
     文字框
      */
@@ -95,6 +101,45 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
        // txtimg = (ImageView)findViewById(R.id.textImg);
         textViewXY = (TextView) findViewById(R.id.textView2);
         textView = (TextView) findViewById(R.id.textView);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        String[] mItems = getResources().getStringArray(R.array.fronts_array);
+// 建立Adapter并且绑定数据源
+        ArrayAdapter<String> _Adapter=new ArrayAdapter<String>(this,R.layout.spinner_item_dropdown, mItems);
+//绑定 Adapter到控件
+        spinner.setAdapter(_Adapter);
+        //font add
+        final Typeface day28 ;
+        final Typeface billstar = Typeface.createFromAsset(getAssets(), "BillionStars_PersonalUse.ttf");
+        final Typeface wedgie = Typeface.createFromAsset(getAssets(), "WedgieRegular.ttf");
+        final Typeface sans = textView.getTypeface();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                String str = parent.getItemAtPosition(position).toString();
+                Toast.makeText(PreviewProduct.this, "你点击的是:" + str, Toast.LENGTH_SHORT).show();
+                switch (str) {
+                    case "Wedgie":
+                        textView.setTypeface(wedgie);
+                    break;
+                    case "Billion Stars":
+                        textView.setTypeface(billstar);
+                    break;
+                    case "28 Days Later":
+                       // textView.setTypeface(day28);
+                    break;
+                    case "Android":
+                        textView.setTypeface(sans);
+                    break;
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
         img.setOnTouchListener(this);
         textView.setOnTouchListener(this);
 //        txtimg.setOnTouchListener(this);
@@ -384,7 +429,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
             File f =new File(picturePath);
             pictureObject = decodeFile(f);
             img.setImageBitmap(pictureObject);
-
+            isPreview = 1;
         }
     }
 
