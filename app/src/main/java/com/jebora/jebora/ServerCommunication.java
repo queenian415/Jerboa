@@ -1,18 +1,19 @@
 package com.jebora.jebora;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.jebora.jebora.Utils.FileInfo;
 import com.jebora.jebora.Utils.KidInfo;
-import com.jpardogo.listbuddies.lib.views.ObservableListView;
+import com.jebora.jebora.Utils.OrderEntry;
+import com.jebora.jebora.Utils.OrderInfo;
+import com.jebora.jebora.Utils.ProductInfo;
+import com.jebora.jebora.Utils.ShippingInfo;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -21,12 +22,8 @@ import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -352,6 +349,117 @@ public class ServerCommunication {
                 }
             }
         });
+    }
+
+    public static ShippingInfo saveShippingInfo(ShippingInfo shippingInfo) {
+        Log.d(TAG, "saveShippingInfo");
+
+        ParseObject info = new ParseObject("ShippingInfo");
+        info.put("user", ParseUser.getCurrentUser());
+        info.put("name", shippingInfo.getName());
+        info.put("address", shippingInfo.getAddress());
+        info.put("city", shippingInfo.getCity());
+        info.put("country", shippingInfo.getCountry());
+        info.put("postalCode", shippingInfo.getPostalCode());
+
+        try {
+            info.save();
+            shippingInfo.setObjectId(info.getObjectId());
+            return shippingInfo;
+        } catch (ParseException e) {
+            Log.d(TAG, "saveShippingInfo: error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static void editShippingInfo(final ShippingInfo shippingInfo) {
+        Log.d(TAG, "editShippingInfo");
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShippingInfo");
+        query.getInBackground(shippingInfo.getObjectId(), new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject info, ParseException e) {
+                if (e == null) {
+                    info.put("name", shippingInfo.getName());
+                    info.put("address", shippingInfo.getAddress());
+                    info.put("city", shippingInfo.getCity());
+                    info.put("country", shippingInfo.getCountry());
+                    info.put("postalCode", shippingInfo.getPostalCode());
+
+                    info.saveInBackground();
+                } else {
+                    Log.d(TAG, "editShippingInfo: error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public static List<ShippingInfo> getShippingInfoList() {
+        Log.d(TAG, "getShippingInfoList");
+
+        List<ShippingInfo> shippingInfos = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShippingInfo");
+        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        try {
+            List<ParseObject> objects = query.find();
+            for (ParseObject object : objects) {
+                shippingInfos.add(new ShippingInfo(object.getObjectId(), object.getString("name"),
+                        object.getString("address"), object.getString("city"), object.getString("country"),
+                        object.getString("postalCode")));
+            }
+            return shippingInfos;
+
+        } catch (ParseException e) {
+            Log.d(TAG, "getShippingInfoList: error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static List<ProductInfo> getProducts() {
+        Log.d(TAG, "getProduct");
+
+        List<ProductInfo> products = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Product");
+        try {
+            List<ParseObject> list = query.find();
+            for (ParseObject object : list) {
+                ProductInfo product = new ProductInfo(object.getObjectId(), object.getString("productName"),
+                        object.getInt("price"));
+                products.add(product);
+            }
+            return products;
+        } catch (ParseException e) {
+            Log.d(TAG, "getProduct: error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static boolean submitOrder(OrderInfo order) {
+        Log.d(TAG, "submitOrder");
+
+        ParseObject thisOrder = new ParseObject("Order");
+        thisOrder.put("user", UserRecorder.getUserId());
+        thisOrder.put("shipping", ParseObject.createWithoutData("ShippingInfo", order.getShipping().getObjectId()));
+        try {
+            thisOrder.save();
+        } catch (ParseException e) {
+            Log.d(TAG, "submitOrder: error: " + e.getMessage());
+            return false;
+        }
+
+        for (OrderEntry entry : order.getOrderEntries()) {
+            ParseObject orderEntry = new ParseObject("OrderEntry");
+            orderEntry.put("order", thisOrder.getObjectId());
+            orderEntry.put("product", ParseObject.createWithoutData("Product", entry.getProduct().getProductId()));
+            orderEntry.put("numOfItems", entry.getNumOfItems());
+            try {
+                orderEntry.save();
+            } catch (ParseException e) {
+                Log.d(TAG, "submitOrder: error: " + e.getMessage());
+                return false;
+            }
+        }
+        return true;
     }
 
     public static List<String> loadImages() {
