@@ -24,13 +24,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 
-public class PreviewProduct extends ActionBarActivity implements View.OnTouchListener {
+public class PreviewProduct extends ActionBarActivity implements View.OnTouchListener  {
 
     // these matrices will be used to move and zoom image
     public static Matrix matrix = new Matrix();
@@ -62,7 +64,22 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private Bitmap textbitmap;
     public static Bitmap pictureObject;
     int shirtState = 0; //0 白 1 黑
+    private String stringInfo;
+    private TextView textView;
+    private TextView textViewXY;
 
+    /*
+    文字框
+     */
+    private final static int START_DRAGGING = 0;
+    private final static int STOP_DRAGGING = 1;
+    private SeekBar seekBar;
+    private int status;
+    int flag=0;
+    float xAxis = 0f;
+    float yAxis = 0f;
+    float lastXAxis = 0f;
+    float lastYAxis = 0f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,85 +91,48 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         photoButton = (Button) findViewById(R.id.photogallary);
         shirt = (ImageView) findViewById(R.id.shirt);
         img = (ImageView) findViewById(R.id.logo);
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
        // txtimg = (ImageView)findViewById(R.id.textImg);
-
+        textViewXY = (TextView) findViewById(R.id.textView2);
+        textView = (TextView) findViewById(R.id.textView);
         img.setOnTouchListener(this);
+        textView.setOnTouchListener(this);
 //        txtimg.setOnTouchListener(this);
         //初始化
         matrix.postTranslate(0, 0);
         img.setImageMatrix(matrix);
         matrixtxt.postTranslate(0, 0);
+        seekBar.setVisibility(seekBar.INVISIBLE);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                textView.setTextSize(progress);
+            }
+        });
 //        txtimg.setImageMatrix(matrixtxt);
     }
 
     public boolean onTouch(View v, MotionEvent event) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.logo:
-            // handle touch events here
-            ImageView view = (ImageView) v;
-            switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                case MotionEvent.ACTION_DOWN:
-                    savedMatrix.set(matrix);
-                    start.set(event.getX(), event.getY());
-                    mode = DRAG;
-                    lastEvent = null;
-                    break;
-                case MotionEvent.ACTION_POINTER_DOWN:
-                    oldDist = spacing(event);
-                    if (oldDist > 10f) {
-                        savedMatrix.set(matrix);
-                        midPoint(mid, event);
-                        mode = ZOOM;
-                    }
-                    lastEvent = new float[4];
-                    lastEvent[0] = event.getX(0);
-                    lastEvent[1] = event.getX(1);
-                    lastEvent[2] = event.getY(0);
-                    lastEvent[3] = event.getY(1);
-                    d = rotation(event);
-                    break;
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_POINTER_UP:
-                    mode = NONE;
-                    lastEvent = null;
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    if (mode == DRAG) {
-                        matrix.set(savedMatrix);
-                        float dx = event.getX() - start.x;
-                        float dy = event.getY() - start.y;
-                        matrix.postTranslate(dx, dy);
-                    } else if (mode == ZOOM) {
-                        float newDist = spacing(event);
-                        if (newDist > 10f) {
-                            matrix.set(savedMatrix);
-                            float scale = (newDist / oldDist);
-                            matrix.postScale(scale, scale, mid.x, mid.y);
-                        }
-                        if (lastEvent != null && event.getPointerCount() == 3) {
-                            newRot = rotation(event);
-                            float r = newRot - d;
-                            float[] values = new float[9];
-                            matrix.getValues(values);
-                            float tx = values[2];
-                            float ty = values[5];
-                            float sx = values[0];
-                            float xc = (view.getWidth() / 2) * sx;
-                            float yc = (view.getHeight() / 2) * sx;
-                            matrix.postRotate(r, tx + xc, ty + yc);
-                        }
-                    }
-                    break;
-            }
-
-            view.setImageMatrix(matrix);
-                break;
-          /*  case R.id.textImg:
                 // handle touch events here
-                ImageView viewtxt = (ImageView) v;
+                ImageView view = (ImageView) v;
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        savedMatrixtxt.set(matrixtxt);
+                        seekBar.setVisibility(seekBar.INVISIBLE);
+                        textView.setOnTouchListener(null);
+                        savedMatrix.set(matrix);
                         start.set(event.getX(), event.getY());
                         mode = DRAG;
                         lastEvent = null;
@@ -160,7 +140,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                     case MotionEvent.ACTION_POINTER_DOWN:
                         oldDist = spacing(event);
                         if (oldDist > 10f) {
-                            savedMatrixtxt.set(matrixtxt);
+                            savedMatrix.set(matrix);
                             midPoint(mid, event);
                             mode = ZOOM;
                         }
@@ -172,42 +152,83 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                         d = rotation(event);
                         break;
                     case MotionEvent.ACTION_UP:
+
                     case MotionEvent.ACTION_POINTER_UP:
                         mode = NONE;
                         lastEvent = null;
+                        textView.setOnTouchListener(this);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (mode == DRAG) {
-                            savedMatrixtxt.set(matrixtxt);
+                            matrix.set(savedMatrix);
                             float dx = event.getX() - start.x;
                             float dy = event.getY() - start.y;
-                            matrixtxt.postTranslate(dx, dy);
+                            matrix.postTranslate(dx, dy);
                         } else if (mode == ZOOM) {
                             float newDist = spacing(event);
                             if (newDist > 10f) {
-                                savedMatrixtxt.set(matrixtxt);
+                                matrix.set(savedMatrix);
                                 float scale = (newDist / oldDist);
-                                matrixtxt.postScale(scale, scale, mid.x, mid.y);
+                                matrix.postScale(scale, scale, mid.x, mid.y);
                             }
                             if (lastEvent != null && event.getPointerCount() == 3) {
                                 newRot = rotation(event);
                                 float r = newRot - d;
                                 float[] values = new float[9];
-                                matrixtxt.getValues(values);
+                                matrix.getValues(values);
                                 float tx = values[2];
                                 float ty = values[5];
                                 float sx = values[0];
-                                float xc = (viewtxt.getWidth() / 2) * sx;
-                                float yc = (viewtxt.getHeight() / 2) * sx;
-                                matrixtxt.postRotate(r, tx + xc, ty + yc);
+                                float xc = (view.getWidth() / 2) * sx;
+                                float yc = (view.getHeight() / 2) * sx;
+                                matrix.postRotate(r, tx + xc, ty + yc);
                             }
                         }
-                        break;*/
+                        break;
                 }
 
-               // viewtxt.setImageMatrix(matrixtxt);
-           //     break;
-     //   }
+                view.setImageMatrix(matrix);
+                break;
+            case R.id.textView:
+                // handle touch events here
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    seekBar.setVisibility(seekBar.VISIBLE);
+                    img.setOnTouchListener(null);
+                    status = START_DRAGGING;
+                    final float x = event.getX();
+                    final float y = event.getY();
+                    lastXAxis = x;
+                    lastYAxis = y;
+                    v.setVisibility(View.INVISIBLE);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    status = STOP_DRAGGING;
+                    flag = 0;
+                    v.setVisibility(View.VISIBLE);
+                    img.setOnTouchListener(this);
+                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (status == START_DRAGGING) {
+                        flag = 1;
+                        v.setVisibility(View.VISIBLE);
+                        final float x = event.getX();
+                        final float y = event.getY();
+                        final float dx = x - lastXAxis;
+                        final float dy = y - lastYAxis;
+                        xAxis += dx;
+                        yAxis += dy;
+                        textViewXY.setText("x:" + xAxis + "  y:" + yAxis);
+
+                        v.setX((int) xAxis);
+                        v.setY((int) yAxis);
+
+                        v.invalidate();
+
+                    }
+                }
+
+
+        break;
+    }
 
         return true;
     }
@@ -321,6 +342,9 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 // Do something with value!
+                stringInfo = input.getText().toString();
+                textView.setText(stringInfo);
+
             }
         });
 
