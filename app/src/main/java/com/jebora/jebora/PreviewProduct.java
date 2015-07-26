@@ -108,9 +108,10 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
 //绑定 Adapter到控件
         spinner.setAdapter(_Adapter);
         //font add
-        final Typeface day28 ;
+
         final Typeface billstar = Typeface.createFromAsset(getAssets(), "BillionStars_PersonalUse.ttf");
         final Typeface wedgie = Typeface.createFromAsset(getAssets(), "WedgieRegular.ttf");
+        final Typeface zhongxingshu =  Typeface.createFromAsset(getAssets(), "ZhongXing.ttf");
         final Typeface sans = textView.getTypeface();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -125,8 +126,8 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                     case "Billion Stars":
                         textView.setTypeface(billstar);
                     break;
-                    case "28 Days Later":
-                       // textView.setTypeface(day28);
+                    case "钟齐蔡云汉毛笔行书":
+                        textView.setTypeface(zhongxingshu);
                     break;
                     case "Android":
                         textView.setTypeface(sans);
