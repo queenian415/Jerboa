@@ -61,8 +61,10 @@
 
 
         <string-array name="fronts_array">
+            <item>字体</item>
             <item>Billion Stars</item>
             <item>钟齐蔡云汉毛笔行书</item>
+            <item>熊猫萌萌</item>
             <item>Wedgie</item>
             <item>Android</item>
         </string-array>

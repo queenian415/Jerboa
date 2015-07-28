@@ -29,6 +29,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="match_parent">
 
             <ImageView
@@ -38,7 +39,7 @@
                 android:src="@drawable/logo"
                 android:scaleType="matrix"
                 android:layout_gravity="center"
-                android:layout_alignTop="@+id/textView"
+                android:layout_alignTop="@+id/textView2"
                 android:layout_centerHorizontal="true" />
 
             <TextView
@@ -53,17 +54,6 @@
                 android:textSize="30dp"
                 android:textStyle="bold|normal" />
 
-            <SeekBar
-                android:layout_width="309dp"
-                android:max="40"
-                android:progress="18"
-                android:layout_height="wrap_content"
-                android:id="@+id/seekBar"
-                android:layout_below="@+id/logo"
-                android:layout_alignLeft="@+id/textView"
-                android:layout_alignStart="@+id/textView"
-                android:layout_marginTop="25dp" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,16 +63,16 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
-            <Spinner
-                android:layout_width="wrap_content"
+            <SeekBar
+                android:layout_width="309dp"
+                android:max="40"
+                android:progress="18"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner"
-                android:spinnerMode="dropdown"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+                android:id="@+id/seekBar"
                 android:layout_below="@+id/logo"
-                android:layout_toLeftOf="@+id/seekBar"
-                android:layout_toStartOf="@+id/seekBar" />
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="27dp" />
 
         </RelativeLayout>
 
@@ -117,6 +107,17 @@
                     android:id="@+id/sizebutton"
                     android:onClick="setTextImg"
                     android:padding="0dp" />
+
+                <Spinner
+                    android:layout_width="96dp"
+                    android:layout_height="75dp"
+                    android:id="@+id/spinner"
+                    android:spinnerMode="dialog"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/logo"
+                    android:layout_toLeftOf="@+id/seekBar"
+                    android:layout_toStartOf="@+id/seekBar" />
 
                 <Button
                     android:layout_width="96dp"

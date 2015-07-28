@@ -7,6 +7,6 @@
     android:minHeight="@dimen/touchable_ui"
     android:gravity="center_vertical"
     android:padding="@dimen/standar_padding"
-    android:textColor="@color/white"
+    android:textColor="@color/black"
     android:lines="1"
     android:ellipsize="end" />

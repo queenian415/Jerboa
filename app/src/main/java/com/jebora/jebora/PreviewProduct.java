@@ -112,6 +112,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         final Typeface billstar = Typeface.createFromAsset(getAssets(), "BillionStars_PersonalUse.ttf");
         final Typeface wedgie = Typeface.createFromAsset(getAssets(), "WedgieRegular.ttf");
         final Typeface zhongxingshu =  Typeface.createFromAsset(getAssets(), "ZhongXing.ttf");
+        final Typeface xiongmao =  Typeface.createFromAsset(getAssets(), "xiongmao.ttf");
         final Typeface sans = textView.getTypeface();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -132,6 +133,9 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                     case "Android":
                         textView.setTypeface(sans);
                     break;
+                    case "熊猫萌萌":
+                        textView.setTypeface(xiongmao);
+                        break;
 
                 }
             }
