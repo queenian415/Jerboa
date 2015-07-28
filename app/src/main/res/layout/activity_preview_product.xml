@@ -122,6 +122,13 @@
                 <Button
                     android:layout_width="96dp"
                     android:layout_height="75dp"
+                    android:text="颜色"
+                    android:id="@+id/buttoncolor"
+                    android:onClick="changeTextColor" />
+
+                <Button
+                    android:layout_width="96dp"
+                    android:layout_height="75dp"
                     android:text="3D预览"
                     android:id="@+id/button3d"
                     android:layout_gravity="right|bottom"

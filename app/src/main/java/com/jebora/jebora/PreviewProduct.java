@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -31,6 +32,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,7 +92,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     float yAxis = 0f;
     float lastXAxis = 0f;
     float lastYAxis = 0f;
-
+    final Context context = PreviewProduct.this;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -326,6 +332,34 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         }
     }
 
+    public void changeTextColor(View v) {
+        ColorPickerDialogBuilder
+                .with(context)
+                .setTitle("选择颜色")
+                .initialColor(0xffffffff)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int selectedColor) {
+
+                    }
+                })
+                .setPositiveButton("ok", new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                    textView.setTextColor(selectedColor);
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .build()
+                .show();
+    }
+
     public void threeDView(View v) {
         Intent intent = new Intent();
 
@@ -447,7 +481,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             // The new size we want to scale to
-            final int REQUIRED_SIZE=128;
+            final int REQUIRED_SIZE=256;
 
             // Find the correct scale value. It should be the power of 2.
             int scale = 1;
