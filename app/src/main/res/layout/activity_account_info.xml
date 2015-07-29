@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/account_info_layout"
+    tools:context="com.jebora.jebora.AccountInfo">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/personal_info_list"
+        android:layout_weight="1"
+        android:divider="#dddbdb"
+        android:dividerHeight="1.0px"
+        android:choiceMode="singleChoice" />
+</LinearLayout>

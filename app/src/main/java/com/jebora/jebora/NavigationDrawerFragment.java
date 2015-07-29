@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -55,7 +56,7 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
-
+    private boolean mDefaultPosition = true;
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -97,7 +98,11 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                if(position == 0&&!mDefaultPosition){
+                    startActivity(new Intent(getActivity(), AccountInfo.class));
+                }
+                else
+                    selectItem(position);
             }
         });
         String[] itemTitle = getResources().getStringArray(R.array.item_title);
@@ -108,7 +113,6 @@ public class NavigationDrawerFragment extends Fragment {
     		R.drawable.ic_drawer_follow,
     		R.drawable.ic_drawer_collect,
 	        R.drawable.ic_drawer_draft,
-	        R.drawable.ic_drawer_search,
 	        R.drawable.ic_drawer_question,
         };
         
@@ -117,7 +121,12 @@ public class NavigationDrawerFragment extends Fragment {
 			mData.add(item);
 			
 		}
-        selectItem(mCurrentSelectedPosition);
+        if(mDefaultPosition){
+            selectItem(1);
+            mDefaultPosition = false;
+        }
+        else
+            selectItem(mCurrentSelectedPosition);
         DrawerListAdapter adapter = new DrawerListAdapter(this.getActivity(), mData);
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -198,14 +207,17 @@ public class NavigationDrawerFragment extends Fragment {
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
         if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
+            if(mCurrentSelectedPosition == 0)
+                mDrawerListView.setItemChecked(1, true);
+            else
+                mDrawerListView.setItemChecked(position, true);
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
         	if(mCurrentSelectedPosition == 0) {
-        		mCallbacks.onNavigationDrawerItemSelected(getString(R.string.app_name));
+                mCallbacks.onNavigationDrawerItemSelected(getString(R.string.myphotos));
         		return;
         	}
             mCallbacks.onNavigationDrawerItemSelected(mData.get(position - 1).getTitle());

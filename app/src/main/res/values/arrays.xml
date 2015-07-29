@@ -5,9 +5,8 @@
         <item>@string/mykids</item>
         <item>@string/myorders</item>
         <item>@string/browseproduct</item>
-        <item>@string/changepw</item>
+        <item>@string/settings</item>
         <item>@string/aboutus</item>
-        <item>@string/follwus</item>
         <item>@string/logout</item>
     </string-array>
     
@@ -30,5 +29,10 @@
         <item>126.com</item>
         <item>hotmail.com</item>
         <item>sohu.com</item>
+    </string-array>
+
+    <string-array name="user_info">
+        <item>@string/email</item>
+        <item>@string/password</item>
     </string-array>
 </resources>

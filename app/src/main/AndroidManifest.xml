@@ -148,7 +148,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jebora.jebora.UserMain" />
         </activity>
-
+        <activity
+            android:name=".ShoppingCart"
+            android:label="@string/title_activity_shopping_cart"
+            android:parentActivityName=".UserMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.UserMain" />
+        </activity>
+        <activity
+            android:name=".ShippingInfo"
+            android:label="@string/title_activity_shipping_info"
+            android:parentActivityName=".ShoppingCart" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.ShoppingCart" />
+        </activity>
+        <activity
+            android:name=".AccountInfo"
+            android:label="@string/title_activity_account_info"
+            android:parentActivityName=".UserMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.UserMain" />
+        </activity>
     </application>
 
 </manifest>

@@ -37,6 +37,7 @@
     <string name="myorders">我的订单</string>
     <string name="browseproduct">浏览产品</string>
     <string name="changepw">更改密码</string>
+    <string name="settings">设置</string>
     <string name="aboutus">关于我们</string>
     <string name="follwus">关注我们</string>
     <string name="logout">注销</string>
@@ -68,5 +69,8 @@
             <item>Wedgie</item>
             <item>Android</item>
         </string-array>
+    <string name="title_activity_shopping_cart">ShoppingCart</string>
+    <string name="title_activity_shipping_info">ShippingInfo</string>
+    <string name="title_activity_account_info">AccountInfo</string>
 
 </resources>

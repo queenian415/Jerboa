@@ -131,6 +131,7 @@ public class UserMain extends ActionBarActivity
                 else{
                     UserMainCheck.FilterItemStatus(true);
                     UserMainCheck.SetKidSelected(temp[itemPosition]);
+                    UserRecorder.setPreferredKid(temp[itemPosition]);
                     onNavigationDrawerItemSelected("ListBuddies");
                 }
                 return false;
@@ -170,14 +171,31 @@ public class UserMain extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(String title) {
-
+        if(title.equals(getString(R.string.app_name))){
+            return;
+        }
         if(title.equals("我的孩子")){
             startActivity(new Intent(UserMain.this, ManageKids.class));
             return;
         }
         if(title.equals("浏览产品")){
-            Intent intent = new Intent(UserMain.this, ProductSelect.class);
-            startActivity(intent);
+            startActivity(new Intent(UserMain.this, ProductSelect.class));
+            return;
+        }
+        if(title.equals("注销")){
+            for (Thread thread : talkToServerThreads) {
+                try {
+                    thread.join();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            ServerCommunication.logOut();
+            talkToServerThreads.clear();
+            kidsnumber = 0;
+            listNames.clear();
+            listIds.clear();
+            startActivity(new Intent(UserMain.this, MainActivity.class));
             return;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -290,35 +308,6 @@ public class UserMain extends ActionBarActivity
                 syncUpServerInBackground();
                 UserMainCheck.reqUpdOptMenu("Jebora");
                 return setUpMainPage(inflater, container);
-            }
-            else if (getArguments().getString(ARG_SECTION_TITLE).equals("注销")) {
-                // We need to wait until all the threads exit before loging out
-                for (Thread thread : talkToServerThreads) {
-                    try {
-                        thread.join();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                ServerCommunication.logOut();
-                talkToServerThreads.clear();
-                kidsnumber = 0;
-                listNames.clear();
-                listIds.clear();
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                return null;
-            }
-            else if(getArguments().getString(ARG_SECTION_TITLE).equals("关注我们")){
-                View rootView = inflater.inflate(R.layout.preview_temp_layout, container, false);
-                Button preview = (Button) rootView.findViewById(R.id.preview);
-                preview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), ProductSelect.class);
-                        startActivity(intent);
-                    }
-                });
-                return rootView;
             }
             else{
                 for (int i=0; i<=kidsnumber; i++) {

@@ -2,11 +2,32 @@
 <items version="2" >
 
     <item
+        jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.github.QuadFlask/colorpicker/0.0.9/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="93aec1a27134f2d5fd94631996b3b3e1265df825">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-6c012fbcc61d0f73b7401a5c44e341b5bfdb7fcd.jar" />
+    </item>
+    <item
         jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/Jerboa/library/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="91433111ceaa0b971fc618baf9ce9cb83755ccfe">
         <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-755d6ed0b0bfd26b0e6911e1992abc8094d1f4cc.jar" />
+    </item>
+    <item
+        jar="/Users/jack/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/library-2.4.0-cd6cbc8adffe700fa6ff315d0504372d448c6c4d.jar" />
+    </item>
+    <item
+        jar="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/exploded-aar/com.rengwuxian.materialedittext/library/2.0.3/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="052802ed198178e7133de387fbc87d3f2998482a">
+        <dex dex="/Users/jack/AndroidStudioProjects/Jerboa/app/build/intermediates/pre-dexed/debug/classes-182cdf4b645f54a349912204fd8c005c43b4339c.jar" />
     </item>
 
 </items>
