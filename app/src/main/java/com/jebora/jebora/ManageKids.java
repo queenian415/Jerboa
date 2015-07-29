@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,15 +34,16 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
 
     private SlideView mLastSlideViewWithStatusOn;
 
-    boolean slider_visibility = false;
-
     private int slided_item_position;
+
+    private static SlideAdapter adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_kids);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
     }
 
@@ -55,7 +57,8 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
             item.kidname = kids.get(key);
             mMessageItems.add(item);
         }
-        mListView.setAdapter(new SlideAdapter());
+        adapter = new SlideAdapter();
+        mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(this);
     }
 
@@ -134,29 +137,28 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        if(slider_visibility)
+        if(mLastSlideViewWithStatusOn != null)
             mLastSlideViewWithStatusOn.shrink();
-        if(!slider_visibility)
+        else
             startActivity(new Intent(ManageKids.this,EditKid.class));
     }
 
     @Override
     public void onSlide(View view, int status) {
 
-        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
+        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view)
             mLastSlideViewWithStatusOn.shrink();
-            slider_visibility = false;
-        }
-        if (status == SLIDE_STATUS_ON) {
+
+        if (status == SLIDE_STATUS_ON)
             mLastSlideViewWithStatusOn = (SlideView) view;
-            slider_visibility = true;
-        }
+
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.holder) {
             mMessageItems.remove(slided_item_position);
+            adapter.notifyDataSetChanged();
         }
     }
 }
