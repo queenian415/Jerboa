@@ -1,180 +1,345 @@
 package com.jebora.jebora;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import com.jebora.jebora.Utils.ImgProc;
 
 
-public class ImageEditing extends ActionBarActivity {
 
-    //public static native int[] ImgFun(int[] buf, int w, int h);
+public class ImageEditing extends Activity {
     static {
         System.loadLibrary("hello");
     }
-    public native int[] hello(int[] buf, int w, int h, double alpha, int beta);
-    //public native int[] contrast(int[] buf, int w, int h);
+    public native void doGreyscale(int[] buf, int w, int h);
+    public native void doSepia(int[] buf, int w, int h, int depth, double r, double g, double b);
+    public native void doContrast(int[] buf, int w, int h, double contrastLvl);
+    public native void doBrightness(int[] buf, int w, int h, int brightnessLvl);
+    public native void doEmboss(int[] buf, int w, int h);
+    public native void doSnow(int[] buf, int w, int h);
+    public native void doBlur(int[] buf, int w, int h);
+    public native void doSharpen(int[] buf, int w, int h, double weight);
+    public native void doEmbossTwo(int[] buf, int w, int h);
+    public native void doEdgeDetect(int[] buf, int w, int h);
 
     ImageView imageView;
-    Button btnNDK, btnRestore;
-    SeekBar contrastBar, brightnessBar;
-    TextView contrastText, brightnessText;
-    int contrastBarVal = 0, brightnessBarVal = 0;
-    double alpha = 1.5;
-    int beta = 33;
+    Button btnNDK, btnRestore, btnFrame, btnDone;
     int w, h;
+    Bitmap bm;
+    int [] pixels;
+    int [] originalPixs;
+    int brightness = 0;
+    int contrast = 0;
+    double red = 0, green=0, blue=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_editing);
 
-        this.setTitle("使用NDK转换灰度图");
+        this.setTitle("ImageEdit");
 
         imageView = (ImageView) this.findViewById(R.id.ImageView01);
-        contrastBar = (SeekBar) this.findViewById(R.id.contrastBar);
-        brightnessBar = (SeekBar) this.findViewById(R.id.brightnessBar);
-        contrastText = (TextView) this.findViewById(R.id.contrastText);
-        contrastText.setText("Contrast : " + contrastBar.getProgress() + " / " + contrastBar.getMax());
-        brightnessText = (TextView) this.findViewById(R.id.brightnessText);
-        brightnessText.setText("Brightness : " + brightnessBar.getProgress() + " / " + brightnessBar.getMax());
 
-        contrastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                contrastBarVal = progress;
-                alpha = (((double)contrastBarVal) / contrastBar.getMax()) * 2.0 + 1.0;
-                contrastText.setText("Contrast : " + progress + " / " + contrastBar.getMax());
-                Toast.makeText(ImageEditing.this, "Contrast changed", Toast.LENGTH_SHORT).show();
-            }
+        bm = ((BitmapDrawable) getResources().getDrawable(
+                R.drawable.minions)).getBitmap();
+        w = bm.getWidth();
+        h = bm.getHeight();
+        pixels = new int[w * h];
+        originalPixs = new int[w *h];
+        bm.getPixels(pixels, 0, w, 0, 0, w, h);
+        System.arraycopy(pixels, 0, originalPixs, 0, w * h);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(ImageEditing.this, "Contrast start tracking", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                contrastText.setText("Contrast : " + contrastBarVal + " / " + contrastBar.getMax());
-            }
-        });
-
-        brightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                beta = progress;
-                brightnessText.setText("Brightness : " + progress + " / " + brightnessBar.getMax());
-                Toast.makeText(ImageEditing.this, "Contrast changed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(ImageEditing.this, "Brightness start tracking", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                brightnessText.setText("Brightness : " + beta + " / " + brightnessBar.getMax());
-            }
-        });
-
-        Bitmap img1 = ((BitmapDrawable) getResources().getDrawable(
-                R.drawable.logo)).getBitmap();
-
-        w = img1.getWidth();
-        h = img1.getHeight();
-
-        imageView.setImageBitmap(img1);
+        imageView.setImageBitmap(bm);
 
         btnRestore = (Button) this.findViewById(R.id.btnRestore);
-        btnRestore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bitmap orig = ((BitmapDrawable) getResources().getDrawable(
-                        R.drawable.logo)).getBitmap();
-                imageView.setImageBitmap(orig);
-            }
-        });
+        btnRestore.setOnClickListener(switchListener);
+        btnFrame = (Button) this.findViewById(R.id.btnFrame);
+        btnFrame.setOnClickListener(switchListener);
+        btnDone = (Button) this.findViewById(R.id.btnFinish);
+        btnDone.setOnClickListener(switchListener);
         btnNDK = (Button) this.findViewById(R.id.btnNDK);
-        btnNDK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bitmap img = ((BitmapDrawable) getResources().getDrawable(
-                        R.drawable.logo)).getBitmap();
-                int[] pix = new int[w * h];
-                img.getPixels(pix, 0, w, 0, 0, w, h);
-                int[] resultInt = hello(pix, w, h, alpha, beta);
-                Bitmap resultImg = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
-                resultImg.setPixels(resultInt, 0, w, 0, 0, w, h);
-                imageView.setImageBitmap(resultImg);
-            }
-        });
+        btnNDK.setOnClickListener(switchListener);
     }
-/*
-    class ClickEvent implements View.OnClickListener {
-        public void onClick(View v) {
 
-            try {
-                Set<String> libs = new HashSet<String>();
-                String mapsFile = "/proc/" + android.os.Process.myPid() + "/maps";
-                BufferedReader reader = new BufferedReader(new FileReader(mapsFile));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.endsWith(".so")) {
-                        int n = line.lastIndexOf(" ");
-                        libs.add(line.substring(n + 1));
-                    }
-                }
-                Log.d("Ldd", libs.size() + " libraries:");
-                for (String lib : libs) {
-                    Log.d("Ldd", lib);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+    private View.OnClickListener switchListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final LinearLayout ll = (LinearLayout) findViewById(R.id.LLTabs);
+            final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            final LinearLayout sb_ll = (LinearLayout) findViewById(R.id.LLSeekbars);
+
+            if(ll.getChildCount() > 0){
+                ll.removeAllViews();
+            }
+            if(sb_ll.getChildCount() > 0){
+                sb_ll.removeAllViews();
             }
 
-            if (v == btnNDK) {
-                long current = System.currentTimeMillis();
-                Bitmap img1 = ((BitmapDrawable) getResources().getDrawable(
-                        R.drawable.logo)).getBitmap();
-                int w = img1.getWidth(), h = img1.getHeight();
-                int[] pix = new int[w * h];
-                img1.getPixels(pix, 0, w, 0, 0, w, h);
-                int[] resultInt = ImgFun(pix, w, h);
-                Bitmap resultImg = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
-                resultImg.setPixels(resultInt, 0, w, 0, 0, w, h);
-                long performance = System.currentTimeMillis() - current;
-                imageView.setImageBitmap(resultImg);
-                ImageEditing.this.setTitle("w:" + String.valueOf(img1.getWidth())
-                        + ",h:" + String.valueOf(img1.getHeight()) + "NDK耗时"
-                        + String.valueOf(performance) + " 毫秒");
-            } else if (v == btnRestore) {
-                Bitmap img2 = ((BitmapDrawable) getResources().getDrawable(
-                        R.drawable.whiteshirt)).getBitmap();
-                imageView.setImageBitmap(img2);
-                ImageEditing.this.setTitle("使用OpenCV进行图像处理");
+            if(btnNDK == v) {
+                final SepiaFilters sf = new SepiaFilters();
+                int num_filters = sf.num_filters;
+
+                for(int i_f = 0; i_f < num_filters; ++i_f){
+                    final int i = i_f;
+                    Button filter_btn = new Button(getApplicationContext());
+                    filter_btn.setText("Filter" + i);
+                    ll.addView(filter_btn, lp);
+                    filter_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doSepia(pixels, w, h, 100, sf.red[i], sf.green[i], sf.blue[i]);
+                            updateImageView();
+                        }
+                    });
+
+                }
+
+                Button customize_btn = new Button(getApplicationContext());
+                customize_btn.setText("Customize");
+                ll.addView(customize_btn, lp);
+                customize_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ll.removeAllViews();
+                        Button brightnesBtn = new Button(getApplicationContext());
+                        Button contrastBtn = new Button(getApplicationContext());
+                        Button sepiaBtn = new Button(getApplicationContext());
+                        Button noiseBtn = new Button(getApplicationContext());
+                        brightnesBtn.setText("Brightness");
+                        contrastBtn.setText("Contrast");
+                        sepiaBtn.setText("RBG");
+                        noiseBtn.setText("Noise");
+                        ll.addView(brightnesBtn, lp);
+                        ll.addView(contrastBtn, lp);
+                        ll.addView(sepiaBtn, lp);
+                        ll.addView(noiseBtn, lp);
+
+                        brightnesBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (sb_ll.getChildCount() > 0) {
+                                    sb_ll.removeAllViews();
+                                }
+                                SeekBar bLvl = new SeekBar(getApplicationContext());
+                                sb_ll.addView(bLvl, lp);
+                                bLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+                                        int progress = seekBar.getProgress();
+                                        doBrightness(pixels, w, h, progress - brightness);
+                                        brightness = progress;
+                                        updateImageView();
+                                    }
+                                });
+                            }
+                        });
+
+                        contrastBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (sb_ll.getChildCount() > 0) {
+                                    sb_ll.removeAllViews();
+                                }
+                                SeekBar cLvl = new SeekBar(getApplicationContext());
+                                sb_ll.addView(cLvl, lp);
+                                cLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+                                        int progress = seekBar.getProgress();
+                                        doContrast(pixels, w, h, (double) progress - contrast);
+                                        contrast = progress;
+                                        updateImageView();
+                                    }
+                                });
+                            }
+                        });
+
+                        sepiaBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                red = blue = green = 0;
+                                if (sb_ll.getChildCount() > 0) {
+                                    sb_ll.removeAllViews();
+                                }
+                                SeekBar redLvl = new SeekBar(getApplicationContext());
+                                SeekBar greenLvl = new SeekBar(getApplicationContext());
+                                SeekBar blueLvl = new SeekBar(getApplicationContext());
+                                sb_ll.addView(redLvl, lp);
+                                sb_ll.addView(greenLvl, lp);
+                                sb_ll.addView(blueLvl, lp);
+                                redLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+                                        double progress = (double)seekBar.getProgress() / seekBar.getMax();
+                                        doSepia(pixels, w, h, 100, progress - red, blue, green);
+                                        red = progress;
+                                        updateImageView();
+                                    }
+                                });
+                                greenLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+                                        double progress = (double)seekBar.getProgress() / seekBar.getMax();
+                                        doSepia(pixels, w, h, 100, red, progress - green, blue);
+                                        green = progress;
+                                        updateImageView();
+                                    }
+                                });
+                                blueLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                    @Override
+                                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                    }
+
+                                    @Override
+                                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                    }
+
+                                    @Override
+                                    public void onStopTrackingTouch(SeekBar seekBar) {
+                                        double progress = (double)seekBar.getProgress()/seekBar.getMax();
+                                        doSepia(pixels, w, h, 100, red, green, progress - blue);
+                                        blue = progress;
+                                        updateImageView();
+                                    }
+                                });
+                            }
+                        });
+
+                        noiseBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                doSnow(pixels, w, h);
+                                updateImageView();
+                            }
+                        });
+                    }
+                });
+            }
+            else if (btnFrame == v){
+                selectImgProc();
+            }
+            else if (btnRestore == v){
+                Bitmap orig = ((BitmapDrawable) getResources().getDrawable(
+                        R.drawable.minions)).getBitmap();
+                imageView.setImageBitmap(orig);
+                System.arraycopy(originalPixs, 0, pixels, 0, w * h);
+                updateImageView();
+                clearAllLL();
+            }
+            else if (btnDone == v){
+                clearAllLL();
             }
         }
-    }*/
+    };
+
+    private void selectImgProc(){
+        final CharSequence[] options = {
+                "Brightness",
+                "Contrast",
+                "Greyscale",
+                "Sepia",
+                "Noise",
+                "Blur",
+                "GaussianBlur",
+                "Emboss",
+                "Sharpen",
+                "Emboss2",
+                "EdgeDetect",
+                "Cancel"
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ImageEditing.this);
+        builder.setTitle("Select option");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (options[which].equals("Brightness")) {
+                    doBrightness(pixels, w, h, 20);
+                } else if (options[which].equals("Contrast")) {
+                    doContrast(pixels, w, h, 40);
+                } else if (options[which].equals("Greyscale")) {
+                    doGreyscale(pixels, w, h);
+                } else if (options[which].equals("Sepia")) {
+                    doSepia(pixels, w, h, 100, red, green, blue);
+                } else if (options[which].equals("Noise")) {
+                    doSnow(pixels, w, h);
+                } else if (options[which].equals("Blur")) {
+                    doBlur(pixels, w, h);
+                } else if (options[which].equals("GaussianBlur")) {
+                    bm = ImgProc.doGaussianBlur(bm);
+                } else if (options[which].equals("Emboss")) {
+                    doEmboss(pixels, w, h);
+                } else if (options[which].equals("Sharpen")) {
+                    doSharpen(pixels, w, h, 12.0);
+                } else if (options[which].equals("Emboss2")) {
+                    doEmbossTwo(pixels, w, h);
+                } else if (options[which].equals("EdgeDetect")) {
+                    doEdgeDetect(pixels, w, h);
+                } else if (options[which].equals("Cancel")) {
+                }
+
+                Bitmap dummy = Bitmap.createBitmap(w, h, bm.getConfig());
+                dummy.setPixels(pixels, 0, w, 0, 0, w, h);
+                imageView.setImageBitmap(dummy);
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -197,4 +362,29 @@ public class ImageEditing extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void updateImageView(){
+        Bitmap dummy = Bitmap.createBitmap(w, h, bm.getConfig());
+        dummy.setPixels(pixels, 0, w, 0, 0, w, h);
+        imageView.setImageBitmap(dummy);
+    }
+
+    private void clearAllLL() {
+        brightness = 0;
+        contrast = 0;
+        red = green = blue = 0;
+        LinearLayout ll = (LinearLayout)findViewById(R.id.LLTabs);
+        LinearLayout sbll = (LinearLayout) findViewById(R.id.LLSeekbars);
+        ll.removeAllViews();
+        sbll.removeAllViews();
+    }
+
+    private class SepiaFilters{
+        public int num_filters = 6;
+        double[] red =   {0.4, 0.0, 0.0, 0.5, 0.3, 0.0};
+        double[] green = {0.0, 0.4, 0.0, 0.0, 0.45, 0.3};
+        double[] blue =  {0.0, 0.0, 0.4, 0.4, 0.0, 0.5};
+    }
 }
+
+

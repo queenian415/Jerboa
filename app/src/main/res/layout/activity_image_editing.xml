@@ -1,47 +1,108 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:padding="0dp"
     android:orientation="vertical"
     tools:context="com.jebora.jebora.ImageEditing">
 
-    <Button android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:id="@+id/btnNDK"
-        android:text="使用C++ OpenCV进行处理" />
-    <Button android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:id="@+id/btnRestore"
-        android:text="还原" />
-    <!--<TextView
-        android:id="@+id/textview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />-->
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/contrastBar"
-        android:layout_gravity="center_horizontal"
-        android:clickable="false" />
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/brightnessBar"
-        android:layout_gravity="center_horizontal"
-        android:clickable="false" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/contrastText"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/brightnessText"/>
-
     <ImageView android:id="@+id/ImageView01"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
-</LinearLayout>
+    <Button android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/btnFinish"
+        android:text="完成"
+        android:layout_gravity="top|right"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LLSeekbars"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="left|bottom"
+                android:id="@+id/LLTabs">
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom|center"
+            android:layout_gravity="bottom|center">
+
+            <Button android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/btnNDK"
+                android:text="滤镜" />
+            <Button android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/btnFrame"
+                android:text="边框" />
+            <Button android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/btnRestore"
+                android:text="还原" />
+            <Button android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/btnTools"
+                android:text="工具" />
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>
+
+
+<!--<SeekBar-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:id="@+id/contrastBar"-->
+<!--android:layout_gravity="center_horizontal"-->
+<!--android:clickable="false" />-->
+<!--<SeekBar-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:id="@+id/brightnessBar"-->
+<!--android:layout_gravity="center_horizontal"-->
+<!--android:clickable="false" />-->
+<!--<SeekBar-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:id="@+id/blueBar"-->
+<!--android:layout_gravity="center_horizontal"-->
+<!--android:clickable="false"/>-->
+<!--<TextView-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:id="@+id/contrastText"/>-->
+<!--<TextView-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:id="@+id/brightnessText"/>-->
+<!--<TextView-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:id="@+id/blueText"/>-->

@@ -9,11 +9,83 @@ extern "C" {
 #endif
 /*
  * Class:     com_jebora_jebora_ImageEditing
- * Method:    hello
- * Signature: ([IIIDI)[I
+ * Method:    doGreyscale
+ * Signature: ([III)V
  */
-JNIEXPORT jintArray JNICALL Java_com_jebora_jebora_ImageEditing_hello
-  (JNIEnv *, jobject, jintArray, jint, jint, jdouble, jint);
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doGreyscale
+  (JNIEnv *, jobject, jintArray, jint, jint);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doSepia
+ * Signature: ([IIIIDDD)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doSepia
+  (JNIEnv *, jobject, jintArray, jint, jint, jint, jdouble, jdouble, jdouble);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doContrast
+ * Signature: ([IIID)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doContrast
+  (JNIEnv *, jobject, jintArray, jint, jint, jdouble);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doBrightness
+ * Signature: ([IIII)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doBrightness
+  (JNIEnv *, jobject, jintArray, jint, jint, jint);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doEmboss
+ * Signature: ([III)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doEmboss
+  (JNIEnv *, jobject, jintArray, jint, jint);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doSnow
+ * Signature: ([III)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doSnow
+  (JNIEnv *, jobject, jintArray, jint, jint);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doBlur
+ * Signature: ([III)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doBlur
+  (JNIEnv *, jobject, jintArray, jint, jint);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doSharpen
+ * Signature: ([IIID)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doSharpen
+  (JNIEnv *, jobject, jintArray, jint, jint, jdouble);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doEmbossTwo
+ * Signature: ([III)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doEmbossTwo
+  (JNIEnv *, jobject, jintArray, jint, jint);
+
+/*
+ * Class:     com_jebora_jebora_ImageEditing
+ * Method:    doEdgeDetect
+ * Signature: ([III)V
+ */
+JNIEXPORT void JNICALL Java_com_jebora_jebora_ImageEditing_doEdgeDetect
+  (JNIEnv *, jobject, jintArray, jint, jint);
 
 #ifdef __cplusplus
 }
