@@ -72,5 +72,6 @@
     <string name="title_activity_shopping_cart">ShoppingCart</string>
     <string name="title_activity_shipping_info">ShippingInfo</string>
     <string name="title_activity_account_info">AccountInfo</string>
+    <string name="title_activity_checkout">Checkout</string>
 
 </resources>

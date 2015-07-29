@@ -172,6 +172,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jebora.jebora.UserMain" />
         </activity>
+        <activity
+            android:name=".Checkout"
+            android:label="@string/title_activity_checkout" >
+        </activity>
     </application>
 
 </manifest>

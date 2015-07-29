@@ -144,6 +144,13 @@
                     android:focusable="false"
                     android:padding="0dp"
                     android:onClick="selectPhoto" />
+
+                <Button
+                    android:layout_width="96dp"
+                    android:layout_height="75dp"
+                    android:text="下单"
+                    android:id="@+id/buttonCheckout"
+                    android:onClick="captureScreen" />
             </LinearLayout>
         </HorizontalScrollView>
 

@@ -41,6 +41,8 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 public class PreviewProduct extends ActionBarActivity implements View.OnTouchListener  {
@@ -80,6 +82,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private TextView textView;
     private TextView textViewXY;
     private Spinner spinner;
+    public Bitmap screenshot;
     /*
     文字框
      */
@@ -106,6 +109,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         seekBar = (SeekBar) findViewById(R.id.seekBar);
        // txtimg = (ImageView)findViewById(R.id.textImg);
         textViewXY = (TextView) findViewById(R.id.textView2);
+        textViewXY.setVisibility(textViewXY.INVISIBLE);
         textView = (TextView) findViewById(R.id.textView);
         spinner = (Spinner) findViewById(R.id.spinner);
         String[] mItems = getResources().getStringArray(R.array.fronts_array);
@@ -470,6 +474,33 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
             img.setImageBitmap(pictureObject);
             isPreview = 1;
         }
+    }
+
+    public void captureScreen(View view) {
+
+
+        View v = getWindow().getDecorView().getRootView();
+        v.setDrawingCacheEnabled(true);
+        screenshot = Bitmap.createBitmap(v.getDrawingCache());
+        v.setDrawingCacheEnabled(false);
+        try {
+            FileOutputStream fos  = this.openFileOutput("screenshot", Context.MODE_PRIVATE);
+            screenshot.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            Intent intent = new Intent(this, Checkout.class);
+            intent.putExtra("image", "screenshot");
+            startActivity(intent);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
     }
 
 
