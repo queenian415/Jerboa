@@ -86,10 +86,21 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
         mContext = getActivity().getApplicationContext();
         //If we do this we need to uncomment the container on the xml layout
         //createListBuddiesLayoutDinamically(rootView);
-        mImagesLeft = loadLocalImages(false);
-        mImagesRight = loadLocalImages(false);
         mAdapterLeft = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_small), mImagesLeft);
         mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
+        List<String> allImages = new ArrayList<>();
+        allImages = loadLocalImages(false);
+        for (int i=0; i<allImages.size(); i++){
+            if(i%7==0){
+                mImagesLeft.add(allImages.get(i).toString().trim());
+            }
+            else if(i%7%2==0){
+                mImagesLeft.add(allImages.get(i).toString().trim());
+            }
+            else{
+                mImagesRight.add(allImages.get(i).toString().trim());
+            }
+        }
         mListBuddies.setAdapters(mAdapterLeft, mAdapterRight);
         mListBuddies.setOnItemClickListener(this);
         UserMainCheck.reqUpdOptMenu("ListBuddies");

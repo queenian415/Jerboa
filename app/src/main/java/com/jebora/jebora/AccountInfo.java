@@ -42,6 +42,8 @@ public class AccountInfo extends ActionBarActivity implements AdapterView.OnItem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_info);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
         mListView = (ListView)findViewById(R.id.personal_info_list);
         String[] temp = getResources().getStringArray(R.array.user_info);
         for(int i=0; i<temp.length; i++){
