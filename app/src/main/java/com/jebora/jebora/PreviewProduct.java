@@ -110,6 +110,22 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         photoButton = (Button) findViewById(R.id.photogallary);
         shirt = (ImageView) findViewById(R.id.shirt);
         img = (ImageView) findViewById(R.id.logo);
+
+        // Daniel's part
+        String callingActivity = getIntent().getStringExtra("calling-activity");
+        if(!callingActivity.isEmpty() && callingActivity.equals("ImageEditing")){
+            try{
+                String filePath = getIntent().getStringExtra("imagePath");
+                File f = new File(filePath);
+                FileInputStream fis = new FileInputStream(f);
+                Bitmap bm = BitmapFactory.decodeStream(fis);
+                img.setImageBitmap(bm);
+            }  catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        // Daniel, end
         seekBar = (SeekBar) findViewById(R.id.seekBar);
        // txtimg = (ImageView)findViewById(R.id.textImg);
         textViewXY = (TextView) findViewById(R.id.textView2);

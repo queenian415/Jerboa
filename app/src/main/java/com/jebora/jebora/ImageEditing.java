@@ -3,9 +3,12 @@ package com.jebora.jebora;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.jebora.jebora.Utils.FileInfo;
 import com.jebora.jebora.Utils.ImgProc;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 
 
 public class ImageEditing extends Activity {
@@ -67,14 +74,14 @@ public class ImageEditing extends Activity {
 
         imageView.setImageBitmap(bm);
 
-        btnRestore = (Button) this.findViewById(R.id.btnRestore);
-        btnRestore.setOnClickListener(switchListener);
-        btnFrame = (Button) this.findViewById(R.id.btnFrame);
-        btnFrame.setOnClickListener(switchListener);
-        btnDone = (Button) this.findViewById(R.id.btnFinish);
-        btnDone.setOnClickListener(switchListener);
         btnNDK = (Button) this.findViewById(R.id.btnNDK);
         btnNDK.setOnClickListener(switchListener);
+        btnFrame = (Button) this.findViewById(R.id.btnFrame);
+        btnFrame.setOnClickListener(switchListener);
+        btnRestore = (Button) this.findViewById(R.id.btnRestore);
+        btnRestore.setOnClickListener(switchListener);
+        btnDone = (Button) this.findViewById(R.id.btnFinish);
+        btnDone.setOnClickListener(switchListener);
     }
 
     private View.OnClickListener switchListener = new View.OnClickListener() {
@@ -282,6 +289,29 @@ public class ImageEditing extends Activity {
             }
             else if (btnDone == v){
                 clearAllLL();
+                finish();
+                File kidDir = FileInfo.getUserKidDirectory(getApplicationContext());
+                Date imageEditTime = new Date();
+                long unsignedHash = imageEditTime.hashCode() & 0x00000000ffffffffL;
+                String fileName = unsignedHash + ".jpg";
+                String dstPath = kidDir.toString() + File.separator + fileName;
+                try{
+                    File dstFile = FileInfo.newFile(dstPath);
+                    FileOutputStream fos = new FileOutputStream(dstFile);
+                    Bitmap dummy = Bitmap.createBitmap(w, h, bm.getConfig());
+                    dummy.setPixels(pixels, 0, w, 0, 0, w, h);
+                    if(dummy.compress(Bitmap.CompressFormat.PNG, 100, fos)){
+                        int x = 1;
+                    }
+                    fos.flush();
+                    fos.close();
+                    Intent i = new Intent(ImageEditing.this, PreviewProduct.class);
+                    i.putExtra("imagePath", dstPath);
+                    i.putExtra("calling-activity", "ImageEditing");
+                    startActivity(i);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     };

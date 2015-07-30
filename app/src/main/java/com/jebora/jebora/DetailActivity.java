@@ -18,7 +18,7 @@ public class DetailActivity extends ActionBarActivity {
     public static final String EXTRA_URL = "url";
     @InjectView(R.id.image)
     ImageView mImageView;
-    Button mEditBtn;
+    Button mEditBtn, mDeleteBtn, mShareBtn, mProductBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class DetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_activity);
         ButterKnife.inject(this);
-        String imageUrl = getIntent().getExtras().getString(EXTRA_URL);
+        final String imageUrl = getIntent().getExtras().getString(EXTRA_URL);
         Picasso.with(this).load(imageUrl).into((ImageView) findViewById(R.id.image), new Callback() {
             @Override
             public void onSuccess() {
@@ -37,14 +37,19 @@ public class DetailActivity extends ActionBarActivity {
             }
         });
 
-//        mEditBtn = (Button) findViewById(R.id.editBtn);
-//        mEditBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent();
-//                i.putExtra("")
-//            }
-//        });
+        mEditBtn = (Button) findViewById(R.id.editBtn);
+        mEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DetailActivity.this, ImageEditing.class);
+                i.putExtra("image", imageUrl);
+                startActivity(i);
+            }
+        });
+
+        mDeleteBtn = (Button) findViewById(R.id.delBtn);
+        mShareBtn = (Button) findViewById(R.id.shareBtn);
+        mProductBtn = (Button) findViewById(R.id.productBtn);
 
     }
 

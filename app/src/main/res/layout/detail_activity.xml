@@ -16,8 +16,37 @@
         android:layout_height="match_parent"
         listbuddies:insetBackground="@color/inset" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editBtn"/>
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|center"
+        android:gravity="bottom|center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/editBtn"
+            android:text="编辑"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/delBtn"
+            android:text="删除"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/shareBtn"
+            android:text="分享"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/productBtn"
+            android:text="订制"/>
+
+    </LinearLayout>
+
 </FrameLayout>
