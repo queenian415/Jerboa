@@ -113,17 +113,18 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
 
         // Daniel's part
         String callingActivity = getIntent().getStringExtra("calling-activity");
-        if(!callingActivity.isEmpty() && callingActivity.equals("ImageEditing")){
-            try{
-                String filePath = getIntent().getStringExtra("imagePath");
-                File f = new File(filePath);
-                FileInputStream fis = new FileInputStream(f);
-                Bitmap bm = BitmapFactory.decodeStream(fis);
-                img.setImageBitmap(bm);
-            }  catch (Exception e){
-                e.printStackTrace();
+        if(callingActivity != null){
+            if(callingActivity.equals("ImageEditing")){
+                try{
+                    String filePath = getIntent().getStringExtra("imagePath");
+                    File f = new File(filePath);
+                    FileInputStream fis = new FileInputStream(f);
+                    Bitmap bm = BitmapFactory.decodeStream(fis);
+                    img.setImageBitmap(bm);
+                }  catch (Exception e){
+                    e.printStackTrace();
+                }
             }
-
         }
         // Daniel, end
         seekBar = (SeekBar) findViewById(R.id.seekBar);
