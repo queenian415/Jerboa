@@ -9,6 +9,7 @@
     <string name="main_login">已注册用户登陆</string>
     <string name="main_email_reg">Email注册新账号</string>
     <string name="title_activity_sign_up_2">SignUp_2</string>
+    <string name="next">下一步</string>
     <string name="skip">跳过</string>
     <string name="Return">返回</string>
     <string name="Register">注册</string>

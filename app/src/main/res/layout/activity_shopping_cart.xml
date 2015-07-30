@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:id="@+id/shopping_cart_title"
         android:background="@color/grey">
         <TextView
             android:layout_width="fill_parent"
@@ -28,10 +29,10 @@
             android:layout_weight="2"/>
 
     </LinearLayout>
-    <com.jebora.jebora.ListViewCompat
+    <com.jebora.jebora.ShoppingCartListView
         android:id="@+id/shopping_cart_items"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="332dp"
         android:background="@color/white"
         android:cacheColorHint="#00000000"
         android:divider="#dddbdb"
@@ -39,20 +40,61 @@
         android:drawSelectorOnTop="false"
         android:listSelector="@android:color/transparent"
         android:scrollbars="none" />
+
+    <LinearLayout
+        android:layout_height="58dp"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:descendantFocusability="blocksDescendants"
+        android:paddingBottom="5dp" android:paddingLeft="10dp"
+        android:paddingRight="10dp" android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="合计"
+            android:id="@+id/item_name"
+            android:textSize="15sp"
+            android:paddingLeft="16dp"
+            android:gravity="center_vertical"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/price"
+            android:textSize="15sp"
+            android:text="价钱"
+            android:paddingRight="40dp"
+            android:gravity="center_vertical|right"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="100dp"
         android:orientation="vertical"
+        android:id="@+id/suggestions"
+        android:gravity="bottom"
         android:background="@color/grey">
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="20dp"
             android:gravity="center_horizontal"
             android:text="推荐" />
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"></ListView>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/shopping_cart_ads"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </HorizontalScrollView>
 
     </LinearLayout>
+
+
+
 
 </LinearLayout>

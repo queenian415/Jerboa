@@ -171,9 +171,7 @@ public class UserMain extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(String title) {
-        if(title.equals(getString(R.string.app_name))){
-            return;
-        }
+
         if(title.equals("我的孩子")){
             startActivity(new Intent(UserMain.this, ManageKids.class));
             return;
@@ -196,6 +194,10 @@ public class UserMain extends ActionBarActivity
             listNames.clear();
             listIds.clear();
             startActivity(new Intent(UserMain.this, MainActivity.class));
+            return;
+        }
+        if(title.equals("我的订单")){
+            startActivity(new Intent(UserMain.this, ShoppingCart.class));
             return;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -268,7 +270,7 @@ public class UserMain extends ActionBarActivity
          * 返回根据title参数创建的fragment
          */
         //parameters for listbuddies
-        private static final String TAG = UserMainList.class.getSimpleName();
+        //private static final String TAG = UserMainList.class.getSimpleName();
         int mMarginDefault;
         int[] mScrollConfig;
         private boolean isOpenActivities;

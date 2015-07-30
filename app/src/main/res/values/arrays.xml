@@ -35,4 +35,5 @@
         <item>@string/email</item>
         <item>@string/password</item>
     </string-array>
+
 </resources>

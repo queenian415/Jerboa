@@ -1,5 +1,7 @@
 package com.jebora.jebora.provider;
 
+import java.util.List;
+
 public class ImagesUrls {
 
     public final static String[] imageUrls_left = new String[]{
@@ -20,4 +22,6 @@ public class ImagesUrls {
             "https://lh3.googleusercontent.com/-rrFnVC8xQEg/URqufdrLBaI/AAAAAAAAAbs/s69WYy_fl1E/s1024/Chess.jpg"
 
     };
+
+    public static List<String> allImages;
 }
