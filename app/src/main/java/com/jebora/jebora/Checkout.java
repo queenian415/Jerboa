@@ -18,13 +18,13 @@ private ImageView imageView;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         imageView = (ImageView)findViewById(R.id.imageViewCheckout);
-        Bitmap bmp = null;
         String filename = getIntent().getStringExtra("image");
         try {
             FileInputStream is = this.openFileInput(filename);
-            bmp = BitmapFactory.decodeStream(is);
+            Bitmap bmp = BitmapFactory.decodeStream(is);
+            Bitmap resizedbitmap=Bitmap.createBitmap(bmp, 0, 250, 1080, 1400);
             is.close();
-            imageView.setImageBitmap(bmp);
+            imageView.setImageBitmap(resizedbitmap);
         } catch (Exception e) {
             e.printStackTrace();
         }

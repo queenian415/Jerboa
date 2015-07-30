@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -83,6 +84,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private TextView textViewXY;
     private Spinner spinner;
     public Bitmap screenshot;
+    public HorizontalScrollView horizontalScrollView;
     /*
     文字框
      */
@@ -99,6 +101,8 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_preview_product);
         colorButton = (Button) findViewById(R.id.colorbutton);
         sizeButton = (Button) findViewById(R.id.sizebutton);
@@ -112,6 +116,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         textViewXY.setVisibility(textViewXY.INVISIBLE);
         textView = (TextView) findViewById(R.id.textView);
         spinner = (Spinner) findViewById(R.id.spinner);
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
         String[] mItems = getResources().getStringArray(R.array.fronts_array);
 // 建立Adapter并且绑定数据源
         ArrayAdapter<String> _Adapter=new ArrayAdapter<String>(this,R.layout.spinner_item_dropdown, mItems);
@@ -477,11 +482,17 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     }
 
     public void captureScreen(View view) {
+        horizontalScrollView.setVisibility(horizontalScrollView.INVISIBLE);
 
 
-        View v = getWindow().getDecorView().getRootView();
+        //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.previewrelative);
+        //relativeLayout.setDrawingCacheEnabled(true);
+        //relativeLayout.buildDrawingCache();
+
+        View v = getWindow().getDecorView();//.getRootView();
         v.setDrawingCacheEnabled(true);
         screenshot = Bitmap.createBitmap(v.getDrawingCache());
+       // screenshot = relativeLayout.getDrawingCache();
         v.setDrawingCacheEnabled(false);
         try {
             FileOutputStream fos  = this.openFileOutput("screenshot", Context.MODE_PRIVATE);
