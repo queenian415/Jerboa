@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -59,6 +60,19 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(this);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                ManageKids.this.onBackPressed();
+                return true;
+            case R.id.action_settings:
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);    }
 
     private class SlideAdapter extends BaseAdapter {
 

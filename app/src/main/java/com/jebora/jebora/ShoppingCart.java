@@ -85,12 +85,13 @@ public class ShoppingCart extends ActionBarActivity implements OnItemClickListen
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-        if (id == R.id.next) {
-            startActivity(new Intent(ShoppingCart.this, ShippingInfo.class));
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                ShoppingCart.this.onBackPressed();
+                return true;
+            case R.id.next:
+                startActivity(new Intent(ShoppingCart.this, ShippingInfo.class));
         }
 
         return super.onOptionsItemSelected(item);
