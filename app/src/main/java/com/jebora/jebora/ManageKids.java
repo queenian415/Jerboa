@@ -46,6 +46,12 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
         initView();
     }
 
+    @Override
+    protected void onPause(){
+        this.finish();
+        super.onPause();
+    }
+
     private void initView() {
         mListView = (ListViewCompat) findViewById(R.id.managekids_list);
 
@@ -54,6 +60,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
             MessageItem item = new MessageItem();
             item.iconRes = R.drawable.ic_drawer_explore;
             item.kidname = kids.get(key);
+            item.kidID = key;
             mMessageItems.add(item);
         }
         adapter = new SlideAdapter();
@@ -130,6 +137,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
     public class MessageItem {
         public int iconRes;
         public String kidname;
+        public String kidID;
         public SlideView slideView;
     }
 
@@ -150,8 +158,12 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
                             long id) {
         if(mLastSlideViewWithStatusOn != null)
             mLastSlideViewWithStatusOn.shrink();
-        else
-            startActivity(new Intent(ManageKids.this,EditKid.class));
+        else{
+            Intent intent = new Intent(ManageKids.this,EditKid.class);
+            intent.putExtra(EditKid.KID_ID, mMessageItems.get(position).kidID);
+            startActivity(intent);
+        }
+
     }
 
     @Override
@@ -170,6 +182,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
         if (v.getId() == R.id.holder) {
             for(int i=0;i<mMessageItems.size();i++){
                 if(mLastSlideViewWithStatusOn == mMessageItems.get(i).slideView){
+                    ServerCommunication.deleteKidInBackground(getApplicationContext(),mMessageItems.get(i).kidID);
                     mMessageItems.remove(i);
                     adapter.notifyDataSetChanged();
                 }

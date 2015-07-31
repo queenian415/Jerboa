@@ -124,7 +124,7 @@ public class UserMain extends ActionBarActivity
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
                 String[] temp = new String[listIds.size()];
                 temp = listIds.toArray(temp);
-                if(temp[itemPosition].equals("+")){
+                if(temp!=null&&temp[itemPosition].equals("+")){
                     kidsnumber++;
                     startActivity(new Intent(UserMain.this, AddKids.class));
                 }

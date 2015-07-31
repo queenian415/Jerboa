@@ -153,7 +153,7 @@ public class ServerCommunication {
         return true;
     }
 
-    public KidInfo getKidObject(String kidId) {
+    public static KidInfo getKidObject(String kidId) {
         Log.d(TAG, "getKidObjects");
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Kid");
@@ -168,7 +168,7 @@ public class ServerCommunication {
         }
     }
 
-    public boolean editKidObject(KidInfo kidInfo) {
+    public static boolean editKidObject(KidInfo kidInfo) {
         Log.d(TAG, "editKidObject");
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Kid");
