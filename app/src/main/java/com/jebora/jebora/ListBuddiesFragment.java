@@ -133,7 +133,7 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
     public void onBuddyItemClicked(AdapterView<?> parent, View view, int buddy, int position, long id) {
         if (isOpenActivities) {
             Intent intent = new Intent(getActivity(), DetailActivity.class);
-            intent.putExtra(DetailActivity.EXTRA_URL, getImage(buddy, position));
+            intent.putExtra("localImagePath", getClickedImage(buddy, position));
             startActivity(intent);
         } else {
             Resources resources = getResources();
@@ -143,6 +143,17 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
 
     private String getImage(int buddy, int position) {
         return buddy == 0 ? ImagesUrls.imageUrls_left[position] : ImagesUrls.imageUrls_right[position];
+    }
+
+    private String getClickedImage(int buddy, int position) {
+        if(buddy == 0 && position < mImagesLeft.size()){
+            return mImagesLeft.get(position);
+        }
+        else if (buddy == 1 && position < mImagesRight.size()){
+            return mImagesRight.get(position);
+        }
+        else { return null; }
+
     }
 
     public void setGap(int value) {

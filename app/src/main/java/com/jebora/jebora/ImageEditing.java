@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.jebora.jebora.Utils.FileInfo;
 import com.jebora.jebora.Utils.ImgProc;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Date;
 
@@ -45,6 +47,7 @@ public class ImageEditing extends Activity {
     public native void doEdgeDetect(int[] buf, int w, int h);
 
     ImageView imageView;
+    private String imagePath;
     Button btnNDK, btnRestore, btnFrame, btnDone;
     int w, h;
     Bitmap bm;
@@ -58,13 +61,26 @@ public class ImageEditing extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_editing);
-
+        bm = ((BitmapDrawable) getResources().getDrawable(
+                R.drawable.minions)).getBitmap();
         this.setTitle("ImageEdit");
 
         imageView = (ImageView) this.findViewById(R.id.ImageView01);
 
-        bm = ((BitmapDrawable) getResources().getDrawable(
-                R.drawable.minions)).getBitmap();
+        imagePath = getIntent().getStringExtra("image");
+        if (imagePath != null){
+            //imagePath = FileInfo.getCompressedFromOriginal(imagePath);
+            try{
+                File f = new File(imagePath);
+                FileInputStream fis = new FileInputStream(f);
+                bm = BitmapFactory.decodeStream(fis);
+                imageView.setImageBitmap(bm);
+            }  catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
         w = bm.getWidth();
         h = bm.getHeight();
         pixels = new int[w * h];
@@ -300,9 +316,7 @@ public class ImageEditing extends Activity {
                     FileOutputStream fos = new FileOutputStream(dstFile);
                     Bitmap dummy = Bitmap.createBitmap(w, h, bm.getConfig());
                     dummy.setPixels(pixels, 0, w, 0, 0, w, h);
-                    if(dummy.compress(Bitmap.CompressFormat.PNG, 100, fos)){
-                        int x = 1;
-                    }
+                    dummy.compress(Bitmap.CompressFormat.JPEG, 50, fos);
                     fos.flush();
                     fos.close();
                     Intent i = new Intent(ImageEditing.this, PreviewProduct.class);

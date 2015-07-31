@@ -246,6 +246,33 @@ public class FileInfo {
         }
     }
 
+    public static String getOriginalFromCompressed(String compressedPath){
+        if(compressedPath.contains("Compressed/")){
+            return compressedPath.replace("Compressed/", "");
+        }
+        else{
+            return compressedPath;
+        }
+    }
+
+    // Written on July 31,2015, not tested use with caution
+    public static String getCompressedFromOriginal(String originalPath){
+        String compressedPath = "";
+        for(String str :  originalPath.split("/")){
+            if (str.endsWith(".jpg")){
+                compressedPath += ("/Compressed/" + str);
+            }
+            else if(str.isEmpty()){
+                // Do not do anything if empty delimited part
+            }
+            else{
+                compressedPath += "/" + str;
+            }
+
+        }
+        return compressedPath;
+    }
+
     public static Bitmap compressImage(File f) {
         try {
             // Decode image size
