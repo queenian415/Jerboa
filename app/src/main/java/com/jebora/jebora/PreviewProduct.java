@@ -126,6 +126,8 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                 }
             }
         }
+        else
+        img.setImageResource(R.drawable.logo);
         // Daniel, end
         seekBar = (SeekBar) findViewById(R.id.seekBar);
        // txtimg = (ImageView)findViewById(R.id.textImg);
