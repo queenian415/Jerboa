@@ -1,14 +1,9 @@
 package com.jebora.jebora;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.internal.widget.AdapterViewCompat;
-import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,25 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.jebora.jebora.adapters.ProductAdapter;
-import com.jebora.jebora.adapters.RecyclerItemClickListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ShippingInfo extends ActionBarActivity implements AdapterView.OnItemClickListener{
+public class Shipping extends ActionBarActivity implements AdapterView.OnItemClickListener{
 
     private List<AddressItem> mAddressItem = new ArrayList<>();
     private ListView mListView;
@@ -60,6 +47,22 @@ public class ShippingInfo extends ActionBarActivity implements AdapterView.OnIte
         mAddressItem.add(item1);
         mListView.setAdapter(new ShippingInfoAdapter());
         mListView.setOnItemClickListener(this);
+
+        Button manageAddress = (Button)findViewById(R.id.manage_address);
+        manageAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Shipping.this, ManageAddress.class));
+            }
+        });
+
+        Button checkout = (Button)findViewById(R.id.checkout);
+        checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ;
+            }
+        });
     }
 
     @Override
@@ -108,7 +111,7 @@ public class ShippingInfo extends ActionBarActivity implements AdapterView.OnIte
             RelativeLayout ManageInfo = (RelativeLayout) convertView;
             if(ManageInfo==null){
                 View itemView = mInflater.inflate(R.layout.address_items,parent, false);
-                ManageInfo = new RelativeLayout(ShippingInfo.this);
+                ManageInfo = new RelativeLayout(Shipping.this);
                 ManageInfo.addView(itemView);
                 holder = new ViewHolder(ManageInfo);
                 ManageInfo.setTag(holder);

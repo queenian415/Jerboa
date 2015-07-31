@@ -1,10 +1,13 @@
 package com.jebora.jebora;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.transition.Slide;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,15 +22,15 @@ import com.jebora.jebora.SlideView.OnSlideListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class ShoppingCart extends ActionBarActivity implements OnItemClickListener, OnClickListener,
+public class ManageAddress extends ActionBarActivity implements OnItemClickListener, OnClickListener,
         OnSlideListener {
 
-    //private static final String TAG = "ManageKids";
 
-    private ShoppingCartListView mListView;
+    private ListViewAddress mListView;
 
-    private List<ShoppingCartItem> mShoppingCartItems = new ArrayList<ShoppingCart.ShoppingCartItem>();
+    private List<MessageItem> mMessageItems = new ArrayList<ManageAddress.MessageItem>();
 
     private SlideView mLastSlideViewWithStatusOn;
 
@@ -37,30 +40,23 @@ public class ShoppingCart extends ActionBarActivity implements OnItemClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shopping_cart);
+        setContentView(R.layout.activity_manage_address);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
     }
 
     private void initView() {
-        mListView = (ShoppingCartListView) findViewById(R.id.shopping_cart_items);
+        mListView = (ListViewAddress) findViewById(R.id.manage_address);
 
-        ShoppingCartItem item = new ShoppingCartItem();
-        item.iconRes = R.drawable.ic_drawer_explore;
-        item.itemName = "Item1";
-        item.itemNumber = "1";
-        item.itemPrice = "60";
-        mShoppingCartItems.add(item);
+        MessageItem item = new MessageItem();
+        item.receiver = "Jack";
+        item.address = "asdfasdfasdfasdfasdfsaf";
+        mMessageItems.add(item);
 
-        ShoppingCartItem item1 = new ShoppingCartItem();
-        item1.iconRes = R.drawable.ic_drawer_explore;
-        item1.itemName = "Item2";
-        item1.itemNumber = "4";
-        item1.itemPrice = "20";
-        mShoppingCartItems.add(item1);
-
-        TextView subtotal = (TextView) findViewById(R.id.price);
-        subtotal.setText("140");
+        MessageItem item1 = new MessageItem();
+        item1.receiver = "Mike";
+        item1.address = "asdfasdfasdfasdfasdfsaf";
+        mMessageItems.add(item1);
 
         adapter = new SlideAdapter();
         mListView.setAdapter(adapter);
@@ -68,28 +64,18 @@ public class ShoppingCart extends ActionBarActivity implements OnItemClickListen
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_shopping_cart, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                ShoppingCart.this.onBackPressed();
+                ManageAddress.this.onBackPressed();
                 return true;
-            case R.id.next:
-                startActivity(new Intent(ShoppingCart.this, Shipping.class));
+            case R.id.add:
+                startActivity(new Intent(ManageAddress.this,EditAddress.class));
+                return true;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        return super.onOptionsItemSelected(item);    }
 
     private class SlideAdapter extends BaseAdapter {
 
@@ -102,12 +88,12 @@ public class ShoppingCart extends ActionBarActivity implements OnItemClickListen
 
         @Override
         public int getCount() {
-            return mShoppingCartItems.size();
+            return mMessageItems.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return mShoppingCartItems.get(position);
+            return mMessageItems.get(position);
         }
 
         @Override
@@ -120,52 +106,44 @@ public class ShoppingCart extends ActionBarActivity implements OnItemClickListen
             ViewHolder holder;
             SlideView slideView = (SlideView) convertView;
             if (slideView == null) {
-                View itemView = mInflater.inflate(R.layout.shopping_cart_items, parent, false);
+                View itemView = mInflater.inflate(R.layout.manage_address_items, parent, false);
 
-                slideView = new SlideView(ShoppingCart.this);
+                slideView = new SlideView(ManageAddress.this);
                 slideView.setContentView(itemView);
 
                 holder = new ViewHolder(slideView);
-                slideView.setOnSlideListener(ShoppingCart.this);
+                slideView.setOnSlideListener(ManageAddress.this);
                 slideView.setTag(holder);
             } else {
                 holder = (ViewHolder) slideView.getTag();
             }
-            ShoppingCartItem item = mShoppingCartItems.get(position);
+            MessageItem item = mMessageItems.get(position);
             item.slideView = slideView;
             item.slideView.shrink();
 
-            holder.icon.setImageResource(item.iconRes);
-            holder.itemName.setText(item.itemName);
-            holder.itemPrice.setText(item.itemPrice);
-            holder.itemNumber.setText(item.itemNumber);
-            holder.deleteHolder.setOnClickListener(ShoppingCart.this);
+            holder.address.setText(item.address);
+            holder.receiver.setText(item.receiver);
+            holder.deleteHolder.setOnClickListener(ManageAddress.this);
 
             return slideView;
         }
 
     }
 
-    public class ShoppingCartItem {
-        public int iconRes;
-        public String itemName;
-        public String itemNumber;
-        public String itemPrice;
+    public class MessageItem {
+        public String receiver;
+        public String address;
         public SlideView slideView;
     }
 
     private static class ViewHolder {
-        public ImageView icon;
-        public TextView itemName;
-        public TextView itemNumber;
-        public TextView itemPrice;
+        public TextView receiver;
+        public TextView address;
         public ViewGroup deleteHolder;
 
         ViewHolder(View view) {
-            icon = (ImageView) view.findViewById(R.id.item_icon);
-            itemName = (TextView) view.findViewById(R.id.item_name);
-            itemNumber = (TextView) view.findViewById(R.id.quantity);
-            itemPrice = (TextView) view.findViewById(R.id.price);
+            receiver = (TextView) view.findViewById(R.id.receiver_name);
+            address = (TextView) view.findViewById(R.id.shipping_address);
             deleteHolder = (ViewGroup)view.findViewById(R.id.holder);
         }
     }
@@ -175,8 +153,12 @@ public class ShoppingCart extends ActionBarActivity implements OnItemClickListen
                             long id) {
         if(mLastSlideViewWithStatusOn != null)
             mLastSlideViewWithStatusOn.shrink();
-        else
-            startActivity(new Intent(ShoppingCart.this,PreviewProduct.class));
+        else{
+            Intent intent = new Intent(ManageAddress.this,EditAddress.class);
+            //intent.putExtra(EditKid.KID_ID, mMessageItems.get(position).kidID);
+            startActivity(intent);
+        }
+
     }
 
     @Override
@@ -193,9 +175,9 @@ public class ShoppingCart extends ActionBarActivity implements OnItemClickListen
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.holder) {
-            for(int i=0;i<mShoppingCartItems.size();i++){
-                if(mLastSlideViewWithStatusOn == mShoppingCartItems.get(i).slideView){
-                    mShoppingCartItems.remove(i);
+            for(int i=0;i<mMessageItems.size();i++){
+                if(mLastSlideViewWithStatusOn == mMessageItems.get(i).slideView){
+                    mMessageItems.remove(i);
                     adapter.notifyDataSetChanged();
                 }
             }

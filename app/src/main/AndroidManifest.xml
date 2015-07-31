@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
@@ -79,7 +78,7 @@
             android:name=".PreviewProduct"
             android:label="@string/title_activity_preview_product"
             android:parentActivityName=".UserMain"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".UserMain" />
@@ -109,7 +108,7 @@
             android:exported="true"
             android:label="@string/title_activity_image_editing"
             android:parentActivityName=".DetailActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
         </activity>
         <activity
             android:name=".ProductSelect"
@@ -160,7 +159,7 @@
                 android:value="com.jebora.jebora.UserMain" />
         </activity>
         <activity
-            android:name=".ShippingInfo"
+            android:name=".Shipping"
             android:label="@string/title_activity_shipping_info"
             android:parentActivityName=".ShoppingCart" >
             <meta-data
@@ -178,6 +177,22 @@
         <activity
             android:name=".Checkout"
             android:label="@string/title_activity_checkout" >
+        </activity>
+        <activity
+            android:name=".ManageAddress"
+            android:label="@string/title_activity_manage_address"
+            android:parentActivityName=".Shipping" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Shipping" />
+        </activity>
+        <activity
+            android:name=".EditAddress"
+            android:label="@string/title_activity_edit_address"
+            android:parentActivityName=".ManageAddress" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jebora.jebora.ManageAddress" />
         </activity>
     </application>
 
