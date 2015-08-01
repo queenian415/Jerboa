@@ -143,6 +143,8 @@ public class UserMain extends ActionBarActivity
 
     }
 
+    /* Comment this out. Re-enable it if we see duplicate kid drop down.
+    ** If we need to re-enable this we need to implement onResume
     @Override
     protected void onPause (){
         UserMainCheck.ResetUserMainEnter();
@@ -150,6 +152,7 @@ public class UserMain extends ActionBarActivity
         listNames.clear();
         super.onPause();
     }
+    */
     @Override
     protected void onDestroy (){
         // We need to wait until all the threads exit
