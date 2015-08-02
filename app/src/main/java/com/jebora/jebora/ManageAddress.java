@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jebora.jebora.SlideView.OnSlideListener;
+import com.jebora.jebora.Utils.ShippingInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,12 @@ public class ManageAddress extends ActionBarActivity implements OnItemClickListe
 
     private static SlideAdapter adapter;
 
+    private List<ShippingInfo> mShippingInfo = new ArrayList<>();
+
+    private String[] address_selected;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,23 +52,32 @@ public class ManageAddress extends ActionBarActivity implements OnItemClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
     }
-
+    @Override
+    protected void onResume(){
+        adapter.notifyDataSetChanged();
+        super.onResume();
+    }
     private void initView() {
         mListView = (ListViewAddress) findViewById(R.id.manage_address);
+        mShippingInfo = ServerCommunication.getShippingInfoList();
 
-        MessageItem item = new MessageItem();
-        item.receiver = "Jack";
-        item.address = "asdfasdfasdfasdfasdfsaf";
-        mMessageItems.add(item);
-
-        MessageItem item1 = new MessageItem();
-        item1.receiver = "Mike";
-        item1.address = "asdfasdfasdfasdfasdfsaf";
-        mMessageItems.add(item1);
+        for(int i = 0;i<mShippingInfo.size();i++){
+            MessageItem item = new MessageItem();
+            item.address = mShippingInfo.get(i).getAddress()+", "+mShippingInfo.get(i).getCity()+", "+mShippingInfo.get(i).getCountry()+", "+mShippingInfo.get(i).getPostalCode();
+            item.receiver = mShippingInfo.get(i).getName();
+            mMessageItems.add(item);
+        }
 
         adapter = new SlideAdapter();
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_manage_address, menu);
+        return true;
     }
 
     @Override
@@ -71,11 +88,14 @@ public class ManageAddress extends ActionBarActivity implements OnItemClickListe
                 ManageAddress.this.onBackPressed();
                 return true;
             case R.id.add:
-                startActivity(new Intent(ManageAddress.this,EditAddress.class));
+                Intent intent = new Intent(ManageAddress.this,EditAddress.class);
+                intent.putExtra(EditAddress.IS_EDIT, false);
+                startActivity(intent);
                 return true;
         }
 
-        return super.onOptionsItemSelected(item);    }
+        return super.onOptionsItemSelected(item);
+    }
 
     private class SlideAdapter extends BaseAdapter {
 
@@ -155,7 +175,18 @@ public class ManageAddress extends ActionBarActivity implements OnItemClickListe
             mLastSlideViewWithStatusOn.shrink();
         else{
             Intent intent = new Intent(ManageAddress.this,EditAddress.class);
-            //intent.putExtra(EditKid.KID_ID, mMessageItems.get(position).kidID);
+            address_selected = new String[6];
+            address_selected[0] = mShippingInfo.get(position).getObjectId();
+            address_selected[1] = mShippingInfo.get(position).getName();
+            address_selected[2] = mShippingInfo.get(position).getAddress();
+            address_selected[3] = mShippingInfo.get(position).getCity();
+            address_selected[4] = mShippingInfo.get(position).getCountry();
+            address_selected[5] = mShippingInfo.get(position).getPostalCode();
+
+
+
+            intent.putExtra(EditAddress.INFO, address_selected);
+            intent.putExtra(EditAddress.IS_EDIT, true);
             startActivity(intent);
         }
 

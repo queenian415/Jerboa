@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +35,7 @@ public class DetailActivity extends ActionBarActivity {
         overridePendingTransition(0, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_activity);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.inject(this);
         mImageLocalPath= getIntent().getStringExtra("localImagePath");
         if(mImageLocalPath != null){
@@ -77,6 +80,19 @@ public class DetailActivity extends ActionBarActivity {
         mShareBtn = (Button) findViewById(R.id.shareBtn);
         mProductBtn = (Button) findViewById(R.id.productBtn);
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                DetailActivity.this.onBackPressed();
+                return true;
+            case R.id.action_settings:
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

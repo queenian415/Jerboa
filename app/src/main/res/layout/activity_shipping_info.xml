@@ -26,7 +26,7 @@
             android:layout_weight="1"
             android:id="@+id/manage_address"
             android:gravity="center_vertical|center_horizontal"
-            android:text="添加新地址"
+            android:text="添加或修改地址"
             android:background="@drawable/button_selector"/>
 
         <Button

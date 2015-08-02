@@ -15,26 +15,40 @@ import com.jebora.jebora.Utils.ShippingInfo;
 
 public class EditAddress extends ActionBarActivity {
 
-    private static final String INFO = "INFO";
-
+    public static final String INFO = "INFO";
+    public static final String IS_EDIT = "false";
     private static final String NO_NAME = "请输入收件人姓名";
     private static final String NO_ADDRESS = "请输入地址";
     private static final String NO_CITY = "请输入城市";
     private static final String NO_COUNTRY = "请输入国家";
     private static final String NO_POSTALCODE = "请输入邮编";
     private static final String SUCCESS = "成功添加地址";
+    private String objID;
+    private boolean status;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_address);
+        status = getIntent().getBooleanExtra(IS_EDIT,false);
+        if(status){
+            EditText name = (EditText)findViewById(R.id.Name);
+            EditText address = (EditText)findViewById(R.id.Address);
+            EditText city = (EditText)findViewById(R.id.City);
+            EditText country = (EditText)findViewById(R.id.Country);
+            EditText postalcode = (EditText)findViewById(R.id.PostalCode);
 
-        EditText name = (EditText)findViewById(R.id.Name);
-        EditText address = (EditText)findViewById(R.id.Address);
-        EditText city = (EditText)findViewById(R.id.City);
-        EditText country = (EditText)findViewById(R.id.Country);
-        EditText postalcode = (EditText)findViewById(R.id.PostalCode);
+            String[] info = getIntent().getStringArrayExtra(INFO);
+            if(info.length == 6){
+                objID = info[0];
+                name.setText(info[1]);
+                address.setText(info[2]);
+                city.setText(info[3]);
+                country.setText(info[4]);
+                postalcode.setText(info[5]);
+            }
+        }
     }
 
     public void onClickFinish(View v) {
@@ -64,8 +78,12 @@ public class EditAddress extends ActionBarActivity {
                 return;
             }
             case(SUCCESS):{
-                DisplayToastMessage(SUCCESS);
-                startActivity(new Intent(EditAddress.this,ManageAddress.class));
+                if(status)
+                    DisplayToastMessage("成功修改地址");
+                else
+                    DisplayToastMessage(SUCCESS);
+                EditAddress.this.onBackPressed();
+                //startActivity(new Intent(EditAddress.this,ManageAddress.class));
             }
         }
 
@@ -94,8 +112,14 @@ public class EditAddress extends ActionBarActivity {
             return NO_COUNTRY;
         if(postalcode.getText().toString().equals(""))
             return NO_POSTALCODE;
-        ShippingInfo si = new ShippingInfo(name.getText().toString(),address.getText().toString(),city.getText().toString(),country.getText().toString(),postalcode.getText().toString());
-        ServerCommunication.saveShippingInfo(si);
+        if(status){
+            ShippingInfo si = new ShippingInfo(objID, name.getText().toString(),address.getText().toString(),city.getText().toString(),country.getText().toString(),postalcode.getText().toString());
+            ServerCommunication.editShippingInfo(si);
+        }
+        else{
+            ShippingInfo si = new ShippingInfo(name.getText().toString(),address.getText().toString(),city.getText().toString(),country.getText().toString(),postalcode.getText().toString());
+            ServerCommunication.saveShippingInfo(si);
+        }
         return SUCCESS;
     }
 
@@ -114,7 +138,8 @@ public class EditAddress extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            EditAddress.this.onBackPressed();
             return true;
         }
 

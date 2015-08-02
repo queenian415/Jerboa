@@ -17,6 +17,8 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jebora.jebora.Utils.ShippingInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,8 @@ public class Shipping extends ActionBarActivity implements AdapterView.OnItemCli
     private List<AddressItem> mAddressItem = new ArrayList<>();
     private ListView mListView;
     private int item_checked = 0;
+    private List<ShippingInfo> mShippingInfo = new ArrayList<>();
+    private ShippingInfoAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +38,16 @@ public class Shipping extends ActionBarActivity implements AdapterView.OnItemCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
         mListView = (ListView)findViewById(R.id.shipping_address);
+        mShippingInfo = ServerCommunication.getShippingInfoList();
 
-        AddressItem item = new AddressItem();
-        item.address = "asdfasdlfkjalsdkjflaskjdfljasfdlaksjdflkjasdlfkjalsjd";
-        item.receiver = "Jack";
-
-        AddressItem item1 = new AddressItem();
-        item1.address = "asdfasdlfkjalsdkjflaskjdfljasfdlaksjdflkjasdlfkjalsjd";
-        item1.receiver = "Mike";
-
-        mAddressItem.add(item);
-        mAddressItem.add(item1);
-        mListView.setAdapter(new ShippingInfoAdapter());
+        for(int i = 0;i<mShippingInfo.size();i++){
+            AddressItem item = new AddressItem();
+            item.address = mShippingInfo.get(i).getAddress()+", "+mShippingInfo.get(i).getCity()+", "+mShippingInfo.get(i).getCountry()+", "+mShippingInfo.get(i).getPostalCode();
+            item.receiver = mShippingInfo.get(i).getName();
+            mAddressItem.add(item);
+        }
+        adapter = new ShippingInfoAdapter();
+        mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(this);
 
         Button manageAddress = (Button)findViewById(R.id.manage_address);
@@ -64,7 +66,11 @@ public class Shipping extends ActionBarActivity implements AdapterView.OnItemCli
             }
         });
     }
-
+    @Override
+    protected void onResume(){
+        adapter.notifyDataSetChanged();
+        super.onResume();
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
