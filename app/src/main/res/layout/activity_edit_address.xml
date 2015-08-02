@@ -9,9 +9,11 @@
 
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:inputType="textPersonName"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
         android:layout_margin="16dp"
         android:background="@drawable/customize_textbox"
         android:hint="Name"
@@ -19,19 +21,23 @@
         android:id="@+id/Name" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:inputType="textPostalAddress"
+        android:layout_gravity="center"
         android:background="@drawable/customize_textbox"
+        android:paddingLeft="10dp"
         android:layout_margin="16dp"
         android:hint="Address"
         android:ems="10"
         android:id="@+id/Address" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:background="@drawable/customize_textbox"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
         android:layout_margin="16dp"
         android:inputType="textPostalAddress"
         android:hint="City"
@@ -39,9 +45,11 @@
         android:id="@+id/City" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:background="@drawable/customize_textbox"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
         android:layout_margin="16dp"
         android:inputType="textPostalAddress"
         android:hint="Country"
@@ -49,17 +57,19 @@
         android:id="@+id/Country" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:background="@drawable/customize_textbox"
+        android:layout_gravity="center"
+        android:paddingLeft="10dp"
         android:layout_margin="16dp"
         android:inputType="textPostalAddress"
         android:hint="PostalCode"
         android:ems="10"
         android:id="@+id/PostalCode" />
     <Button
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
         android:gravity="center"
         android:text="完成"
         android:background="@drawable/button_selector"
