@@ -402,7 +402,11 @@ public class ServerCommunication {
                     info.put("country", shippingInfo.getCountry());
                     info.put("postalCode", shippingInfo.getPostalCode());
 
-                    info.saveInBackground();
+                    try {
+                        info.save();
+                    } catch (ParseException e2) {
+                        Log.d(TAG, "editShippingInfo: error: " + e.getMessage());
+                    }
                 } else {
                     Log.d(TAG, "editShippingInfo: error: " + e.getMessage());
                 }
