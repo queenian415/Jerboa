@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/blackshirt"
+            android:title="黑T恤"/>
+
+        <item
+            android:id="@+id/whiteshirt"
+            android:title="白T恤"/>
+
+        <item
+            android:id="@+id/blackwshirtshirt"
+            android:title="黑白T恤"/>
+
+
+
+    <item
+        android:id="@+id/redwhiteshirt"
+        android:title="紅白T恤"/>
+    <item
+        android:id="@+id/greyshirt"
+        android:title="灰T恤"/>
+    <item
+        android:id="@+id/redshirt"
+        android:title="紅T恤"/>
+    <item
+        android:id="@+id/blueshirt"
+        android:title="藍T恤"/>
+    <item
+        android:id="@+id/greenshirt"
+        android:title="綠T恤"/>
+</menu>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Wedgie"
+        android:title="Wedgie"/>
+
+    <item
+        android:id="@+id/BillionStars"
+        android:title="Billion Stars"/>
+
+    <item
+        android:id="@+id/xingshu"
+        android:title="钟齐蔡云汉毛笔行书"/>
+
+
+
+    <item
+        android:id="@+id/Android"
+        android:title="Android"/>
+    <item
+        android:id="@+id/panda"
+        android:title="熊猫萌萌"/>
+
+</menu>

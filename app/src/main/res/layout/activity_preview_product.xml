@@ -87,71 +87,9 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="0dp">
+                android:padding="0dp"
+                android:id="@+id/buttonlayout">
 
-                <Button
-                    android:layout_width="96dp"
-                    android:layout_height="75dp"
-                    android:text="黑色"
-                    android:id="@+id/colorbutton"
-                    android:layout_gravity="left|bottom"
-                    android:onClick="changeShirtColor"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:padding="0dp" />
-
-                <Button
-                    android:layout_width="96dp"
-                    android:layout_height="75dp"
-                    android:text="文字"
-                    android:id="@+id/sizebutton"
-                    android:onClick="setTextImg"
-                    android:padding="0dp" />
-
-                <Spinner
-                    android:layout_width="96dp"
-                    android:layout_height="75dp"
-                    android:id="@+id/spinner"
-                    android:spinnerMode="dialog"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/logo"
-                    android:layout_toLeftOf="@+id/seekBar"
-                    android:layout_toStartOf="@+id/seekBar" />
-
-                <Button
-                    android:layout_width="96dp"
-                    android:layout_height="75dp"
-                    android:text="颜色"
-                    android:id="@+id/buttoncolor"
-                    android:onClick="changeTextColor" />
-
-                <Button
-                    android:layout_width="96dp"
-                    android:layout_height="75dp"
-                    android:text="3D预览"
-                    android:id="@+id/button3d"
-                    android:layout_gravity="right|bottom"
-                    android:onClick="threeDView"
-                    android:padding="0dp" />
-
-                <Button
-                    android:layout_width="96dp"
-                    android:layout_height="75dp"
-                    android:text="相册"
-                    android:id="@+id/photogallary"
-                    android:layout_gravity="right|bottom"
-                    android:focusable="false"
-                    android:padding="0dp"
-                    android:onClick="selectPhoto" />
-
-                <Button
-                    android:layout_width="96dp"
-                    android:layout_height="75dp"
-                    android:text="下单"
-                    android:id="@+id/buttonCheckout"
-                    android:onClick="captureScreen" />
             </LinearLayout>
         </HorizontalScrollView>
 

@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,18 +18,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.PopupMenu;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.FloatMath;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,10 +70,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private float d = 0f;
     private float newRot = 0f;
     private float[] lastEvent = null;
-    private Button colorButton;
-    private Button sizeButton;
-    private Button threeDButton;
-    private Button photoButton;
+
     private ImageView img;
     private ImageView txtimg;
     private ImageView shirt;
@@ -85,6 +85,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private Spinner spinner;
     public Bitmap screenshot;
     public HorizontalScrollView horizontalScrollView;
+    public LinearLayout buttonLayout;
     /*
     文字框
      */
@@ -97,6 +98,14 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     float yAxis = 0f;
     float lastXAxis = 0f;
     float lastYAxis = 0f;
+    int bottonStatus = 0; //衣服
+    //动态button
+    private Button clothStyleButton, clothInfoBotton, cloth3dpreviewButton;
+    private Button textAddButton, textColorButton, textFrontButton;
+    private Button imgChangeButton, imgFitButton;
+
+
+
     final Context context = PreviewProduct.this;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,10 +113,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
 
 
         setContentView(R.layout.activity_preview_product);
-        colorButton = (Button) findViewById(R.id.colorbutton);
-        sizeButton = (Button) findViewById(R.id.sizebutton);
-        threeDButton = (Button) findViewById(R.id.button3d);
-        photoButton = (Button) findViewById(R.id.photogallary);
+        buttonLayout = (LinearLayout) findViewById(R.id.buttonlayout);
         shirt = (ImageView) findViewById(R.id.shirt);
         img = (ImageView) findViewById(R.id.logo);
 
@@ -134,20 +140,17 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         textViewXY = (TextView) findViewById(R.id.textView2);
         textViewXY.setVisibility(textViewXY.INVISIBLE);
         textView = (TextView) findViewById(R.id.textView);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        //spinner = (Spinner) findViewById(R.id.spinner);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
         String[] mItems = getResources().getStringArray(R.array.fronts_array);
 // 建立Adapter并且绑定数据源
         ArrayAdapter<String> _Adapter=new ArrayAdapter<String>(this,R.layout.spinner_item_dropdown, mItems);
 //绑定 Adapter到控件
-        spinner.setAdapter(_Adapter);
+     //   spinner.setAdapter(_Adapter);
         //font add
 
-        final Typeface billstar = Typeface.createFromAsset(getAssets(), "BillionStars_PersonalUse.ttf");
-        final Typeface wedgie = Typeface.createFromAsset(getAssets(), "WedgieRegular.ttf");
-        final Typeface zhongxingshu =  Typeface.createFromAsset(getAssets(), "ZhongXing.ttf");
-        final Typeface xiongmao =  Typeface.createFromAsset(getAssets(), "xiongmao.ttf");
-        final Typeface sans = textView.getTypeface();
+
+        /*
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -174,11 +177,13 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                 }
             }
 
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO Auto-generated method stub
             }
         });
+        */
         img.setOnTouchListener(this);
         textView.setOnTouchListener(this);
 //        txtimg.setOnTouchListener(this);
@@ -205,11 +210,18 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
             }
         });
 //        txtimg.setImageMatrix(matrixtxt);
+        //動態button
+        clothButton();
     }
 
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()) {
             case R.id.logo:
+                if(bottonStatus != 0) {
+                    bottonStatus = 0;
+                    clothButton();
+                }
+                clothButton();
                 // handle touch events here
                 ImageView view = (ImageView) v;
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -274,8 +286,12 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                 view.setImageMatrix(matrix);
                 break;
             case R.id.textView:
-                // handle touch events here
 
+                // handle touch events here
+                if(bottonStatus != 1) {
+                    bottonStatus = 1;
+                    textButton();
+                }
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     seekBar.setVisibility(seekBar.VISIBLE);
                     img.setOnTouchListener(null);
@@ -348,17 +364,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         return (float) Math.toDegrees(radians);
     }
 
-    public void changeShirtColor(View v) {
-        if (shirtState == 0) {
-            shirt.setImageResource(R.drawable.blackshirt);
-            colorButton.setText("白色");
-            shirtState = 1;
-        } else if (shirtState == 1) {
-            shirt.setImageResource(R.drawable.whiteshirt);
-            colorButton.setText("黑色");
-            shirtState = 0;
-        }
-    }
+
 
     public void changeTextColor(View v) {
         ColorPickerDialogBuilder
@@ -558,4 +564,192 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         } catch (FileNotFoundException e) {}
         return null;
     }
+
+    private void clothButton(){
+        if((buttonLayout).getChildCount() > 0)
+            (buttonLayout).removeAllViews();
+
+        clothStyleButton = new Button(this);
+        clothStyleButton.setText("樣式");
+
+        clothInfoBotton = new Button(this);
+        clothInfoBotton.setText("信息");
+
+        cloth3dpreviewButton = new Button(this);
+        cloth3dpreviewButton.setText("預覽");
+
+        textAddButton = new Button(this);
+        textAddButton.setText("文字");
+
+        imgChangeButton = new Button(this);
+        imgChangeButton.setText("換圖");
+
+        imgChangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectPhoto(v);
+            }
+        });
+
+        textAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTextImg(v);
+            }
+        });
+
+        clothStyleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+            PopupMenu popup = new PopupMenu(PreviewProduct.this, clothStyleButton);
+            //Inflating the Popup using xml file
+            popup.getMenuInflater().inflate(R.menu.menu_cloth_style, popup.getMenu());
+
+            //registering popup with OnMenuItemClickListener
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    Toast.makeText(PreviewProduct.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                    switch (item.getItemId()) {
+                        case R.id.blackshirt:
+                            shirt.setImageResource(R.drawable.blackshirt);
+                            break;
+                        case R.id.whiteshirt:
+                            shirt.setImageResource(R.drawable.whiteshirt);
+                            break;
+                        case R.id.blackwshirtshirt:
+                            shirt.setImageResource(R.drawable.blackwhite);
+                            break;
+                        case R.id.redwhiteshirt:
+                            shirt.setImageResource(R.drawable.redwhite);
+                            break;
+                        case R.id.greyshirt:
+                            shirt.setImageResource(R.drawable.greyshirt);
+                            break;
+                        case R.id.redshirt:
+                            shirt.setImageResource(R.drawable.redshirt);
+                            break;
+                        case R.id.blueshirt:
+                            shirt.setImageResource(R.drawable.blueshirt);
+                            break;
+                        case R.id.greenshirt:
+                            shirt.setImageResource(R.drawable.greenshirt);
+                            break;
+
+                    }
+                    return true;
+                }
+            });
+
+            popup.show();//showing popup menu
+
+        }
+        });
+
+        clothInfoBotton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.popupview);
+                TextView txt = (TextView)dialog.findViewById(R.id.textBox);
+                txt.setText("T恤（或者T恤，英文：T-shirt或者Tee，带有展示性图案的也称文化衫）是衣衫的一种，通常是短袖而圆领的，长及腰间，一般没有钮扣、领子或袋。摊开时呈T形，因而得名。穿着时把头部穿过领子即成。T恤一般以棉或是人造纤维大规模制造，以平针编织出柔软的质地。");
+                dialog.show();
+            }
+        });
+
+        cloth3dpreviewButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                threeDView(v);
+            }
+        });
+
+        buttonLayout.addView(clothStyleButton);
+        buttonLayout.addView(clothInfoBotton);
+        buttonLayout.addView(imgChangeButton);
+        buttonLayout.addView(textAddButton);
+        buttonLayout.addView(cloth3dpreviewButton);
+    }
+
+    private void textButton(){
+        if((buttonLayout).getChildCount() > 0)
+            (buttonLayout).removeAllViews();
+
+        final Typeface billstar = Typeface.createFromAsset(getAssets(), "BillionStars_PersonalUse.ttf");
+        final Typeface wedgie = Typeface.createFromAsset(getAssets(), "WedgieRegular.ttf");
+        final Typeface zhongxingshu =  Typeface.createFromAsset(getAssets(), "ZhongXing.ttf");
+        final Typeface xiongmao =  Typeface.createFromAsset(getAssets(), "xiongmao.ttf");
+        final Typeface sans = textView.getTypeface();
+
+
+        textAddButton = new Button(this);
+        textAddButton.setText("文字");
+
+        textColorButton = new Button(this);
+        textColorButton.setText("顏色");
+
+        textFrontButton = new Button(this);
+        textFrontButton.setText("字體");
+
+        textFrontButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(PreviewProduct.this, textFrontButton);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.menu_front_style, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(PreviewProduct.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        switch (item.getItemId()) {
+                            case R.id.Wedgie:
+                                textView.setTypeface(wedgie);
+                                break;
+                            case R.id.BillionStars:
+                                textView.setTypeface(billstar);
+                                break;
+                            case R.id.xingshu:
+                                textView.setTypeface(zhongxingshu);
+                                break;
+                            case R.id.Android:
+                                textView.setTypeface(sans);
+                                break;
+                            case R.id.panda:
+                                textView.setTypeface(xiongmao);
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
+
+            }
+
+        });
+
+
+
+        textAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTextImg(v);
+            }
+        });
+
+
+        textColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeTextColor(v);
+            }
+        });
+
+        buttonLayout.addView(textAddButton);
+        buttonLayout.addView(textColorButton);
+        buttonLayout.addView(textFrontButton);
+    }
+
+
 }
