@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -48,7 +49,7 @@ public class ImageEditing extends Activity {
 
     ImageView imageView;
     private String imagePath;
-    Button btnNDK, btnRestore, btnFrame, btnDone;
+    ImageButton btnNDK, btnRestore, btnFrame, btnDone;
     int w, h;
     Bitmap bm;
     int [] pixels;
@@ -90,13 +91,13 @@ public class ImageEditing extends Activity {
 
         imageView.setImageBitmap(bm);
 
-        btnNDK = (Button) this.findViewById(R.id.btnNDK);
+        btnNDK = (ImageButton) this.findViewById(R.id.btnNDK);
         btnNDK.setOnClickListener(switchListener);
-        btnFrame = (Button) this.findViewById(R.id.btnFrame);
+        btnFrame = (ImageButton) this.findViewById(R.id.btnFrame);
         btnFrame.setOnClickListener(switchListener);
-        btnRestore = (Button) this.findViewById(R.id.btnRestore);
+        btnRestore = (ImageButton) this.findViewById(R.id.btnRestore);
         btnRestore.setOnClickListener(switchListener);
-        btnDone = (Button) this.findViewById(R.id.btnFinish);
+        btnDone = (ImageButton) this.findViewById(R.id.btnFinish);
         btnDone.setOnClickListener(switchListener);
     }
 

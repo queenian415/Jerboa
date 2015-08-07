@@ -11,10 +11,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <Button android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:layout_width="@dimen/btm_btn_size"
+        android:layout_height="@dimen/btm_btn_size"
+        android:scaleType="fitCenter"
         android:id="@+id/btnFinish"
-        android:text="完成"
+        android:src="@drawable/done_w"
+        android:background="@android:color/transparent"
         android:layout_gravity="top|right"/>
 
     <LinearLayout
@@ -51,25 +54,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="bottom|center"
+            android:gravity="center"
             android:layout_gravity="bottom|center">
 
-            <Button android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+            <ImageButton
+                android:layout_width="@dimen/btm_btn_size"
+                android:layout_height="@dimen/btm_btn_size"
+                android:scaleType="fitCenter"
                 android:id="@+id/btnNDK"
-                android:text="滤镜" />
-            <Button android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:src="@drawable/filter_w"
+                android:background="@android:color/transparent"/>
+            <ImageButton
+                android:layout_width="@dimen/btm_btn_size"
+                android:layout_height="@dimen/btm_btn_size"
+                android:scaleType="fitCenter"
                 android:id="@+id/btnFrame"
-                android:text="边框" />
-            <Button android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:src="@drawable/frame_w"
+                android:background="@android:color/transparent"/>
+            <ImageButton
+                android:layout_width="@dimen/btm_btn_size"
+                android:layout_height="@dimen/btm_btn_size"
+                android:scaleType="fitCenter"
                 android:id="@+id/btnRestore"
-                android:text="还原" />
-            <Button android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:src="@drawable/reset_w"
+                android:background="@android:color/transparent"/>
+            <ImageButton
+                android:layout_width="@dimen/btm_btn_size"
+                android:layout_height="@dimen/btm_btn_size"
+                android:scaleType="fitCenter"
                 android:id="@+id/btnTools"
-                android:text="工具" />
+                android:src="@drawable/tools_w"
+                android:background="@android:color/transparent"/>
         </LinearLayout>
 
     </LinearLayout>
