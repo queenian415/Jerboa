@@ -263,6 +263,7 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
     public void setCameraAndGalleryButton(View rootView){
         ImageButton cameraButton = (ImageButton) rootView.findViewById(R.id.camera_button);
         ImageButton galleryButton = (ImageButton) rootView.findViewById(R.id.gallery_button);
+        ImageButton shoppingCartButton = (ImageButton) rootView.findViewById(R.id.shoping_cart_button);
 
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override

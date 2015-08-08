@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -119,11 +120,20 @@ public class ImageEditing extends Activity {
             if(btnNDK == v) {
                 final SepiaFilters sf = new SepiaFilters();
                 int num_filters = sf.num_filters;
+                Bitmap new_bm = Bitmap.createBitmap(w, h, bm.getConfig());
+                new_bm.setPixels(pixels, 0, w, 0, 0, w, h);
 
                 for(int i_f = 0; i_f < num_filters; ++i_f){
                     final int i = i_f;
-                    Button filter_btn = new Button(getApplicationContext());
-                    filter_btn.setText("Filter" + i);
+                    ImageButton filter_btn = new ImageButton(getApplicationContext());
+
+                    Bitmap filter_bm = Bitmap.createScaledBitmap(new_bm, 100, 100, false);
+                    int[] new_pixels = new int[100*100];
+                    filter_bm.getPixels(new_pixels, 0, 100, 0, 0, 100, 100);
+                    doSepia(new_pixels, 100, 100, 100, sf.red[i], sf.green[i], sf.blue[i]);
+                    filter_bm.setPixels(new_pixels, 0, 100, 0, 0, 100, 100);
+                    filter_btn.setImageBitmap(filter_bm);
+
                     ll.addView(filter_btn, lp);
                     filter_btn.setOnClickListener(new View.OnClickListener() {
                         @Override

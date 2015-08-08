@@ -40,7 +40,7 @@
             android:layout_gravity="left|bottom">
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="left|bottom"
                 android:id="@+id/LLTabs">

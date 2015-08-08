@@ -27,25 +27,42 @@
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"/>-->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="bottom|center_horizontal">
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="bottom|center_horizontal">
 
         <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:id="@+id/camera_button"
-            android:background="@drawable/button_circle"
-            android:src="@drawable/ic_camera"
-            android:layout_gravity="center" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/shoping_cart_button"
+            android:src="@drawable/shoppingcart"
+            android:background="@android:color/transparent"
+            android:alpha="0.80"
+            android:layout_gravity="left|bottom"/>
+
         <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/btm_btn_size"
+            android:layout_height="@dimen/btm_btn_size"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/camera_button"
+            android:background="@android:color/transparent"
+            android:alpha="0.80"
+            android:src="@drawable/camera_icon"
+            android:layout_gravity="center|bottom" />
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
             android:id="@+id/gallery_button"
-            android:src="@drawable/ic_gallery"
-            android:background="@drawable/button_circle"
-            android:layout_gravity="right"/>
+            android:src="@drawable/addtogallery"
+            android:background="@android:color/transparent"
+            android:alpha="0.80"
+            android:layout_gravity="right|bottom"/>
 
     </LinearLayout>
 

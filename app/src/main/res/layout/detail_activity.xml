@@ -23,7 +23,7 @@
             android:scaleType="fitCenter"
             android:id="@+id/editBtn"
             android:src="@drawable/edit"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent" />
 
         <ImageButton
             android:layout_width="@dimen/btm_btn_size"
