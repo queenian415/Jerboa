@@ -23,8 +23,10 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.FloatMath;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -103,16 +105,19 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private Button clothStyleButton, clothInfoBotton, cloth3dpreviewButton;
     private Button textAddButton, textColorButton, textFrontButton;
     private Button imgChangeButton, imgFitButton;
-
-
-
+    private ScaleGestureDetector scaleGD;
+    private
+    LinearLayout.LayoutParams params;
+    int button_size;
     final Context context = PreviewProduct.this;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        button_size= (int)getResources().getDimension(R.dimen.btm_btn_size);
+        params = new LinearLayout.LayoutParams(button_size,button_size);
         setContentView(R.layout.activity_preview_product);
+        scaleGD = new ScaleGestureDetector(context, new simpleOnScaleGestureListener());
         buttonLayout = (LinearLayout) findViewById(R.id.buttonlayout);
         shirt = (ImageView) findViewById(R.id.shirt);
         img = (ImageView) findViewById(R.id.logo);
@@ -141,7 +146,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         textViewXY.setVisibility(textViewXY.INVISIBLE);
         textView = (TextView) findViewById(R.id.textView);
         //spinner = (Spinner) findViewById(R.id.spinner);
-        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
+      //  horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
         String[] mItems = getResources().getStringArray(R.array.fronts_array);
 // 建立Adapter并且绑定数据源
         ArrayAdapter<String> _Adapter=new ArrayAdapter<String>(this,R.layout.spinner_item_dropdown, mItems);
@@ -292,37 +297,59 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                     bottonStatus = 1;
                     textButton();
                 }
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    seekBar.setVisibility(seekBar.VISIBLE);
-                    img.setOnTouchListener(null);
-                    status = START_DRAGGING;
-                    final float x = event.getX();
-                    final float y = event.getY();
-                    lastXAxis = x;
-                    lastYAxis = y;
-                    v.setVisibility(View.INVISIBLE);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    status = STOP_DRAGGING;
-                    flag = 0;
-                    v.setVisibility(View.VISIBLE);
-                    img.setOnTouchListener(this);
-                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    if (status == START_DRAGGING) {
-                        flag = 1;
-                        v.setVisibility(View.VISIBLE);
+                if(event.getPointerCount() == 1) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        seekBar.setVisibility(seekBar.VISIBLE);
+                        img.setOnTouchListener(null);
+                        status = START_DRAGGING;
                         final float x = event.getX();
                         final float y = event.getY();
-                        final float dx = x - lastXAxis;
-                        final float dy = y - lastYAxis;
-                        xAxis += dx;
-                        yAxis += dy;
-                        textViewXY.setText("x:" + xAxis + "  y:" + yAxis);
+                        lastXAxis = x;
+                        lastYAxis = y;
+                        v.setVisibility(View.INVISIBLE);
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                        status = STOP_DRAGGING;
+                        flag = 0;
+                        v.setVisibility(View.VISIBLE);
+                        img.setOnTouchListener(this);
+                    } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        if (status == START_DRAGGING) {
+                            flag = 1;
+                            v.setVisibility(View.VISIBLE);
+                            final float x = event.getX();
+                            final float y = event.getY();
+                            final float dx = x - lastXAxis;
+                            final float dy = y - lastYAxis;
+                            xAxis += dx;
+                            yAxis += dy;
+                            textViewXY.setText("x:" + xAxis + "  y:" + yAxis);
 
-                        v.setX((int) xAxis);
-                        v.setY((int) yAxis);
+                            v.setX((int) xAxis);
+                            v.setY((int) yAxis);
 
-                        v.invalidate();
+                            v.invalidate();
 
+                        }
+                    }
+                }
+                else{ //when 2 pointers are present
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            scaleGD.onTouchEvent(event);
+                            break;
+
+                        case MotionEvent.ACTION_MOVE:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            scaleGD.onTouchEvent(event);
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
                     }
                 }
 
@@ -507,8 +534,9 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     }
 
     public void captureScreen(View view) {
-        horizontalScrollView.setVisibility(horizontalScrollView.INVISIBLE);
-
+       // horizontalScrollView.setVisibility(horizontalScrollView.INVISIBLE);
+        Button button = (Button) findViewById(R.id.button);
+        button.setVisibility(button.INVISIBLE);
 
         //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.previewrelative);
         //relativeLayout.setDrawingCacheEnabled(true);
@@ -569,20 +597,34 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         if((buttonLayout).getChildCount() > 0)
             (buttonLayout).removeAllViews();
 
+
         clothStyleButton = new Button(this);
-        clothStyleButton.setText("樣式");
+        // clothStyleButton.setText("樣式");
+        clothStyleButton.setBackgroundResource(R.drawable.material);
+
+        clothStyleButton.setLayoutParams(params);
 
         clothInfoBotton = new Button(this);
-        clothInfoBotton.setText("信息");
+        //clothInfoBotton.setText("信息");
+        clothInfoBotton.setBackgroundResource(R.drawable.info);
+        //clothInfoBotton.setWidth(R.dimen.btm_btn_size);
+        clothInfoBotton.setLayoutParams(params);
 
         cloth3dpreviewButton = new Button(this);
-        cloth3dpreviewButton.setText("預覽");
+        //cloth3dpreviewButton.setText("預覽");
+        cloth3dpreviewButton.setBackgroundResource(R.drawable.preview);
+        cloth3dpreviewButton.setLayoutParams(params);
+
+
 
         textAddButton = new Button(this);
-        textAddButton.setText("文字");
+        //textAddButton.setText("文字");
+        textAddButton.setBackgroundResource(R.drawable.text);
+        textAddButton.setLayoutParams(params);
 
         imgChangeButton = new Button(this);
-        imgChangeButton.setText("換圖");
+        imgChangeButton.setBackgroundResource(R.drawable.image);
+        imgChangeButton.setLayoutParams(params);
 
         imgChangeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -673,6 +715,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         if((buttonLayout).getChildCount() > 0)
             (buttonLayout).removeAllViews();
 
+
         final Typeface billstar = Typeface.createFromAsset(getAssets(), "BillionStars_PersonalUse.ttf");
         final Typeface wedgie = Typeface.createFromAsset(getAssets(), "WedgieRegular.ttf");
         final Typeface zhongxingshu =  Typeface.createFromAsset(getAssets(), "ZhongXing.ttf");
@@ -681,13 +724,17 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
 
 
         textAddButton = new Button(this);
-        textAddButton.setText("文字");
+        //textAddButton.setText("文字");
+        textAddButton.setBackgroundResource(R.drawable.text);
+        textAddButton.setLayoutParams(params);
 
         textColorButton = new Button(this);
-        textColorButton.setText("顏色");
+        //textColorButton.setText("顏色");
+        textColorButton.setBackgroundResource(R.drawable.colour);
+        textColorButton.setLayoutParams(params);
 
         textFrontButton = new Button(this);
-        textFrontButton.setText("字體");
+        textFrontButton.setLayoutParams(params);
 
         textFrontButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -752,4 +799,35 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     }
 
 
+
+    public class simpleOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float size = textView.getTextSize();
+            float factor = detector.getScaleFactor();
+            int increase = 0;
+            if(factor > 1.0f)
+                increase = 2;
+            else if(factor < 1.0f)
+                increase = -2;
+
+            size += increase;
+
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return true;
+        }
+    }
+
+
+
 }
+
+
