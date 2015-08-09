@@ -226,7 +226,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                     bottonStatus = 0;
                     clothButton();
                 }
-                clothButton();
+
                 // handle touch events here
                 ImageView view = (ImageView) v;
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
