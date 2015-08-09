@@ -768,7 +768,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
 
         textFrontButton = new Button(this);
         textFrontButton.setLayoutParams(params);
-
+        textFrontButton.setBackgroundResource(R.drawable.fontstyle);
         textFrontButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
