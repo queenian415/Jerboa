@@ -11,15 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <ImageButton
-        android:layout_width="@dimen/btm_btn_size"
-        android:layout_height="@dimen/btm_btn_size"
-        android:scaleType="fitCenter"
-        android:id="@+id/btnFinish"
-        android:src="@drawable/done_w"
-        android:background="@android:color/transparent"
-        android:layout_gravity="top|right"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|bottom">
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="left|bottom"
@@ -52,10 +43,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_gravity="bottom|center">
+            android:layout_gravity="bottom|center"
+            android:background="@android:color/darker_gray"
+            android:alpha="0.9">
 
             <ImageButton
                 android:layout_width="@dimen/btm_btn_size"
@@ -63,27 +56,38 @@
                 android:scaleType="fitCenter"
                 android:id="@+id/btnNDK"
                 android:src="@drawable/filter_w"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                android:layout_marginRight="10dp"/>
             <ImageButton
                 android:layout_width="@dimen/btm_btn_size"
                 android:layout_height="@dimen/btm_btn_size"
                 android:scaleType="fitCenter"
                 android:id="@+id/btnFrame"
                 android:src="@drawable/frame_w"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                android:layout_marginRight="10dp"/>
             <ImageButton
                 android:layout_width="@dimen/btm_btn_size"
                 android:layout_height="@dimen/btm_btn_size"
                 android:scaleType="fitCenter"
                 android:id="@+id/btnRestore"
                 android:src="@drawable/reset_w"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                android:layout_marginRight="10dp"/>
             <ImageButton
                 android:layout_width="@dimen/btm_btn_size"
                 android:layout_height="@dimen/btm_btn_size"
                 android:scaleType="fitCenter"
                 android:id="@+id/btnTools"
                 android:src="@drawable/tools_w"
+                android:background="@android:color/transparent"
+                android:layout_marginRight="10dp"/>
+            <ImageButton
+                android:layout_width="@dimen/btm_btn_size"
+                android:layout_height="@dimen/btm_btn_size"
+                android:scaleType="fitCenter"
+                android:id="@+id/btnFinish"
+                android:src="@drawable/done_w"
                 android:background="@android:color/transparent"/>
         </LinearLayout>
 

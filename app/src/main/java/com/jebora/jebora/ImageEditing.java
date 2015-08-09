@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -58,6 +59,9 @@ public class ImageEditing extends Activity {
     int brightness = 0;
     int contrast = 0;
     double red = 0, green=0, blue=0;
+    int button_size;
+    private LinearLayout.LayoutParams params;
+    private LinearLayout ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +104,10 @@ public class ImageEditing extends Activity {
         btnRestore.setOnClickListener(switchListener);
         btnDone = (ImageButton) this.findViewById(R.id.btnFinish);
         btnDone.setOnClickListener(switchListener);
+
+        button_size= (int)getResources().getDimension(R.dimen.btm_btn_size);
+        params = new LinearLayout.LayoutParams(button_size,button_size);
+        ll = (LinearLayout) findViewById(R.id.LLTabs);
     }
 
     private View.OnClickListener switchListener = new View.OnClickListener() {
@@ -107,7 +115,7 @@ public class ImageEditing extends Activity {
         public void onClick(View v) {
             final LinearLayout ll = (LinearLayout) findViewById(R.id.LLTabs);
             final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             final LinearLayout sb_ll = (LinearLayout) findViewById(R.id.LLSeekbars);
 
             if(ll.getChildCount() > 0){
@@ -132,9 +140,10 @@ public class ImageEditing extends Activity {
                     filter_bm.getPixels(new_pixels, 0, 100, 0, 0, 100, 100);
                     doSepia(new_pixels, 100, 100, 100, sf.red[i], sf.green[i], sf.blue[i]);
                     filter_bm.setPixels(new_pixels, 0, 100, 0, 0, 100, 100);
+                    filter_btn.setLayoutParams(params);
                     filter_btn.setImageBitmap(filter_bm);
 
-                    ll.addView(filter_btn, lp);
+                    ll.addView(filter_btn);
                     filter_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -145,9 +154,13 @@ public class ImageEditing extends Activity {
 
                 }
 
-                Button customize_btn = new Button(getApplicationContext());
-                customize_btn.setText("Customize");
-                ll.addView(customize_btn, lp);
+                ImageButton customize_btn = new ImageButton(getApplicationContext());
+                Bitmap customize_bm = ((BitmapDrawable) getResources().getDrawable(
+                        R.drawable.adjust_w)).getBitmap();
+                customize_btn.setImageBitmap(customize_bm);
+                customize_btn.setLayoutParams(params);
+                customize_btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                ll.addView(customize_btn);
                 customize_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,10 +173,10 @@ public class ImageEditing extends Activity {
                         contrastBtn.setText("Contrast");
                         sepiaBtn.setText("RBG");
                         noiseBtn.setText("Noise");
-                        ll.addView(brightnesBtn, lp);
-                        ll.addView(contrastBtn, lp);
-                        ll.addView(sepiaBtn, lp);
-                        ll.addView(noiseBtn, lp);
+                        ll.addView(brightnesBtn);
+                        ll.addView(contrastBtn);
+                        ll.addView(sepiaBtn);
+                        ll.addView(noiseBtn);
 
                         brightnesBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
