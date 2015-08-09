@@ -218,6 +218,11 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         //動態button
         clothButton();
     }
+    public void onResume(Bundle savedInstanceState) {
+        Button button = (Button) findViewById(R.id.button);
+        button.setVisibility(button.VISIBLE);
+    }
+
 
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()) {
