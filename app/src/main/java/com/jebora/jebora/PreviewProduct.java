@@ -43,6 +43,7 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.jebora.jebora.models.Item;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -106,9 +107,9 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
     private Button textAddButton, textColorButton, textFrontButton;
     private Button imgChangeButton, imgFitButton;
     private ScaleGestureDetector scaleGD;
-    private
-    LinearLayout.LayoutParams params;
+    private LinearLayout.LayoutParams params;
     int button_size;
+    static public Item checkoutItem;
     final Context context = PreviewProduct.this;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                     FileInputStream fis = new FileInputStream(f);
                     Bitmap bm = BitmapFactory.decodeStream(fis);
                     img.setImageBitmap(bm);
+                    checkoutItem.image = bm;
                 }  catch (Exception e){
                     e.printStackTrace();
                 }
@@ -534,6 +536,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
             File f =new File(picturePath);
             pictureObject = decodeFile(f);
             img.setImageBitmap(pictureObject);
+            checkoutItem.image = pictureObject;
             isPreview = 1;
         }
     }
@@ -542,7 +545,7 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
        // horizontalScrollView.setVisibility(horizontalScrollView.INVISIBLE);
         Button button = (Button) findViewById(R.id.button);
         button.setVisibility(button.INVISIBLE);
-
+        seekBar.setVisibility(seekBar.INVISIBLE);
         //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.previewrelative);
         //relativeLayout.setDrawingCacheEnabled(true);
         //relativeLayout.buildDrawingCache();
@@ -659,27 +662,35 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
                     Toast.makeText(PreviewProduct.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                     switch (item.getItemId()) {
                         case R.id.blackshirt:
+                            checkoutItem.color = "黑色";
                             shirt.setImageResource(R.drawable.blackshirt);
                             break;
                         case R.id.whiteshirt:
+                            checkoutItem.color = "白色";
                             shirt.setImageResource(R.drawable.whiteshirt);
                             break;
                         case R.id.blackwshirtshirt:
+                            checkoutItem.color = "黑白色";
                             shirt.setImageResource(R.drawable.blackwhite);
                             break;
                         case R.id.redwhiteshirt:
+                            checkoutItem.color = "红白色";
                             shirt.setImageResource(R.drawable.redwhite);
                             break;
                         case R.id.greyshirt:
+                            checkoutItem.color = "灰色";
                             shirt.setImageResource(R.drawable.greyshirt);
                             break;
                         case R.id.redshirt:
+                            checkoutItem.color = "红色";
                             shirt.setImageResource(R.drawable.redshirt);
                             break;
                         case R.id.blueshirt:
+                            checkoutItem.color = "蓝色";
                             shirt.setImageResource(R.drawable.blueshirt);
                             break;
                         case R.id.greenshirt:
+                            checkoutItem.color = "绿色";
                             shirt.setImageResource(R.drawable.greenshirt);
                             break;
 

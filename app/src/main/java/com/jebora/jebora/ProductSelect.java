@@ -52,7 +52,9 @@ public class ProductSelect extends TabActivity {
                         Toast.makeText(ProductAdapter.mContext, "The Item Clicked is: " + position, Toast.LENGTH_SHORT).show();
 
                         switch (position){
-                            case 0: Intent intent = new Intent();
+                            case 0:
+                                    PreviewProduct.checkoutItem.name = "T恤衫";
+                                    Intent intent = new Intent();
                                     intent.setClass(ProductSelect.this, PreviewProduct.class);
                                     startActivity(intent);
                                     break;

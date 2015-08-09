@@ -25,6 +25,7 @@ private ImageView imageView;
             Bitmap resizedbitmap=Bitmap.createBitmap(bmp, 0, 250, 1080, 1400);
             is.close();
             imageView.setImageBitmap(resizedbitmap);
+            PreviewProduct.checkoutItem.finalImage = resizedbitmap;
         } catch (Exception e) {
             e.printStackTrace();
         }
