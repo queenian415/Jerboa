@@ -24,6 +24,8 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.FloatMath;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -221,10 +223,28 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         clothButton();
     }
     public void onResume(Bundle savedInstanceState) {
-        Button button = (Button) findViewById(R.id.button);
-        button.setVisibility(button.VISIBLE);
+
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_preview_product, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_done:
+                captureScreen();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()) {
@@ -541,14 +561,11 @@ public class PreviewProduct extends ActionBarActivity implements View.OnTouchLis
         }
     }
 
-    public void captureScreen(View view) {
-       // horizontalScrollView.setVisibility(horizontalScrollView.INVISIBLE);
-        Button button = (Button) findViewById(R.id.button);
-        button.setVisibility(button.INVISIBLE);
+    public void captureScreen() {
+
+
         seekBar.setVisibility(seekBar.INVISIBLE);
-        //RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.previewrelative);
-        //relativeLayout.setDrawingCacheEnabled(true);
-        //relativeLayout.buildDrawingCache();
+
 
         View v = getWindow().getDecorView();//.getRootView();
         v.setDrawingCacheEnabled(true);
