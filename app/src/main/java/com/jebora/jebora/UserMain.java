@@ -1,18 +1,12 @@
 package com.jebora.jebora;
 
-import android.accounts.NetworkErrorException;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,34 +19,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jebora.jebora.Utils.FileInfo;
 import com.jebora.jebora.Utils.UserMainCheck;
 import com.jebora.jebora.adapters.CircularAdapter;
+import com.jebora.jebora.models.Item;
 import com.jebora.jebora.provider.ImagesUrls;
 import com.jebora.jebora.provider.ListsSize;
-import com.jpardogo.listbuddies.lib.provider.ScrollConfigOptions;
 import com.jpardogo.listbuddies.lib.views.ListBuddiesLayout;
-import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
 
 
 public class UserMain extends ActionBarActivity
@@ -76,11 +62,16 @@ public class UserMain extends ActionBarActivity
 
     private static List<Thread> talkToServerThreads = new ArrayList<>();
 
+    //connect to shopping cart
+    public static Item checkoutItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
 
+        //connect to shopping cart
+       checkoutItem = new Item();
         Map <String, String> kids = UserRecorder.getKidList();
         if (UserMainCheck.getUserMainEnter() == 0){
             for (String key : kids.keySet()) {

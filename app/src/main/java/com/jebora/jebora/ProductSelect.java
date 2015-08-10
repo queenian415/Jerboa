@@ -22,6 +22,7 @@ public class ProductSelect extends TabActivity {
     public RecyclerView mRecyclerView;
     private ProductAdapter mAdapter;
     private TabHost tabhost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class ProductSelect extends TabActivity {
 
                         switch (position){
                             case 0:
-                                    PreviewProduct.checkoutItem.name = "T恤衫";
+                                    UserMain.checkoutItem.name = "T恤衫";
                                     Intent intent = new Intent();
                                     intent.setClass(ProductSelect.this, PreviewProduct.class);
                                     startActivity(intent);
