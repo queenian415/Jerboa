@@ -3,6 +3,7 @@ package com.jebora.jebora;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.transition.Slide;
@@ -25,6 +26,7 @@ import com.jebora.jebora.Utils.ShippingInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
 
 public class ManageAddress extends ActionBarActivity implements OnItemClickListener, OnClickListener,
         OnSlideListener {
@@ -42,6 +44,8 @@ public class ManageAddress extends ActionBarActivity implements OnItemClickListe
 
     private String[] address_selected;
 
+    private int check = 0;
+
 
 
 
@@ -51,14 +55,34 @@ public class ManageAddress extends ActionBarActivity implements OnItemClickListe
         setContentView(R.layout.activity_manage_address);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
+        check++;
     }
     @Override
     protected void onResume(){
-        adapter.notifyDataSetChanged();
+        if(check!=1) {
+
+            if (mMessageItems != null)
+                mMessageItems.clear();
+            if (mShippingInfo != null)
+                mShippingInfo.clear();
+
+            mShippingInfo = ServerCommunication.getShippingInfoList();
+
+            for (int i = 0; i < mShippingInfo.size(); i++) {
+                MessageItem item = new MessageItem();
+                item.address = mShippingInfo.get(i).getAddress() + ", " + mShippingInfo.get(i).getCity() + ", " + mShippingInfo.get(i).getCountry() + ", " + mShippingInfo.get(i).getPostalCode();
+                item.receiver = mShippingInfo.get(i).getName();
+                mMessageItems.add(item);
+            }
+            this.adapter.notifyDataSetInvalidated();
+            this.adapter.notifyDataSetChanged();
+        }
+        check++;
         super.onResume();
     }
     private void initView() {
         mListView = (ListViewAddress) findViewById(R.id.manage_address);
+
         mShippingInfo = ServerCommunication.getShippingInfoList();
 
         for(int i = 0;i<mShippingInfo.size();i++){

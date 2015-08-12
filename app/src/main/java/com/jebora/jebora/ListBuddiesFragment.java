@@ -118,8 +118,35 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
 
     @Override
     public void onResume(){
+
+        if(ImagesUrls.allImages!=null)
+            ImagesUrls.allImages.clear();
+        if(UserMainCheck.GetKidSelected()!=null&&UserMainCheck.GetKidSelected().equals("全部照片"))
+            ImagesUrls.allImages = loadLocalImages(false);
+        else
+            ImagesUrls.allImages = loadLocalImages(true);
+
+        if(mImagesLeft!=null)
+            mImagesLeft.clear();
+        if(mImagesRight!=null)
+            mImagesRight.clear();
+
+        for (int i=0; i<ImagesUrls.allImages.size(); i++){
+            if(i%7==0){
+                mImagesLeft.add(ImagesUrls.allImages.get(i).toString().trim());
+            }
+            else if(i%7%2==0){
+                mImagesLeft.add(ImagesUrls.allImages.get(i).toString().trim());
+            }
+            else{
+                mImagesRight.add(ImagesUrls.allImages.get(i).toString().trim());
+            }
+        }
+
         mAdapterLeft.notifyDataSetChanged();
         mAdapterRight.notifyDataSetChanged();
+        mAdapterLeft.notifyDataSetInvalidated();
+        mAdapterRight.notifyDataSetInvalidated();
         super.onResume();
     }
     /*private void createListBuddiesLayoutDinamically(View rootView) {

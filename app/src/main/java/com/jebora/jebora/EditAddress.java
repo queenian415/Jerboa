@@ -1,6 +1,7 @@
 package com.jebora.jebora;
 
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -83,6 +84,7 @@ public class EditAddress extends ActionBarActivity {
                 else
                     DisplayToastMessage(SUCCESS);
                 EditAddress.this.onBackPressed();
+                finish();
                 //startActivity(new Intent(EditAddress.this,ManageAddress.class));
             }
         }
@@ -120,6 +122,7 @@ public class EditAddress extends ActionBarActivity {
             ShippingInfo si = new ShippingInfo(name.getText().toString(),address.getText().toString(),city.getText().toString(),country.getText().toString(),postalcode.getText().toString());
             ServerCommunication.saveShippingInfo(si);
         }
+        SystemClock.sleep(1000);
         return SUCCESS;
     }
 

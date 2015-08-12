@@ -2,6 +2,7 @@ package com.jebora.jebora;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
@@ -83,11 +84,15 @@ public class EditKid extends ActionBarActivity {
             case android.R.id.home:
                 EditKid.this.onBackPressed();
                 return true;
-            case R.id.action_settings:
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void onClickDelete (View v){
+        ServerCommunication.deleteKidInBackground(getApplicationContext(),get_kidid);
+        SystemClock.sleep(1000);
+        EditKid.this.onBackPressed();
+        finish();
     }
 
     public void onClickComplete(View v) {
@@ -106,7 +111,8 @@ public class EditKid extends ActionBarActivity {
         } else {
             // Save the preferred kid
             UserRecorder.setPreferredKid(status);
-            startActivity(new Intent(EditKid.this, ManageKids.class));
+            SystemClock.sleep(1000);
+            EditKid.this.onBackPressed();
             finish();
         }
     }

@@ -19,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.jebora.jebora.Utils.FileInfo;
@@ -56,6 +58,7 @@ public class UserMain extends ActionBarActivity
     private Fragment lastFragment;
     private boolean isOpenActivitiesActivated = true;
 
+
     final static List<String> listNames = new ArrayList<String>();
     final static List<String> listIds = new ArrayList<String>();
     private static int kidsnumber = 0;
@@ -70,8 +73,45 @@ public class UserMain extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
 
-        //connect to shopping cart
-       checkoutItem = new Item();
+        filterSetup();
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getSupportActionBar().getThemedContext(),
+                android.R.layout.simple_spinner_dropdown_item, listNames
+                );
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        ActionBar.OnNavigationListener navigationListener = new ActionBar.OnNavigationListener() {
+            @Override
+            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+                String[] temp = new String[listIds.size()];
+                temp = listIds.toArray(temp);
+                if(temp!=null&&temp[itemPosition].equals("+")){
+                    kidsnumber++;
+                    startActivity(new Intent(UserMain.this, AddKids.class));
+                }
+                else{
+                    UserMainCheck.FilterItemStatus(true);
+                    UserMainCheck.SetKidSelected(temp[itemPosition]);
+                    UserRecorder.setPreferredKid(temp[itemPosition]);
+                    onNavigationDrawerItemSelected("ListBuddies");
+                }
+                return false;
+            }
+        };
+        // 设置抽屉
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        getSupportActionBar().setListNavigationCallbacks(adapter, navigationListener);
+
+    }
+
+    private void filterSetup(){
         Map <String, String> kids = UserRecorder.getKidList();
         if (UserMainCheck.getUserMainEnter() == 0){
             for (String key : kids.keySet()) {
@@ -101,39 +141,7 @@ public class UserMain extends ActionBarActivity
             UserMainCheck.setKidNumberUpdated(false);
         }
         UserMainCheck.UserMainEnters();
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getBaseContext(),
-                android.R.layout.simple_spinner_dropdown_item, listNames
-                );
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        getSupportActionBar().setElevation(0);
-        ActionBar.OnNavigationListener navigationListener = new ActionBar.OnNavigationListener() {
-            @Override
-            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                String[] temp = new String[listIds.size()];
-                temp = listIds.toArray(temp);
-                if(temp!=null&&temp[itemPosition].equals("+")){
-                    kidsnumber++;
-                    startActivity(new Intent(UserMain.this, AddKids.class));
-                }
-                else{
-                    UserMainCheck.FilterItemStatus(true);
-                    UserMainCheck.SetKidSelected(temp[itemPosition]);
-                    UserRecorder.setPreferredKid(temp[itemPosition]);
-                    onNavigationDrawerItemSelected("ListBuddies");
-                }
-                return false;
-            }
-        };
-        // 设置抽屉
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        getSupportActionBar().setListNavigationCallbacks(adapter, navigationListener);
-
     }
-
     /* Comment this out. Re-enable it if we see duplicate kid drop down.
     ** If we need to re-enable this we need to implement onResume
     @Override
@@ -227,14 +235,15 @@ public class UserMain extends ActionBarActivity
 
         if(!mNavigationDrawerFragment.isDrawerOpen()){
             ActionBar actionBar = getSupportActionBar();
-            if(UserMainCheck.getUserMainEnter()==1||UserMainCheck.whoCalledUpdOptMenu().equals("ListBuddies"))
+            if(UserMainCheck.getUserMainEnter()==1||UserMainCheck.whoCalledUpdOptMenu().equals("ListBuddies")){
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            }
             else{
                 getMenuInflater().inflate(R.menu.user_main, menu);
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
             }
 
-            actionBar.setDisplayShowTitleEnabled(true);
+            //actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(mTitle);
             return true;
         }
@@ -244,9 +253,7 @@ public class UserMain extends ActionBarActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -114,8 +114,6 @@ public class AccountInfo extends ActionBarActivity implements AdapterView.OnItem
             case android.R.id.home:
                 AccountInfo.this.onBackPressed();
                 return true;
-            case R.id.action_settings:
-                return true;
         }
 
         return super.onOptionsItemSelected(item);

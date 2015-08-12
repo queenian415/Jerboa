@@ -1,23 +1,41 @@
 package com.jebora.jebora;
 
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class PayvementInfo extends ActionBarActivity {
+public class SplashActivity extends ActionBarActivity {
+
+    private final int SPLASH_DISPLAY_LENGHT = 3000; // 延迟六秒
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payvement_info);
+        setContentView(R.layout.activity_splash);
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                Intent mainIntent = new Intent(SplashActivity.this,
+                        MainActivity.class);
+                SplashActivity.this.startActivity(mainIntent);
+                SplashActivity.this.finish();
+            }
+
+        }, SPLASH_DISPLAY_LENGHT);
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_payvement_info, menu);
+        getMenuInflater().inflate(R.menu.menu_splash, menu);
         return true;
     }
 
@@ -29,7 +47,9 @@ public class PayvementInfo extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-
+        if (id == R.id.action_settings) {
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

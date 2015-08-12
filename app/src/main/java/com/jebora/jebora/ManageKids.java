@@ -37,6 +37,8 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
 
     private static SlideAdapter adapter;
 
+    private int check = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +46,27 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
         setContentView(R.layout.activity_manage_kids);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
+        check++;
     }
 
     @Override
-    protected void onPause(){
-        this.finish();
-        super.onPause();
+    protected void onResume(){
+        if(check!=1) {
+            if (mMessageItems != null)
+                mMessageItems.clear();
+            Map<String, String> kids = UserRecorder.getKidList();
+            for (String key : kids.keySet()) {
+                MessageItem item = new MessageItem();
+                item.iconRes = R.drawable.ic_drawer_explore;
+                item.kidname = kids.get(key);
+                item.kidID = key;
+                mMessageItems.add(item);
+            }
+            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetInvalidated();
+        }
+        check++;
+        super.onResume();
     }
 
     private void initView() {
@@ -75,8 +92,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
             case android.R.id.home:
                 ManageKids.this.onBackPressed();
                 return true;
-            case R.id.action_settings:
-                return true;
+
         }
 
         return super.onOptionsItemSelected(item);    }

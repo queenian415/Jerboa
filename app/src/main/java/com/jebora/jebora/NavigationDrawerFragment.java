@@ -12,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -93,6 +94,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         View headerView = inflater.inflate(R.layout.list_header, null);
         TextView Account = (TextView) headerView.findViewById(R.id.item_title);
+        Account.setEllipsize(TextUtils.TruncateAt.MIDDLE);
         Account.setText(UserRecorder.getUsername());
         mDrawerListView.addHeaderView(headerView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,7 +156,7 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setHomeButtonEnabled(true);
         //隐藏Action bar上的app icon
         actionBar.setDisplayShowHomeEnabled(false);
-
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer);
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* 宿主 */
                 mDrawerLayout,                    /* DrawerLayout 对象 */
@@ -269,10 +271,6 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

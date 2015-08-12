@@ -52,9 +52,7 @@ public class SignUp_2 extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         if (id == R.id.skip) {
             startActivity(new Intent(SignUp_2.this, UserMain.class));

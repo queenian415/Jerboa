@@ -6,8 +6,9 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/santander"
+        android:background="@color/white"
         android:scaleType="centerCrop" />
+    <!--android:src="@drawable/santander"-->
 
     <com.jpardogo.listbuddies.lib.views.ListBuddiesLayout xmlns:listbuddies="http://schemas.android.com/apk/res-auto"
         android:id="@+id/listbuddies"

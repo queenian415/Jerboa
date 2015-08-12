@@ -29,7 +29,8 @@ public class Shipping extends ActionBarActivity implements AdapterView.OnItemCli
     private ListView mListView;
     private int item_checked = 0;
     private List<ShippingInfo> mShippingInfo = new ArrayList<>();
-    private ShippingInfoAdapter adapter;
+    private static ShippingInfoAdapter adapter;
+    private int check = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class Shipping extends ActionBarActivity implements AdapterView.OnItemCli
         adapter = new ShippingInfoAdapter();
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(this);
-
+        check++;
         Button manageAddress = (Button)findViewById(R.id.manage_address);
         manageAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +69,23 @@ public class Shipping extends ActionBarActivity implements AdapterView.OnItemCli
     }
     @Override
     protected void onResume(){
-        adapter.notifyDataSetChanged();
+        if(check!=1){
+            if(mShippingInfo!=null)
+                mShippingInfo.clear();
+            if(mAddressItem!=null)
+                mAddressItem.clear();
+            mShippingInfo = ServerCommunication.getShippingInfoList();
+
+            for(int i = 0;i<mShippingInfo.size();i++){
+                AddressItem item = new AddressItem();
+                item.address = mShippingInfo.get(i).getAddress()+", "+mShippingInfo.get(i).getCity()+", "+mShippingInfo.get(i).getCountry()+", "+mShippingInfo.get(i).getPostalCode();
+                item.receiver = mShippingInfo.get(i).getName();
+                mAddressItem.add(item);
+            }
+            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetInvalidated();
+        }
+        check++;
         super.onResume();
     }
     @Override
@@ -95,8 +112,8 @@ public class Shipping extends ActionBarActivity implements AdapterView.OnItemCli
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.add) {
+            startActivity(new Intent(Shipping.this,EditAddress.class));
         }
 
         return super.onOptionsItemSelected(item);

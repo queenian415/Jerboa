@@ -76,8 +76,6 @@ public class DetailActivity extends ActionBarActivity {
             case android.R.id.home:
                 DetailActivity.this.onBackPressed();
                 return true;
-            case R.id.action_settings:
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
