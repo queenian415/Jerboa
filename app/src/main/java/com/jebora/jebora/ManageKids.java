@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jebora.jebora.SlideView.OnSlideListener;
+import com.jebora.jebora.Utils.UserMainCheck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,8 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
 
     private int check = 0;
 
+    private static int last_item_selected = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
     @Override
     protected void onResume(){
         if(check!=1) {
-            if (mMessageItems != null)
+            /*if (mMessageItems != null)
                 mMessageItems.clear();
             Map<String, String> kids = UserRecorder.getKidList();
             for (String key : kids.keySet()) {
@@ -61,6 +64,10 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
                 item.kidname = kids.get(key);
                 item.kidID = key;
                 mMessageItems.add(item);
+            }*/
+            if(EditKid.isDeleted==true){
+                mMessageItems.remove(last_item_selected);
+                EditKid.isDeleted=false;
             }
             adapter.notifyDataSetChanged();
             adapter.notifyDataSetInvalidated();
@@ -175,6 +182,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
         if(mLastSlideViewWithStatusOn != null)
             mLastSlideViewWithStatusOn.shrink();
         else{
+            last_item_selected = position;
             Intent intent = new Intent(ManageKids.this,EditKid.class);
             intent.putExtra(EditKid.KID_ID, mMessageItems.get(position).kidID);
             startActivity(intent);
@@ -200,6 +208,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
                 if(mLastSlideViewWithStatusOn == mMessageItems.get(i).slideView){
                     ServerCommunication.deleteKidInBackground(getApplicationContext(),mMessageItems.get(i).kidID);
                     mMessageItems.remove(i);
+                    UserMainCheck.setKidNumberUpdated(true);
                     adapter.notifyDataSetChanged();
                 }
             }

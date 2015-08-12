@@ -64,7 +64,7 @@ public class UserMain extends ActionBarActivity
     private static int kidsnumber = 0;
 
     private static List<Thread> talkToServerThreads = new ArrayList<>();
-
+    private static ArrayAdapter<String> adapter;
     //connect to shopping cart
     public static Item checkoutItem;
 
@@ -78,7 +78,7 @@ public class UserMain extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter<String>(
                 getSupportActionBar().getThemedContext(),
                 android.R.layout.simple_spinner_dropdown_item, listNames
                 );
@@ -95,6 +95,11 @@ public class UserMain extends ActionBarActivity
                 if(temp!=null&&temp[itemPosition].equals("+")){
                     kidsnumber++;
                     startActivity(new Intent(UserMain.this, AddKids.class));
+                }
+                else if(temp!=null&&temp[itemPosition].equals("全部照片")){
+                    UserMainCheck.SetKidSelected(null);
+                    UserRecorder.setPreferredKid(null);
+                    onNavigationDrawerItemSelected("ListBuddies");
                 }
                 else{
                     UserMainCheck.FilterItemStatus(true);
@@ -152,6 +157,15 @@ public class UserMain extends ActionBarActivity
         super.onPause();
     }
     */
+
+    @Override
+    protected  void onResume (){
+        filterSetup();
+        adapter.notifyDataSetInvalidated();
+        adapter.notifyDataSetChanged();
+        super.onResume();
+    }
+
     @Override
     protected void onDestroy (){
         // We need to wait until all the threads exit

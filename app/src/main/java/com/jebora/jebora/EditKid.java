@@ -18,6 +18,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.jebora.jebora.Utils.KidInfo;
+import com.jebora.jebora.Utils.UserMainCheck;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -31,6 +32,8 @@ public class EditKid extends ActionBarActivity {
     public static final String SIGNUP2_NORELATION = "请输入与孩子的关系";
     public static final String SIGNUP2_ERROR = "无法连接到服务器";
     public static final String KID_ID = "ID";
+
+    public static boolean isDeleted = false;
     private KidInfo kidinfo;
     private String get_kidid = "ID";
 
@@ -38,33 +41,45 @@ public class EditKid extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_kid);
-        get_kidid = getIntent().getExtras().getString(KID_ID);
+        get_kidid = getIntent().getStringExtra(KID_ID);
         kidinfo = ServerCommunication.getKidObject(get_kidid);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
 
         EditText kidName = (EditText) findViewById(R.id.child_name);
         Button kidBirthday = (Button) findViewById(R.id.child_birthday);
+        if(kidinfo!=null) {
+            kidName.setText(kidinfo.getKidName());
+            kidBirthday.setText(kidinfo.getKidBirthday());
 
-        kidName.setText(kidinfo.getKidName());
-        kidBirthday.setText(kidinfo.getKidBirthday());
+            RadioButton gender;
+            RadioButton relation;
 
-        RadioButton gender;
-        RadioButton relation;
-
-        if(kidinfo.getKidGender().equals("男孩"))
-            gender = (RadioButton) findViewById(R.id.boy);
-        else
-            gender = (RadioButton) findViewById(R.id.girl);
-        gender.setChecked(true);
-        switch (kidinfo.getKidRelation()){
-            case("爸爸"): {relation = (RadioButton) findViewById(R.id.dad); break;}
-            case("妈妈"): {relation = (RadioButton) findViewById(R.id.mom); break;}
-            case("其他"): {relation = (RadioButton) findViewById(R.id.others); break;}
-            default: relation =null; break;
+            if (kidinfo.getKidGender().equals("男孩"))
+                gender = (RadioButton) findViewById(R.id.boy);
+            else
+                gender = (RadioButton) findViewById(R.id.girl);
+            gender.setChecked(true);
+            switch (kidinfo.getKidRelation()) {
+                case ("爸爸"): {
+                    relation = (RadioButton) findViewById(R.id.dad);
+                    break;
+                }
+                case ("妈妈"): {
+                    relation = (RadioButton) findViewById(R.id.mom);
+                    break;
+                }
+                case ("其他"): {
+                    relation = (RadioButton) findViewById(R.id.others);
+                    break;
+                }
+                default:
+                    relation = null;
+                    break;
+            }
+            if (relation != null)
+                relation.setChecked(true);
         }
-        if(relation!=null)
-            relation.setChecked(true);
     }
 
     @Override
@@ -91,6 +106,8 @@ public class EditKid extends ActionBarActivity {
     public void onClickDelete (View v){
         ServerCommunication.deleteKidInBackground(getApplicationContext(),get_kidid);
         SystemClock.sleep(1000);
+        UserMainCheck.setKidNumberUpdated(true);
+        isDeleted = true;
         EditKid.this.onBackPressed();
         finish();
     }

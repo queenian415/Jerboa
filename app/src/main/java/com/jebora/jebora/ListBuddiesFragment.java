@@ -91,7 +91,8 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
         mAdapterRight = new CircularAdapter(getActivity(), getResources().getDimensionPixelSize(R.dimen.item_height_tall), mImagesRight);
         if(ImagesUrls.allImages!=null)
             ImagesUrls.allImages.clear();
-        if(UserMainCheck.GetKidSelected()!=null&&UserMainCheck.GetKidSelected().equals("全部照片"))
+        //if(UserMainCheck.GetKidSelected()==null||(UserMainCheck.GetKidSelected()!=null&&UserMainCheck.GetKidSelected().equals("全部照片")))
+        if(UserRecorder.getPreferredKidId()!=null)
             ImagesUrls.allImages = loadLocalImages(false);
         else
             ImagesUrls.allImages = loadLocalImages(true);
@@ -121,7 +122,8 @@ public class ListBuddiesFragment extends Fragment implements ListBuddiesLayout.O
 
         if(ImagesUrls.allImages!=null)
             ImagesUrls.allImages.clear();
-        if(UserMainCheck.GetKidSelected()!=null&&UserMainCheck.GetKidSelected().equals("全部照片"))
+        //if(UserMainCheck.GetKidSelected()!=null&&UserMainCheck.GetKidSelected().equals("全部照片"))
+        if(UserRecorder.getPreferredKidId()!=null)
             ImagesUrls.allImages = loadLocalImages(false);
         else
             ImagesUrls.allImages = loadLocalImages(true);
