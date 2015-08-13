@@ -206,7 +206,7 @@ public class ManageKids extends ActionBarActivity implements OnItemClickListener
         if (v.getId() == R.id.holder) {
             for(int i=0;i<mMessageItems.size();i++){
                 if(mLastSlideViewWithStatusOn == mMessageItems.get(i).slideView){
-                    ServerCommunication.deleteKidInBackground(getApplicationContext(),mMessageItems.get(i).kidID);
+                    ServerCommunication.deleteKid(getApplicationContext(),mMessageItems.get(i).kidID);
                     mMessageItems.remove(i);
                     UserMainCheck.setKidNumberUpdated(true);
                     adapter.notifyDataSetChanged();

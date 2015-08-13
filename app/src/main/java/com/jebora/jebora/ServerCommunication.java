@@ -112,44 +112,43 @@ public class ServerCommunication {
         }
     }
 
-    public static boolean deleteKidInBackground(Context context, String kidId) {
+    public static boolean deleteKid(Context context, String kidId) {
         Log.d(TAG, "deleteKid");
 
         if (!isNetworkConnected(context))
             return false;
 
-        final ParseObject kid = ParseObject.createWithoutData("Kid", kidId);
+        ParseObject kid = ParseObject.createWithoutData("Kid", kidId);
         ParseUser user = ParseUser.getCurrentUser();
         // Delete all images associated
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Image");
         query.whereEqualTo("user", user);
         query.whereEqualTo("kid", kid);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> imageEntries, ParseException e) {
-                if (e == null) {
-                    if (imageEntries.size() > 0) {
-                        ParseObject.deleteAllInBackground(imageEntries, new DeleteCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    kid.deleteInBackground();
-                                    UserRecorder.updateKidList(getKids());
-                                } else {
-                                    Log.d(TAG, "deleteKidInBackground: error: " + e.getMessage());
-                                }
-                            }
-                        });
-                    } else {
-                        // No kid images. Delete directly
-                        kid.deleteInBackground();
-                        UserRecorder.updateKidList(getKids());
-                    }
-                } else {
-                    Log.d(TAG, "deleteKidInBackground: error: " + e.getMessage());
-                }
+        List<ParseObject> imageEntries;
+        try {
+            imageEntries = query.find();
+        } catch (ParseException e) {
+            Log.d(TAG, "deleteKid: error: " + e.getMessage());
+            return false;
+        }
+
+        if (imageEntries.size() > 0) {
+            try {
+                ParseObject.deleteAll(imageEntries);
+            } catch (ParseException e) {
+                Log.d(TAG, "deleteKid: error: " + e.getMessage());
+                return false;
             }
-        });
+        }
+
+        try {
+            kid.delete();
+        } catch (ParseException e) {
+            Log.d(TAG, "deleteKid: error: " + e.getMessage());
+            return false;
+        }
+
+        UserRecorder.updateKidList(getKids());
         return true;
     }
 

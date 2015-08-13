@@ -104,7 +104,7 @@ public class EditKid extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     public void onClickDelete (View v){
-        ServerCommunication.deleteKidInBackground(getApplicationContext(),get_kidid);
+        ServerCommunication.deleteKid(getApplicationContext(),get_kidid);
         SystemClock.sleep(1000);
         UserMainCheck.setKidNumberUpdated(true);
         isDeleted = true;
