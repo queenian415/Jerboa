@@ -19,9 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.jebora.jebora.Utils.FileInfo;
@@ -70,6 +68,7 @@ public class UserMain extends ActionBarActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        checkoutItem = new Item();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
 
